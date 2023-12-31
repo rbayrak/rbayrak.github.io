@@ -1,2 +1,1 @@
-# rbayrak.github.i
-gdfgfgdfg
+# rbayrak.github.io
