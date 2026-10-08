@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dönen milde burulma ve eğilme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E6ECEE; --sheet:#F4F7F8; --ink:#1C2A35; --muted:#55666F; --line:#B9C5CB;
+  --steel1:#C9D2D8; --steel2:#8996A0; --steel3:#5E6B75;
+  --mb:#0B6E6E; --me:#9C5A12; --ten:#24589B; --com:#B5372B; --mark:#B5372B;
+  --hatch:#3A4A55; --gen:rgba(20,32,42,0.55);
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141C22; --sheet:#1B252C; --ink:#DCE5EA; --muted:#93A4AE; --line:#34444E;
+    --steel1:#8D99A2; --steel2:#5C6872; --steel3:#3B464F;
+    --mb:#3FB6B0; --me:#E0A050; --ten:#6EA0E0; --com:#E26A5C; --mark:#F07C6C; --hatch:#9FB0BB; --gen:rgba(232,240,245,0.6); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141C22; --sheet:#1B252C; --ink:#DCE5EA; --muted:#93A4AE; --line:#34444E;
+  --steel1:#8D99A2; --steel2:#5C6872; --steel3:#3B464F;
+  --mb:#3FB6B0; --me:#E0A050; --ten:#6EA0E0; --com:#E26A5C; --mark:#F07C6C; --hatch:#9FB0BB; --gen:rgba(232,240,245,0.6); color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;font-variant-numeric:tabular-nums}
+.wrap{max-width:1280px;margin:0 auto;padding:20px 20px 48px}
+header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 24px;align-items:start;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:16px}
+h1{font-size:clamp(1.4rem,2.6vw,2.15rem);font-weight:600;line-height:1.15;margin:0;letter-spacing:-0.01em}
+.figref{display:block;margin-top:4px;font-family:"IBM Plex Serif",Georgia,serif;font-style:italic;color:var(--muted)}
+.author{text-align:right;font-size:.85rem;line-height:1.35;color:var(--muted)}
+.author b{display:block;font-weight:600;color:var(--ink)}
+.author a{color:var(--muted);text-decoration:none}
+.author a:hover{text-decoration:underline}
+.lead{grid-column:1/-1;margin:4px 0 0;max-width:74ch;color:var(--muted)}
+.stage{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(280px,1fr);gap:16px;align-items:start}
+.panel{background:var(--sheet);border:1px solid var(--line);border-radius:3px;position:relative}
+.panel h2{font-size:.95rem;font-weight:600;margin:0;padding:10px 12px 0}
+.panel .sub{font-size:.82rem;color:var(--muted);margin:0;padding:0 12px}
+canvas{display:block;width:100%}
+#cvMain{cursor:ew-resize;touch-action:pan-y}
+#cvSec{height:390px}
+#cvHist{height:200px}
+.right{display:grid;gap:16px;align-content:start}
+.vals{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:8px 12px 12px;font-size:.88rem}
+.vals dt{color:var(--muted)} .vals dd{margin:0;text-align:right;font-weight:500}
+.controls{border-top:1px solid var(--line);margin:4px 12px 0;padding:12px 0 14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 20px}
+.ctl label{display:flex;justify-content:space-between;align-items:baseline;font-size:.86rem;color:var(--muted);gap:8px}
+.ctl output{color:var(--ink);font-weight:500;white-space:nowrap}
+input[type=range]{width:100%;accent-color:var(--mb);margin:4px 0 0}
+.hint{font-size:.84rem;color:var(--muted)}
+.sm{display:none}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;grid-column:1/-1}
+button{font:inherit;font-size:.9rem;border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:6px 14px;border-radius:2px;cursor:pointer;min-height:36px}
+button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--mb);outline-offset:2px}
+.cmp{margin-top:16px}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px 32px;margin-top:28px}
+.notes h3{font-size:1.05rem;font-weight:600;margin:0 0 6px}
+.notes p{margin:0 0 10px;max-width:68ch}
+.eq{font-family:"IBM Plex Serif",Georgia,serif;font-size:1rem}
+.refs{font-size:.85rem;color:var(--muted)}
+.rotate-hint{display:none;font-size:.82rem;color:var(--muted);margin:2px 12px 0}
+@media (max-width:980px){.controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){.stage{grid-template-columns:1fr}}
+@media (min-width:861px) and (min-height:760px){.stage > .panel{position:sticky;top:8px}}
+@media (max-width:600px){
+  .wrap{padding:14px 12px 40px}
+  .controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px}
+  .ctl label{font-size:.8rem}
+  .lg{display:none} .sm{display:inline}
+  .author{font-size:.75rem}
+  input[type=range]{height:28px}
+}
+@media (max-width:700px) and (orientation:portrait){.rotate-hint{display:block}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>Dönen mil burulmayı nasıl taşır?</h1>
+    <span class="figref">Şekil 2.5: Burulma ve eğilme ile zorlanan mil</span>
+  </div>
+  <div class="author"><b>Ramazan Bayrak</b><a href="mailto:rbayrak@yildiz.edu.tr"><i>rbayrak@yildiz.edu.tr</i></a></div>
+  <p class="lead">Mil sabit hızla dönerken moment göbekten girer ve dişliden çıkar. Kırmızı çizgi, mil yüzeyine çekilmiş düz bir doğrudur ve yalnızca momentin aktığı bölgede helise döner. Kesit çizgisini sürükleyerek ya da "Kesit konumu" ayarıyla istediğiniz kesitteki gerilmelere bakabilirsiniz.</p>
+</header>
+
+<div class="stage">
+  <section class="panel" aria-label="Mil montajı, moment diyagramları ve ayarlar">
+    <h2>Mil, göbek, yataklar ve dişli</h2>
+    <p class="rotate-hint">Çizimler, telefonu yatay çevirince daha büyük görünür.</p>
+    <canvas id="cvMain" role="img" aria-label="Dönen milin yan görünüşü, altında burulma ve eğilme momenti diyagramları"></canvas>
+    <div class="controls" aria-label="Ayarlar">
+      <div class="ctl btnrow">
+        <button id="btnPlay" aria-pressed="false">Durdur</button>
+        <button id="btnLoad" aria-pressed="true">Yüklü</button>
+        <button id="btnIdle" aria-pressed="false">Boşta</button>
+        <span class="hint">Boşta seçilince dişli boşa döner ve F sıfır olur.</span>
+      </div>
+      <div class="ctl"><label for="inT"><span><span class="lg">İletilen moment</span><span class="sm">Moment</span> M<sub>b</sub></span> <output id="oT"></output></label><input id="inT" type="range" min="50" max="300" step="10" value="150"></div>
+      <div class="ctl"><label for="inD">Mil çapı d <output id="oD"></output></label><input id="inD" type="range" min="20" max="40" step="1" value="30"></div>
+      <div class="ctl"><label for="inN"><span><span class="lg">Devir sayısı n</span><span class="sm">Devir n</span></span> <output id="oN"></output></label><input id="inN" type="range" min="100" max="3000" step="50" value="1000"></div>
+      <div class="ctl"><label for="inK"><span><span class="lg">Burulma açısını büyütme</span><span class="sm">Burulma büyütme</span></span> <output id="oK"></output></label><input id="inK" type="range" min="1" max="400" step="1" value="300"></div>
+      <div class="ctl"><label for="inS"><span><span class="lg">Animasyon hızı</span><span class="sm">Hız</span></span> <output id="oS"></output></label><input id="inS" type="range" min="0.01" max="0.20" step="0.01" value="0.05"></div>
+      <div class="ctl"><label for="inX"><span><span class="lg">Kesit konumu x</span><span class="sm">Kesit x</span></span> <output id="oX"></output></label><input id="inX" type="range" min="0" max="300" step="1" value="160"></div>
+    </div>
+  </section>
+  <div class="right">
+    <section class="panel" aria-label="Seçili kesit">
+      <h2 id="secTitle">Kesit</h2>
+      <p class="sub">Göbek tarafından bakış. Kırmızı bölgede basma, mavi bölgede çekme gerilmesi vardır. Yeşil oklar burulma gerilmesini gösterir.</p>
+      <canvas id="cvSec" role="img" aria-label="Seçili kesitte eğilme ve burulma gerilmesi dağılımı, arkada dişli"></canvas>
+    </section>
+    <section class="panel" aria-label="İşaretli lifin gerilmesi">
+      <h2>İşaretli lifin bir turdaki gerilmesi</h2>
+      <canvas id="cvHist" role="img" aria-label="İşaretli yüzey lifinin bir tur boyunca eğilme ve burulma gerilmesi"></canvas>
+      <dl class="vals" id="vals"></dl>
+    </section>
+  </div>
+</div>
+
+<section class="panel cmp" aria-label="Mukavemet modeli ile karşılaştırma">
+  <h2>Ankastre uç nereye gitti?</h2>
+  <p class="sub">Üstteki mil mukavemet dersindeki modeldir, alttaki ise Şekil 2.5'teki mil. İki mil aynı M<sub>b</sub> momentini taşır ve aynı biçimde burulur. "Boşta" düğmesine basıp ikisini birlikte izleyin.</p>
+  <canvas id="cvCmp" role="img" aria-label="Üstte ankastre ve duran mil, altta göbek ile dişli arasında dönen mil. İki milde aynı burulma görülür."></canvas>
+</section>
+
+<section class="notes">
+  <div>
+    <h3>Dönen mil neden statik dengede?</h3>
+    <p>Mukavemet dersinde milin bir ucu ankastre alınır ve öbür ucuna moment uygulanır. Makinede ankastre ucun yerini yük alır. Eş dişliden gelen F kuvveti, mile F·d<sub>0</sub>/2 büyüklüğünde ters yönlü bir moment uygular. Mil sabit hızla döndüğü için açısal ivmesi sıfırdır (ΣM = I·α = 0). Bu yüzden giren ve çıkan momentler eşittir, mil burulma bakımından statik dengededir.</p>
+    <p>"Boşta" düğmesi aynı şeyi tersinden gösterir. Dişli yük taşımadığında karşılanacak bir moment de kalmaz. Mil aynı hızla dönmeye devam eder, ama helis düzleşir ve gerilmeler sıfıra iner. Mili burulmaya zorlayan, yükün gösterdiği dirençtir. Dönme tek başına burulma oluşturmaz.</p>
+  </div>
+  <div>
+    <h3>Üç bölge</h3>
+    <p>Göbek ile A yatağı arasında yalnızca burulma vardır. Bu bölgede moment taşınır ama radyal yük yoktur. A yatağı ile dişli arasında burulma ve eğilme birlikte bulunur, kritik kesit de çoğunlukla bu bölgededir. Moment dişlide milden ayrılır ve yataklar burulmaya karşı koymaz. Bu nedenle dişliden B yatağına kadar yalnızca eğilme kalır.</p>
+    <h3>Dönen eğilme</h3>
+    <p>F kuvveti yere göre hep aşağı bakar, mil ise döner. İşaretli lif üstteyken basmaya, alttayken çekmeye zorlanır. Böylece her turda ortalaması sıfır olan, tam değişken bir gerilme görür. Burulma gerilmesi ise tur boyunca sabit kalır. Mildeki yorulma hesabı bu farktan yola çıkar.</p>
+  </div>
+  <div>
+    <h3>Kullanılan bağıntılar</h3>
+    <p class="eq">τ = 16 M<sub>b</sub> / (π d³) &nbsp;&nbsp; φ = M<sub>b</sub> L / (G I<sub>p</sub>), &nbsp;I<sub>p</sub> = π d⁴ / 32</p>
+    <p class="eq">σ = 32 M<sub>e</sub> / (π d³) &nbsp;&nbsp; σ<sub>eş</sub> = √(σ² + 3τ²)</p>
+    <p class="eq">F = 2 M<sub>b</sub> / d<sub>0</sub>, &nbsp;R<sub>A</sub> = F b / L, &nbsp;R<sub>B</sub> = F a / L</p>
+    <p class="eq">M<sub>e,max</sub> = F a b / L</p>
+    <p class="eq">P = M<sub>b</sub> ω, &nbsp;ω = 2π n / 60</p>
+    <p class="refs">Kabuller. F, dişlideki teğetsel kuvvettir ve radyal bileşeni ihmal edildi. Moment göbeğin ortasından girer, dişlinin ortasından çıkar. G = 80 GPa ve d<sub>0</sub> = 100 mm (m = 2,5 mm, z = 40) alındı. A yatağı ile dişli arası a = 110 mm, dişli ile B yatağı arası b = 90 mm, yataklar arası L = a + b. Burulma açısı yan görünüşte, kesitte ve gerilme grafiğinde aynı katsayıyla büyütüldü. Boşta durumunda yatak sürtünmesi ihmal edildiği için motorun verdiği moment de sıfırdır. Ok boyları kuvvetle birlikte büyüyüp küçülür ama ölçekli değildir.</p>
+    <p class="refs">Kaynaklar. Budynas &amp; Nisbett, <i>Shigley's Mechanical Engineering Design</i>, Bölüm 3, 5, 7 ve 13. Gere &amp; Goodno, <i>Mechanics of Materials</i>, Bölüm 3 ve 5. Hibbeler, <i>Engineering Mechanics: Dynamics</i>, Bölüm 17 (ΣM = I·α).</p>
+  </div>
+</section>
+</div>
+
+<script>
+// Mil fiziği (SI birimleri). Şekil 2.5 düzeni: göbek (Mb girer), yatak A, dişli C (F etkir, Mb çıkar), yatak B
+// Kaynaklar: Budynas & Nisbett, Shigley's Mech. Eng. Design (Bölüm 3, 5, 7); Gere & Goodno, Mechanics of Materials (Bölüm 3, 5)
+function makeShaft(p) {
+  const d = p.d, r = d / 2, G = p.G;
+  const J = Math.PI * Math.pow(d, 4) / 32;      // polar atalet momenti [m^4]
+  const W = Math.PI * Math.pow(d, 3) / 32;      // eğilme mukavemet momenti [m^3]
+  const Wp = Math.PI * Math.pow(d, 3) / 16;     // burulma mukavemet momenti [m^3]
+  const T = p.T;                                 // iletilen burulma momenti [N·m]
+  const F = T / p.rg;                            // dişli teğetsel kuvveti, F·d0/2 = Mb
+  const a = p.xC - p.xA, b = p.xB - p.xC, L = p.xB - p.xA;
+  const FA = F * b / L, FB = F * a / L;          // basit mesnetli kiriş tepkileri (R_A, R_B)
+  const Mb = x => (x >= p.xH && x <= p.xC) ? T : 0;
+  const Me = x => {
+    if (x < p.xA || x > p.xB) return 0;
+    return x <= p.xC ? FA * (x - p.xA) : FB * (p.xB - x);
+  };
+  const Lt = p.xC - p.xH;
+  // göbeğe göre gecikme açısı φ(x) = Mb·(x−xH)/(G·J), dişliden sonra sabit
+  const phi = x => (T / (G * J)) * Math.min(Math.max(x - p.xH, 0), Lt);
+  const tau = x => Mb(x) / Wp;                   // yüzeyde burulma (kayma) gerilmesi
+  // yüzey lifi, ψ üstten (+y) öne (+z) doğru ölçülür; F aşağı → üstte basma, altta çekme
+  const sigma = (x, psi) => -(Me(x) / W) * Math.cos(psi);
+  const vonMises = x => Math.sqrt(Math.pow(Me(x) / W, 2) + 3 * Math.pow(tau(x), 2));
+  return { d, r, G, J, W, Wp, T, F, a, b, L, FA, FB, Lt, Mb, Me, phi, tau, sigma, vonMises,
+           MeMax: F * a * b / L, phiTot: T * Lt / (G * J) };
+}
+
+
+(function(){
+const P0 = {G:80e9, rg:0.050, xH:0.030, xA:0.080, xC:0.190, xB:0.280};
+const XMIN=-0.004, XMAX=0.304, MREF=300, FMAX=MREF/P0.rg;    // FMAX: kaydırıcının üst sınırındaki F
+const st = {T:150, d:0.030, n:1000, k:300, spd:0.05, xs:0.160, playing:true, t:0, last:null, loaded:true, lf:1};
+const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (reduce) st.playing = false;
+let S = null;
+function rebuild(){ S = makeShaft({d:st.d, G:P0.G, T:st.T*st.lf, rg:P0.rg, xH:P0.xH, xA:P0.xA, xC:P0.xC, xB:P0.xB}); }
+rebuild();
+
+const $ = id => document.getElementById(id);
+const cvM=$('cvMain'), cvS=$('cvSec'), cvH=$('cvHist'), cvC=$('cvCmp');
+function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+let C = {};
+function readColors(){ ['paper','sheet','ink','muted','line','steel1','steel2','steel3','mb','me','ten','com','mark','hatch','gen'].forEach(k=>C[k]=css('--'+k)); }
+readColors();
+if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ()=>{readColors();});
+
+// Tuval boyutlandırma. Dar ekranda çizim minW genişliğinde kurulur ve sığacak kadar küçültülür;
+// yazılar okunur kalsın diye FB katsayısıyla büyütülür.
+let FB = 1;
+function fit(cv, o){
+  o = o || {};
+  const cssW = Math.max(10, cv.getBoundingClientRect().width), dpr = window.devicePixelRatio||1;
+  const vw = o.minW ? Math.max(cssW, o.minW) : cssW, s = cssW/vw;
+  if (o.vh){ const want = Math.round(o.vh(vw)*s); if (Math.abs(cv.getBoundingClientRect().height-want)>0.5) cv.style.height = want+'px'; }
+  const cssH = cv.getBoundingClientRect().height;
+  const W = Math.round(cssW*dpr), H = Math.round(cssH*dpr);
+  if (cv.width!==W || cv.height!==H){ cv.width=W; cv.height=H; }
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr*s,0,0,dpr*s,0,0);
+  FB = s<1 ? Math.min(1.4, 0.8/s) : 1;
+  return {ctx, w:vw, h:cssH/s, s};
+}
+function font(px, w){ return (w||400)+' '+(px*FB).toFixed(2)+'px "IBM Plex Sans", system-ui, sans-serif'; }
+const fmt = (v,n)=>v.toFixed(n).replace('.',',');
+// Alt indisli yazı: "M_{b} = ..." biçimi
+function rich(ctx, str, x, y, o){
+  o = o || {};
+  const size=o.size||12.5, wgt=o.weight||400, al=o.align||'left';
+  const parts=[]; const re=/_\{([^}]*)\}/g; let last=0, m;
+  while ((m=re.exec(str))){ if (m.index>last) parts.push([str.slice(last,m.index),0]); parts.push([m[1],1]); last=re.lastIndex; }
+  if (last<str.length) parts.push([str.slice(last),0]);
+  const fN=font(size,wgt), fS=font(size*0.72,wgt);
+  let W=0; for (const [t,sb] of parts){ ctx.font=sb?fS:fN; W+=ctx.measureText(t).width; }
+  let cx = al==='center' ? x-W/2 : al==='right' ? x-W : x;
+  if (o.bg){ ctx.save(); ctx.globalAlpha=0.88; ctx.fillStyle=C.sheet; ctx.fillRect(cx-3, y-size*FB*0.9, W+6, size*FB*1.25); ctx.restore(); }
+  ctx.fillStyle=o.color||C.ink; ctx.textAlign='left';
+  for (const [t,sb] of parts){ ctx.font=sb?fS:fN; ctx.fillText(t, cx, sb ? y+size*FB*0.28 : y); cx+=ctx.measureText(t).width; }
+  return W;
+}
+function wrapLines(ctx, text, maxW, size, wgt){
+  ctx.font=font(size,wgt); const out=[]; let line='';
+  for (const word of text.split(' ')){ const t=line?line+' '+word:word; if (ctx.measureText(t).width>maxW && line){ out.push(line); line=word; } else line=t; }
+  if (line) out.push(line); return out;
+}
+
+// açı: θ(t) = milin yere göre dönme açısı. ψ üstten öne ölçülür; ön yüz yukarı hareket eder, ψ azalır.
+function theta(){ return 2*Math.PI*st.t; }               // st.t: tur cinsinden zaman
+function viewPsi(psi0, x){ return psi0 - theta() + st.k*S.phi(x); }   // çizim açısı (κ ile büyütülmüş)
+const PSI_MARK = Math.PI/2;                              // işaretli doğru başlangıçta önde
+const forceLen = (F, Lmin, Lmax) => Lmin + (Lmax-Lmin)*Math.min(1, F/FMAX);
+
+function hatchRect(ctx, x, y, w, h){
+  if (w<=0||h<=0) return;
+  ctx.save(); ctx.beginPath(); ctx.rect(x,y,w,h); ctx.fillStyle=C.sheet; ctx.fill(); ctx.clip();
+  ctx.strokeStyle=C.hatch; ctx.lineWidth=0.8; ctx.beginPath();
+  for (let s=-h; s<w+h; s+=7){ ctx.moveTo(x+s, y+h); ctx.lineTo(x+s+h, y); }
+  ctx.stroke(); ctx.restore();
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1.2; ctx.strokeRect(x,y,w,h);
+}
+function arrow(ctx, x1,y1,x2,y2, col, lw, head){
+  const len = Math.hypot(x2-x1,y2-y1);
+  head = Math.min(head||9, len*0.6); const a=Math.atan2(y2-y1,x2-x1);
+  ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=lw||2;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2-Math.cos(a)*head*0.6,y2-Math.sin(a)*head*0.6); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-head*Math.cos(a-0.4), y2-head*Math.sin(a-0.4));
+  ctx.lineTo(x2-head*Math.cos(a+0.4), y2-head*Math.sin(a+0.4)); ctx.closePath(); ctx.fill();
+}
+function curvedArrow(ctx, cx, cy, ry, up, col, label, lx, ly){
+  // Mil etrafında elips: sol yarı arka (kesikli), sağ yarı ön (dolu). Ok ucu ön yüzün hareket yönünü gösterir.
+  const rx = 16;
+  ctx.lineWidth=2.4; ctx.strokeStyle=col;
+  ctx.setLineDash([4,4]); ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,Math.PI/2,3*Math.PI/2,false); ctx.stroke(); ctx.setLineDash([]);
+  const a0 = up? Math.PI/2 : -Math.PI/2, a1 = up? -Math.PI/2+0.42 : Math.PI/2-0.42;
+  ctx.strokeStyle=C.sheet; ctx.lineWidth=6; ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,a0,a1,up); ctx.stroke();
+  ctx.strokeStyle=col; ctx.lineWidth=2.4; ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,a0,a1,up); ctx.stroke();
+  const ex=cx+rx*Math.cos(a1), ey=cy+ry*Math.sin(a1), s=up?-1:1;
+  let tx=-rx*Math.sin(a1)*s, ty=ry*Math.cos(a1)*s; const n=Math.hypot(tx,ty); tx/=n; ty/=n;
+  arrow(ctx, ex-tx*2, ey-ty*2, ex+tx*12, ey+ty*12, col, 2.4, 11);
+  if (label) rich(ctx, label, lx, ly, {size:13, weight:600, color:col, bg:true});
+}
+
+function drawMain(){
+  const {ctx,w,h,s} = fit(cvM, {minW:600, vh: vw => vw<700 ? 520 : Math.min(560, Math.max(450, vw*0.64))});
+  ctx.clearRect(0,0,w,h);
+  const padL=18, padR=18;
+  const sx = (w-padL-padR)/(XMAX-XMIN);
+  const X = x => padL + (x-XMIN)*sx;
+  const asmH = h*0.57, diaTop = asmH+4, diaH = h-diaTop-6;
+  const yc = 80 + (asmH-80)*0.5;
+  const sv = Math.min(sx, (asmH-110)/2/0.068);           // düşey ölçek (dişli sığsın)
+  const Y = m => m*sv;
+  const rp = Math.max(12, Y(S.r));
+
+  // --- mil gövdesi
+  const x0=X(0), x1=X(0.300);
+  const g = ctx.createLinearGradient(0,yc-rp,0,yc+rp);
+  g.addColorStop(0,C.steel3); g.addColorStop(0.28,C.steel1); g.addColorStop(0.55,C.steel2); g.addColorStop(1,C.steel3);
+  ctx.fillStyle=g; ctx.fillRect(x0,yc-rp,x1-x0,2*rp);
+  // yüzeydeki ana doğrular
+  ctx.save(); ctx.beginPath(); ctx.rect(x0,yc-rp,x1-x0,2*rp); ctx.clip();
+  const NL=12, NS=150;
+  for (let i=0;i<NL;i++){
+    const p0 = PSI_MARK + 2*Math.PI*i/NL, mark = (i===0);
+    for (const front of (mark?[true,false]:[true])){
+      ctx.beginPath(); let on=false;
+      for (let j=0;j<=NS;j++){
+        const x = 0.300*j/NS, ps = viewPsi(p0,x), vis = front ? Math.sin(ps)>0.02 : Math.sin(ps)<=0.02;
+        const px = X(x), py = yc - rp*Math.cos(ps);
+        if (vis){ on?ctx.lineTo(px,py):ctx.moveTo(px,py); on=true; } else on=false;
+      }
+      ctx.strokeStyle = mark? C.mark : C.gen; ctx.lineWidth = mark? (front?3.2:2) : 1.1;
+      if (!front){ ctx.setLineDash([5,5]); ctx.globalAlpha=0.6; }
+      ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1;
+    }
+  }
+  ctx.restore();
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1.4; ctx.strokeRect(x0,yc-rp,x1-x0,2*rp);
+  ctx.setLineDash([12,4,2,4]); ctx.strokeStyle=C.muted; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(X(-0.004),yc); ctx.lineTo(X(0.304),yc); ctx.stroke(); ctx.setLineDash([]);
+
+  const R = S.r;
+  // --- göbek (kesitli), 0 ile 60 mm arası
+  const hubO = 0.045;
+  hatchRect(ctx, X(0.000), yc-Y(hubO), X(0.060)-X(0), Y(hubO)-rp);
+  hatchRect(ctx, X(0.000), yc+rp, X(0.060)-X(0), Y(hubO)-rp);
+  // --- yataklar
+  function bearing(xc){
+    const bw=0.020, hw=0.036, ro=R+0.016, hz=0.052;
+    hatchRect(ctx, X(xc-hw/2), yc-Y(hz), X(xc+hw/2)-X(xc-hw/2), Y(hz)-Y(ro));
+    hatchRect(ctx, X(xc-hw/2), yc+Y(ro), X(xc+hw/2)-X(xc-hw/2), Y(hz)-Y(ro));
+    for (const sgn of [-1,1]){
+      const yi = yc + sgn*rp, yo = yc + sgn*Y(ro);
+      const top = Math.min(yi,yo), hh = Math.abs(yo-yi);
+      ctx.fillStyle=C.sheet; ctx.fillRect(X(xc-bw/2), top, X(xc+bw/2)-X(xc-bw/2), hh);
+      ctx.strokeStyle=C.ink; ctx.lineWidth=1.2; ctx.strokeRect(X(xc-bw/2), top, X(xc+bw/2)-X(xc-bw/2), hh);
+      const bc = yc + sgn*(rp + (Y(ro)-rp)/2), br = Math.min((Y(ro)-rp)*0.34, (X(xc+bw/2)-X(xc-bw/2))*0.3);
+      ctx.beginPath(); ctx.arc(X(xc), bc, br, 0, 2*Math.PI); ctx.fillStyle=C.steel1; ctx.fill(); ctx.stroke();
+    }
+  }
+  bearing(P0.xA); bearing(P0.xB);
+  // --- dişli: eksenel kesit (tek parça gövde: göbek + ara gövde + jant tek taramalı bölge;
+  //     dişler kesitte taranmaz, baş ve taban çizgileri sürekli, bölüm çizgisi ince noktalı)
+  //     ölçüler kesit görünüşündeki dişliyle aynı: m = 2,5 mm, z = 40, d0/2 = 50 mm, ra = 52,5 mm, rf = 46,875 mm
+  (function(){
+    const xc=P0.xC, m=0.0025;
+    const bw=0.020, hh=0.022, ww=0.007;                 // diş genişliği/2, göbek boyu/2, ara gövde kalınlığı/2
+    const rHub=R+0.010, rRim=0.040, rP=P0.rg, rT=P0.rg+m, rF=P0.rg-1.25*m;
+    const c=0.0012, f=0.0025;                           // pah (göbek ve diş başı) ve iç köşe yuvarlatma
+    const px = u => X(xc+u);
+    for (const sgn of [-1,1]){
+      const py = r => yc + sgn*Y(r);
+      const yIn = yc + sgn*rp;                          // mil yüzeyi (delik)
+      // gövde konturu: göbek, ara gövde, jant (taban çizgisine kadar)
+      const body = () => {
+        ctx.beginPath();
+        ctx.moveTo(px(-hh), yIn);
+        ctx.lineTo(px(-hh), py(rHub-c)); ctx.lineTo(px(-hh+c), py(rHub));
+        ctx.lineTo(px(-ww-f), py(rHub)); ctx.quadraticCurveTo(px(-ww), py(rHub), px(-ww), py(rHub+f));
+        ctx.lineTo(px(-ww), py(rRim-f)); ctx.quadraticCurveTo(px(-ww), py(rRim), px(-ww-f), py(rRim));
+        ctx.lineTo(px(-bw), py(rRim));
+        ctx.lineTo(px(-bw), py(rF)); ctx.lineTo(px(bw), py(rF));
+        ctx.lineTo(px(bw), py(rRim));
+        ctx.lineTo(px(ww+f), py(rRim)); ctx.quadraticCurveTo(px(ww), py(rRim), px(ww), py(rRim-f));
+        ctx.lineTo(px(ww), py(rHub+f)); ctx.quadraticCurveTo(px(ww), py(rHub), px(ww+f), py(rHub));
+        ctx.lineTo(px(hh-c), py(rHub)); ctx.lineTo(px(hh), py(rHub-c));
+        ctx.lineTo(px(hh), yIn); ctx.closePath();
+      };
+      body(); ctx.fillStyle=C.sheet; ctx.fill();
+      ctx.save(); body(); ctx.clip();
+      const t=Math.min(yIn,py(rF))-2, hgt=Math.abs(py(rF)-yIn)+4, x0=px(-hh)-2, wdt=px(hh)-px(-hh)+4;
+      ctx.strokeStyle=C.hatch; ctx.lineWidth=0.8; ctx.beginPath();
+      for (let s=-hgt; s<wdt+hgt; s+=7){ ctx.moveTo(x0+s, t+hgt); ctx.lineTo(x0+s+hgt, t); }
+      ctx.stroke(); ctx.restore();
+      body(); ctx.strokeStyle=C.ink; ctx.lineWidth=1.3; ctx.stroke();
+      // kesit düzleminin arkasında kalan görünür kenar: jantın iç dairesel kenarı,
+      // göbek ile jant arasındaki boşluktan düz çizgi olarak görünür
+      ctx.beginPath();
+      ctx.moveTo(px(-bw), py(rHub)); ctx.lineTo(px(-bw), py(rRim));
+      ctx.moveTo(px(bw), py(rHub)); ctx.lineTo(px(bw), py(rRim));
+      ctx.stroke();
+      // diş bölgesi (taranmaz), baş köşelerinde pah
+      ctx.beginPath();
+      ctx.moveTo(px(-bw), py(rF)); ctx.lineTo(px(-bw), py(rT-c)); ctx.lineTo(px(-bw+c), py(rT));
+      ctx.lineTo(px(bw-c), py(rT)); ctx.lineTo(px(bw), py(rT-c)); ctx.lineTo(px(bw), py(rF));
+      ctx.fillStyle=C.sheet; ctx.fill(); ctx.strokeStyle=C.ink; ctx.lineWidth=1.3; ctx.stroke();
+      // bölüm çizgisi
+      ctx.setLineDash([10,3,2,3]); ctx.strokeStyle=C.ink; ctx.lineWidth=0.8;
+      ctx.beginPath(); ctx.moveTo(px(-bw-0.005), py(rP)); ctx.lineTo(px(bw+0.005), py(rP)); ctx.stroke(); ctx.setLineDash([]);
+    }
+  })();
+
+  // --- kesit çizgisi ve işaretli lif
+  const xsP = X(st.xs);
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1.5; ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(xsP, 24); ctx.lineTo(xsP, h-48*FB); ctx.stroke(); ctx.setLineDash([]);
+  rich(ctx, 'kesit', xsP, 17, {size:12.5, weight:600, align:'center'});
+  const psv = viewPsi(PSI_MARK, st.xs);
+  const front = Math.sin(psv) > 0, py = yc - rp*Math.cos(psv);
+  ctx.beginPath(); ctx.arc(xsP, py, 6, 0, 2*Math.PI);
+  if (front){ ctx.fillStyle=C.mark; ctx.fill(); ctx.strokeStyle=C.sheet; ctx.lineWidth=2; ctx.stroke(); }
+  else { ctx.strokeStyle=C.mark; ctx.lineWidth=2; ctx.setLineDash([2,2]); ctx.stroke(); ctx.setLineDash([]); }
+
+  // --- kuvvetler: ok boyu kuvvetle değişir
+  const yTop = yc - Y(P0.rg+0.0025), yBot = yc + Y(0.052);
+  if (S.F < 1){
+    rich(ctx, 'Boşta. Dişli yük taşımıyor, F = 0.', X(P0.xC), yTop-18, {size:13.5, weight:600, align:'center'});
+  } else {
+    const Lf = Math.min(forceLen(S.F, 14, 84), yTop-30);   // ok, dişlinin diş üstünde biter
+    arrow(ctx, X(P0.xC), yTop-2-Lf, X(P0.xC), yTop-2, C.ink, 2.8, 12);
+    rich(ctx, 'F = '+fmt(S.F,0)+' N', X(P0.xC)-8, yTop-2-Lf+12, {size:14, weight:600, align:'right', bg:true});
+    for (const [xb,val,lab] of [[P0.xA,S.FA,'R_{A}'],[P0.xB,S.FB,'R_{B}']]){
+      const Lr = forceLen(val, 8, 40);
+      arrow(ctx, X(xb), yBot+2+Lr, X(xb), yBot+2, C.ink, 2.2, 10);
+      const left = xb>0.2;
+      rich(ctx, lab+' = '+fmt(val,0)+' N', X(xb)+(left?-7:7), yBot+2+Math.max(Lr,14)-2, {size:12.5, weight:500, align:left?'right':'left'});
+    }
+  }
+  // giren moment (göbek) ve çıkan moment (dişli)
+  if (S.T > 0.5){
+    curvedArrow(ctx, X(0.030), yc, Y(hubO)+9, true, C.mb, 'M_{b} (giren)', X(0.030)+20, yc-Y(hubO)-14);
+    curvedArrow(ctx, X(P0.xC+0.033), yc, Y(0.054)+7, false, C.mb, 'M_{b} = F·d_{0}/2 (çıkan)', X(P0.xC+0.033)+12, yc-Y(0.054)-6);
+  }
+
+  // --- diyagramlar
+  const base = diaTop + diaH*0.36, hMax = diaH*0.28;
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(X(0),base); ctx.lineTo(X(0.300),base); ctx.stroke();
+  const hb = hMax*S.T/MREF;
+  if (S.T > 0.5){
+    ctx.fillStyle = C.mb+'22'; ctx.fillRect(X(P0.xH), base-hb, X(P0.xC)-X(P0.xH), hb);
+    ctx.strokeStyle=C.mb; ctx.lineWidth=1;
+    ctx.beginPath(); for (let x=P0.xH; x<=P0.xC+1e-9; x+=0.008){ ctx.moveTo(X(x),base); ctx.lineTo(X(x),base-hb);} ctx.stroke();
+    ctx.lineWidth=2; ctx.strokeRect(X(P0.xH), base-hb, X(P0.xC)-X(P0.xH), hb);
+  }
+  rich(ctx, 'M_{b} = '+fmt(S.T,0)+' N·m', X(P0.xH)+4, base-hb-7, {size:13, weight:600, color:C.mb});
+  if (S.MeMax > 0.05){
+    ctx.beginPath(); ctx.moveTo(X(P0.xA),base);
+    for (let j=0;j<=60;j++){ const x=P0.xA+(P0.xB-P0.xA)*j/60; ctx.lineTo(X(x), base+hMax*S.Me(x)/MREF); }
+    ctx.closePath(); ctx.fillStyle=C.me+'22'; ctx.fill();
+    ctx.save(); ctx.clip(); ctx.strokeStyle=C.me; ctx.lineWidth=1; ctx.beginPath();
+    for (let x=P0.xA; x<=P0.xB; x+=0.008){ ctx.moveTo(X(x),base); ctx.lineTo(X(x),base+hMax); } ctx.stroke(); ctx.restore();
+    ctx.strokeStyle=C.me; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(X(P0.xA),base);
+    ctx.lineTo(X(P0.xC), base+hMax*S.MeMax/MREF); ctx.lineTo(X(P0.xB),base); ctx.stroke();
+  }
+  rich(ctx, 'M_{e,max} = '+fmt(S.MeMax,1)+' N·m', X(P0.xC)+10, base+hMax*S.MeMax/MREF+16, {size:13, weight:600, color:C.me});
+  // bölgeler (ders notundaki gibi iki satır)
+  const yz = h-10;
+  const zones=[[P0.xH,P0.xA,'Sadece','burulma'],[P0.xA,P0.xC,'Burulma +','eğilme'],[P0.xC,P0.xB,'Sadece','eğilme']];
+  ctx.strokeStyle=C.muted; ctx.lineWidth=1;
+  for (const [a,b,l1,l2] of zones){
+    ctx.beginPath(); ctx.moveTo(X(a),yz-8); ctx.lineTo(X(a),yz+4); ctx.moveTo(X(b),yz-8); ctx.lineTo(X(b),yz+4);
+    ctx.moveTo(X(a),yz-2); ctx.lineTo(X(b),yz-2); ctx.stroke();
+    rich(ctx, l1, (X(a)+X(b))/2, yz-24*FB, {size:12.5, weight:500, align:'center'});
+    rich(ctx, l2, (X(a)+X(b))/2, yz-9*FB, {size:12.5, weight:500, align:'center'});
+  }
+  ctx.setLineDash([3,4]); ctx.strokeStyle=C.line; ctx.lineWidth=1; ctx.beginPath();
+  for (const xx of [P0.xH,P0.xA,P0.xC,P0.xB]){ ctx.moveTo(X(xx), yBot+48); ctx.lineTo(X(xx), yz-38*FB); }
+  ctx.stroke(); ctx.setLineDash([]);
+
+  drawMain.Xinv = px => XMIN + (px/s-padL)/sx;
+}
+
+function drawSection(){
+  const {ctx,w,h} = fit(cvS);
+  ctx.clearRect(0,0,w,h);
+  // Dişli ölçüleri: m = 2,5 mm, z = 40, d0/2 = 50 mm; baş dairesi d0/2 + m, taban dairesi d0/2 − 1,25 m
+  const mod = 0.0025, z = 40, ra = P0.rg + mod, rf = P0.rg - 1.25*mod, rRim = 0.040, rHub = S.r + 0.010;
+  const k = Math.min(w*0.40, (h-70)*0.45)/ra;             // px/m, ölçekli çizim
+  const cx = w*0.46, cy = (h-62)*0.5+4, R = S.r*k, rgP = P0.rg*k;
+  const th = theta();
+  // --- arkadaki dişli (x = 190 mm), mille birlikte döner
+  ctx.save(); ctx.translate(cx,cy); ctx.rotate(-th + st.k*S.phi(P0.xC));   // yan görünüşle aynı (κ ile) açı
+  ctx.beginPath();
+  const pa = 2*Math.PI/z;
+  for (let i=0;i<z;i++){
+    const b = i*pa;
+    const pts = [[-0.5,rf],[-0.30,rf],[-0.12,ra],[0.12,ra],[0.30,rf],[0.5,rf]];
+    pts.forEach(([f,rr],j)=>{ const a=b+f*pa, X=rr*k*Math.sin(a), Y=-rr*k*Math.cos(a); (i===0&&j===0)?ctx.moveTo(X,Y):ctx.lineTo(X,Y); });
+  }
+  ctx.closePath();
+  for (let i=0;i<4;i++){                                     // gövde boşaltma delikleri
+    const a = Math.PI/4 + i*Math.PI/2, rr=(rHub+rRim)/2, hx=rr*k*Math.sin(a), hy=-rr*k*Math.cos(a), hr=0.0045*k;
+    ctx.moveTo(hx+hr,hy); ctx.arc(hx,hy,hr,0,2*Math.PI,true);
+  }
+  ctx.fillStyle = C.steel1; ctx.globalAlpha = 0.45; ctx.fill('evenodd'); ctx.globalAlpha = 1;
+  ctx.strokeStyle = C.steel3; ctx.lineWidth = 1; ctx.stroke();
+  ctx.setLineDash([3,3]); ctx.beginPath(); ctx.arc(0,0,rRim*k,0,2*Math.PI); ctx.moveTo(rHub*k,0); ctx.arc(0,0,rHub*k,0,2*Math.PI); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = C.steel3; ctx.fillRect(-0.004*k, -(S.r+0.0033)*k, 0.008*k, 0.0066*k);   // kama
+  ctx.restore();
+  // bölüm dairesi
+  ctx.setLineDash([8,3,2,3]); ctx.strokeStyle=C.muted; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.arc(cx,cy,rgP,0,2*Math.PI); ctx.stroke(); ctx.setLineDash([]);
+
+  // --- mil kesiti: gerilme dağılımı yere göre sabit (üstte basma, altta çekme)
+  const sMax = S.MeMax/S.W, sx = S.Me(st.xs)/S.W, tx = S.tau(st.xs);
+  const inten = sMax>0 ? sx/sMax : 0;
+  const grd = ctx.createLinearGradient(cx, cy-R, cx, cy+R);
+  grd.addColorStop(0, C.com); grd.addColorStop(0.5, C.sheet); grd.addColorStop(1, C.ten);
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,2*Math.PI); ctx.fillStyle=C.sheet; ctx.fill();
+  ctx.globalAlpha = inten>0.001 ? 0.15 + 0.85*inten : 0; ctx.fillStyle=grd; ctx.fill(); ctx.globalAlpha=1;
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(cx,cy,R,0,2*Math.PI); ctx.stroke();
+  if (inten>0.001){
+    ctx.setLineDash([6,4]); ctx.strokeStyle=C.ink; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(cx-R*1.15, cy); ctx.lineTo(cx+R*1.15, cy); ctx.stroke(); ctx.setLineDash([]);   // tarafsız eksen, iki yana eşit taşar
+  }
+  // burulma gerilmesi okları (dönme yönünde, ekranda saat tersi)
+  if (tx>0){
+    const L = Math.max(6, R*0.32*(tx/(16*MREF/(Math.PI*Math.pow(st.d,3))))+4);
+    for (let i=0;i<8;i++){
+      const a = 2*Math.PI*i/8 - th;
+      const px = cx + R*0.72*Math.sin(a), py = cy - R*0.72*Math.cos(a);
+      const ux = -Math.cos(a), uy = -Math.sin(a);
+      arrow(ctx, px-ux*L/2, py-uy*L/2, px+ux*L/2, py+uy*L/2, C.mb, 1.6, 6);
+    }
+  }
+  // işaretli lif (yan görünüşteki noktayla aynı açı)
+  const ps = viewPsi(PSI_MARK, st.xs);
+  const mx = cx + R*Math.sin(ps), my = cy - R*Math.cos(ps);
+  ctx.beginPath(); ctx.arc(mx,my,5.5,0,2*Math.PI); ctx.fillStyle=C.mark; ctx.fill(); ctx.strokeStyle=C.sheet; ctx.lineWidth=2; ctx.stroke();
+
+  // --- F: eş dişliden, bölüm dairesindeki temas noktasında, yere göre sabit
+  if (S.F >= 1){
+    const Lf = forceLen(S.F, 14, 64);
+    arrow(ctx, cx+rgP, cy-Lf, cx+rgP, cy-1, C.ink, 2.6, 11);
+    rich(ctx, 'F', cx+rgP+7, cy-Lf+12, {size:13, weight:600});
+  }
+  // --- kuvvet kolu d0/2: mil ekseninden temas noktasına ölçü çizgisi
+  const yd = cy + R + 16;
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(cx-6,cy); ctx.lineTo(cx+6,cy); ctx.moveTo(cx,cy-6); ctx.lineTo(cx,cy+6); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, cy+6); ctx.lineTo(cx, yd+5); ctx.moveTo(cx+rgP, cy+4); ctx.lineTo(cx+rgP, yd+5); ctx.stroke();
+  arrow(ctx, cx+rgP/2, yd, cx+1, yd, C.ink, 1.4, 8); arrow(ctx, cx+rgP/2, yd, cx+rgP-1, yd, C.ink, 1.4, 8);
+  rich(ctx, 'd_{0}/2 = '+(P0.rg*1000).toFixed(0)+' mm', cx+rgP*0.55, yd-6, {size:12.5, weight:600, align:'center'});
+  // moment = kuvvet × kol
+  rich(ctx, S.F>=1 ? 'M_{b} = F · d_{0}/2 = '+fmt(S.F,0)+' N · '+fmt(P0.rg,3)+' m = '+fmt(S.F*P0.rg,0)+' N·m'
+                   : 'F = 0 olduğundan M_{b} = F · d_{0}/2 = 0', 10, h-38, {size:13, weight:600, color:C.mb});
+  // ω oku (saat tersi)
+  ctx.strokeStyle=C.muted; ctx.lineWidth=1.6; const rw = ra*k+12;
+  const ea=-Math.PI*0.93, ex=cx+rw*Math.cos(ea), ey=cy+rw*Math.sin(ea);
+  ctx.beginPath(); ctx.arc(cx,cy,rw,-Math.PI*0.70,ea,true); ctx.stroke();
+  // ok ucu: yayın bittiği noktada, saat tersi teğet yönünde dolu üçgen
+  const wtx=Math.sin(ea), wty=-Math.cos(ea), wnx=-wty, wny=wtx, wL=11, wW=4.5;
+  ctx.fillStyle=C.muted; ctx.beginPath();
+  ctx.moveTo(ex+wtx*wL, ey+wty*wL); ctx.lineTo(ex+wnx*wW, ey+wny*wW); ctx.lineTo(ex-wnx*wW, ey-wny*wW); ctx.closePath(); ctx.fill();
+  rich(ctx, 'ω', ex-6, ey-6, {size:12, weight:500, color:C.muted, align:'right'});
+  const cap = wrapLines(ctx, S.F>=1 ? 'Arkadaki dişli (x = 190 mm) mille birlikte döner, F yerinde kalır.' : 'Boşta. Dişli dönüyor ama F = 0, kesitte gerilme yok.', w-20, 12, 400);
+  cap.slice(0,2).forEach((t,i)=>rich(ctx, t, 10, h-20+i*14-(cap.length>1?6:-4), {size:12, color:C.muted}));
+  $('secTitle').textContent = 'Kesit, x = '+(st.xs*1000).toFixed(0)+' mm';
+}
+
+function drawHist(){
+  const {ctx,w,h} = fit(cvH);
+  ctx.clearRect(0,0,w,h);
+  const pl=46, pr=110, pt=16, pb=26, pw=w-pl-pr, ph=h-pt-pb;
+  const sa = S.Me(st.xs)/S.W/1e6, ta = S.tau(st.xs)/1e6;
+  const smax = Math.max(10, (S.MeMax/S.W)/1e6*1.1, ta*1.1);
+  const Yv = v => pt + ph/2 - v/smax*ph/2, Xu = u => pl + u*pw;
+  ctx.strokeStyle=C.line; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pl,Yv(0)); ctx.lineTo(pl+pw,Yv(0)); ctx.moveTo(pl,pt); ctx.lineTo(pl,pt+ph); ctx.stroke();
+  for (const v of [smax*0.9,0,-smax*0.9]) rich(ctx, v.toFixed(0), pl-5, Yv(v)+4, {size:11.5, color:C.muted, align:'right'});
+  ctx.save(); ctx.translate(12, pt+ph/2); ctx.rotate(-Math.PI/2); rich(ctx,'MPa',0,0,{size:11.5,color:C.muted,align:'center'}); ctx.restore();
+  rich(ctx, 'bir tur', pl+pw/2, h-6, {size:11.5, color:C.muted, align:'center'});
+  const ph0 = PSI_MARK + st.k*S.phi(st.xs);               // kesit ve yan görünüşle aynı faz
+  ctx.strokeStyle=C.mark; ctx.lineWidth=2.2; ctx.beginPath();
+  for (let j=0;j<=120;j++){ const u=j/120, s=-sa*Math.cos(ph0-2*Math.PI*u); j?ctx.lineTo(Xu(u),Yv(s)):ctx.moveTo(Xu(u),Yv(s)); } ctx.stroke();
+  ctx.strokeStyle=C.mb; ctx.lineWidth=2.2; ctx.beginPath(); ctx.moveTo(Xu(0),Yv(ta)); ctx.lineTo(Xu(1),Yv(ta)); ctx.stroke();
+  // σ etiketi eğrinin çukurunda (en büyük basma anı): cos(ph0 − 2πu) = 1 → u = ph0/2π (mod 1)
+  const uT = ((ph0/(2*Math.PI))%1+1)%1, xT = Math.min(Math.max(Xu(uT), pl+8), pl+pw-8);
+  rich(ctx, 'σ', xT, Math.min(Yv(-sa)+17, pt+ph+12), {size:13, weight:600, color:C.mark, align:'center'});
+  rich(ctx, 'τ', Xu(1)+4, Yv(ta)+4, {size:13, weight:600, color:C.mb});
+  // imleç
+  const u = ((st.t%1)+1)%1, sNow = -sa*Math.cos(ph0-2*Math.PI*u);
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1; ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(Xu(u),pt); ctx.lineTo(Xu(u),pt+ph); ctx.stroke(); ctx.setLineDash([]);
+  ctx.beginPath(); ctx.arc(Xu(u),Yv(sNow),5,0,2*Math.PI); ctx.fillStyle=C.mark; ctx.fill();
+  // yüzey elemanı: yatay eksen x (mil ekseni), dikey eksen dönme yönü (lif önteyken yukarı)
+  const ex = w-pr/2+8, ey = pt+ph/2, es = 22;
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1.4; ctx.fillStyle=C.sheet; ctx.fillRect(ex-es,ey-es,2*es,2*es); ctx.strokeRect(ex-es,ey-es,2*es,2*es);
+  const sl = 6+18*Math.abs(sNow)/smax, col = sNow>=0? C.ten : C.com;
+  if (Math.abs(sNow)>0.5){
+    for (const sg of [-1,1]){
+      const xa = ex+sg*es, xo = xa+sg*sl;
+      if (sNow>=0) arrow(ctx, xa+sg*2, ey, xo+sg*2, ey, col, 2, 8); else arrow(ctx, xo+sg*2, ey, xa+sg*2, ey, col, 2, 8);
+    }
+  }
+  if (ta>0.5){
+    // göbek tarafındaki (sol) yüz dönme yönünde, dişli tarafındaki (sağ) yüz ters yönde; üst ve alt yüzler tamamlayıcı
+    const tl = 6+16*ta/smax;
+    arrow(ctx, ex-es-5, ey+tl/2, ex-es-5, ey-tl/2, C.mb, 1.8, 7);   // sol yüz: yukarı
+    arrow(ctx, ex+es+5, ey-tl/2, ex+es+5, ey+tl/2, C.mb, 1.8, 7);   // sağ yüz: aşağı
+    arrow(ctx, ex+tl/2, ey-es-5, ex-tl/2, ey-es-5, C.mb, 1.8, 7);   // üst yüz: sola
+    arrow(ctx, ex-tl/2, ey+es+5, ex+tl/2, ey+es+5, C.mb, 1.8, 7);   // alt yüz: sağa
+  }
+  rich(ctx, 'yüzey elemanı', ex, pt+ph+16, {size:11, color:C.muted, align:'center'});
+
+  const om = 2*Math.PI*st.n/60;
+  const rows = [
+    ['M<sub>b</sub> (kesitte)', fmt(S.Mb(st.xs),0)+' N·m'],
+    ['M<sub>e</sub> (kesitte)', fmt(S.Me(st.xs),1)+' N·m'],
+    ['τ, burulma gerilmesi', fmt(ta,1)+' MPa'],
+    ['σ, anlık ve genlik', fmt(sNow,1)+' ve ±'+fmt(sa,1)+' MPa'],
+    ['σ<sub>eş</sub> = √(σ² + 3τ²), en büyük', fmt(S.vonMises(st.xs)/1e6,1)+' MPa'],
+    ['φ, göbek ile dişli arası', fmt(S.phiTot*180/Math.PI,3)+'° (çizimde ×'+st.k+')'],
+    ['P = M<sub>b</sub>·ω', fmt(S.T*om/1000,1)+' kW']
+  ];
+  $('vals').innerHTML = rows.map(r=>'<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('');
+}
+
+// --- Karşılaştırma paneli: mukavemet modeli (ankastre, durur) ve makine (Şekil 2.5, döner)
+function shaftSeg(ctx, X, xa, xb, yc, rp, psiAt){
+  const x0=X(xa), x1=X(xb);
+  const g = ctx.createLinearGradient(0,yc-rp,0,yc+rp);
+  g.addColorStop(0,C.steel3); g.addColorStop(0.28,C.steel1); g.addColorStop(0.55,C.steel2); g.addColorStop(1,C.steel3);
+  ctx.fillStyle=g; ctx.fillRect(x0,yc-rp,x1-x0,2*rp);
+  ctx.save(); ctx.beginPath(); ctx.rect(x0,yc-rp,x1-x0,2*rp); ctx.clip();
+  const NL=10, NS=90;
+  for (let i=0;i<NL;i++){
+    const p0 = 2*Math.PI*i/NL, mark=(i===0);
+    for (const front of (mark?[true,false]:[true])){
+      ctx.beginPath(); let on=false;
+      for (let j=0;j<=NS;j++){
+        const x = xa+(xb-xa)*j/NS, ps = psiAt(x)+p0, vis = front ? Math.sin(ps)>0.02 : Math.sin(ps)<=0.02;
+        const px=X(x), py=yc-rp*Math.cos(ps);
+        if (vis){ on?ctx.lineTo(px,py):ctx.moveTo(px,py); on=true; } else on=false;
+      }
+      ctx.strokeStyle = mark? C.mark : C.gen; ctx.lineWidth = mark? (front?2.8:1.6) : 1;
+      if (!front){ ctx.setLineDash([4,4]); ctx.globalAlpha=0.6; }
+      ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1;
+    }
+  }
+  ctx.restore();
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1.3; ctx.strokeRect(x0,yc-rp,x1-x0,2*rp);
+}
+function mbBand(ctx, X, y, label){
+  const hb = 10*S.T/MREF + (S.T>0.5?2:0);
+  if (S.T>0.5){
+    ctx.fillStyle=C.mb+'33'; ctx.fillRect(X(P0.xH), y-hb, X(P0.xC)-X(P0.xH), hb);
+    ctx.strokeStyle=C.mb; ctx.lineWidth=1.5; ctx.strokeRect(X(P0.xH), y-hb, X(P0.xC)-X(P0.xH), hb);
+  }
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(X(P0.xH-0.02),y); ctx.lineTo(X(P0.xC+0.02),y); ctx.stroke();
+  rich(ctx, label, X(P0.xC+0.02)+8, y-1, {size:12, weight:600, color:C.mb});
+}
+function drawCmp(){
+  const narrow = cvC.getBoundingClientRect().width < 760;
+  const {ctx,w,h} = fit(cvC, {minW:620, vh: ()=> narrow ? 510 : 460});
+  ctx.clearRect(0,0,w,h);
+  const xa = P0.xH-0.02, xb = P0.xC;
+  const padL = 24, drawW = narrow ? w-padL-150 : Math.min(w-padL-230, 600);
+  const sx = drawW/((xb+0.03)-(xa-0.01));
+  const X = x => padL + (x-(xa-0.01))*sx;
+  const rp = 14, gH = 3.3*rp;
+  const y1 = 120, y2 = 340;
+  const on = S.T > 0.5;
+  // satır başlıkları
+  rich(ctx, 'Mukavemet modeli', padL, 20, {size:13.5, weight:600});
+  rich(ctx, 'Bir ucu ankastre, mil durur.', padL, 20+17*FB, {size:12.5, color:C.muted});
+  rich(ctx, 'Makine (Şekil 2.5)', padL, 238, {size:13.5, weight:600});
+  rich(ctx, 'Moment göbekten girer, dişliden çıkar, mil döner.', padL, 238+17*FB, {size:12.5, color:C.muted});
+
+  // --- 1. satır: ankastre mil
+  const psi1 = x => PSI_MARK + st.k*(S.phi(x)-S.phiTot);  // duvar ucu sabit
+  shaftSeg(ctx, X, P0.xH, xb, y1, rp, psi1);
+  hatchRect(ctx, X(xb), y1-gH, X(xb+0.022)-X(xb), 2*gH);   // duvar
+  rich(ctx, 'ankastre', X(xb+0.011), y1+gH+16, {size:12, color:C.muted, align:'center'});
+  if (on){
+    curvedArrow(ctx, X(P0.xH)+2, y1, rp+12, true, C.mb, 'M_{b} = '+fmt(S.T,0)+' N·m', X(P0.xH)+24, y1-rp-12);
+    curvedArrow(ctx, X(xb)-12, y1, rp+16, false, C.ink, '', 0, 0);
+    rich(ctx, 'duvarın tepki momenti', X(xb)-34, y1+rp+24, {size:13, weight:600, align:'right', bg:true});
+  }
+  mbBand(ctx, X, y1+gH+42, on ? 'M_{b}(x)' : 'M_{b} = 0');
+
+  // --- 2. satır: göbek + dönen mil + dişli
+  const psi2 = x => PSI_MARK - theta() + st.k*S.phi(x);
+  shaftSeg(ctx, X, xa, xb+0.02, y2, rp, psi2);
+  hatchRect(ctx, X(xa), y2-2.1*rp, X(P0.xH+0.02)-X(xa), 1.1*rp);  // göbek
+  hatchRect(ctx, X(xa), y2+rp, X(P0.xH+0.02)-X(xa), 1.1*rp);
+  hatchRect(ctx, X(xb-0.02), y2-gH, X(xb+0.02)-X(xb-0.02), gH-rp);   // dişli
+  hatchRect(ctx, X(xb-0.02), y2+rp, X(xb+0.02)-X(xb-0.02), gH-rp);
+  rich(ctx, 'göbek', X(xa)+4, y2+2.1*rp+20, {size:12, color:C.muted});
+  rich(ctx, 'dişli', X(xb), y2+gH+16, {size:12, color:C.muted, align:'center'});
+  if (on){
+    const Lf = forceLen(S.F, 8, 34);
+    arrow(ctx, X(xb), y2-gH-Lf, X(xb), y2-rp-2, C.ink, 2.2, 10);
+    rich(ctx, 'F', X(xb)+6, y2-gH-Lf+12, {size:12.5, weight:600});
+    curvedArrow(ctx, X(P0.xH)-6, y2, 2.1*rp+8, true, C.mb, 'M_{b} = '+fmt(S.T,0)+' N·m', X(P0.xH)+20, y2-2.1*rp-12);
+    curvedArrow(ctx, X(xb+0.026), y2, gH+6, false, C.ink, '', 0, 0);
+    rich(ctx, 'F·d_{0}/2 = M_{b}', X(xb+0.026)+16, y2+gH-8, {size:13, weight:600, bg:true});
+    rich(ctx, '(yük momenti)', X(xb+0.026)+16, y2+gH-8+16*FB, {size:12, color:C.muted});
+  } else {
+    rich(ctx, 'Boşta. F = 0, M_{b} = 0', X(xb), y2-gH-12, {size:12.5, weight:600, align:'center'});
+  }
+  mbBand(ctx, X, y2+gH+42, on ? 'M_{b}(x)' : 'M_{b} = 0');
+
+  // --- açıklama (masaüstünde sağda, telefonda altta)
+  const xm = X(xb+0.03)+44;
+  const msg = on ? 'Duvarın tepki momenti ile dişlideki yük momenti aynı işi görür. İkisi de giren momenti karşılar.'
+                 : 'Yük yoksa karşılanacak moment de yoktur. Mil döner ama burulmaz.';
+  const col = on ? C.mark : C.muted, wgt = on ? 600 : 500, lh = 16*FB;
+  if (narrow){
+    const lines = wrapLines(ctx, msg, w-2*padL, 12.5, wgt);
+    lines.forEach((s,i)=>rich(ctx, s, padL, h-12-(lines.length-1-i)*lh, {size:12.5, weight:wgt, color:col}));
+  } else {
+    const lines = wrapLines(ctx, msg, Math.min(260, w-xm-28), 12.5, wgt), ty = (y1+y2)/2 - lines.length*lh/2;
+    lines.forEach((s,i)=>rich(ctx, s, xm+10, ty+i*lh, {size:12.5, weight:wgt, color:col}));
+  }
+}
+
+function draw(){ drawMain(); drawSection(); drawHist(); drawCmp(); }
+function tick(ts){
+  if (st.last==null) st.last=ts;
+  const dt = Math.min(0.1,(ts-st.last)/1000); st.last=ts;
+  if (st.playing) st.t += dt*st.spd;
+  const tgt = st.loaded?1:0;
+  if (Math.abs(st.lf-tgt)>1e-4){ st.lf += (tgt-st.lf)*Math.min(1,dt*3); if (Math.abs(st.lf-tgt)<2e-3) st.lf=tgt; rebuild(); }
+  draw(); requestAnimationFrame(tick);
+}
+
+// --- kontroller
+function bind(id, out, fmtOut, set){
+  const el=$(id), o=$(out);
+  const f=()=>{ set(parseFloat(el.value)); o.textContent=fmtOut(parseFloat(el.value)); };
+  el.addEventListener('input', f); f();
+}
+bind('inT','oT', v=>v+' N·m', v=>{st.T=v; rebuild();});
+bind('inD','oD', v=>v+' mm', v=>{st.d=v/1000; rebuild();});
+bind('inN','oN', v=>v+' d/dk', v=>{st.n=v;});
+bind('inK','oK', v=>'×'+v, v=>{st.k=v;});
+bind('inS','oS', v=>fmt(v,2)+' tur/s', v=>{st.spd=v;});
+bind('inX','oX', v=>v+' mm', v=>{st.xs=v/1000;});
+const bp=$('btnPlay');
+function setPlay(p){ st.playing=p; bp.textContent=p?'Durdur':'Oynat'; bp.setAttribute('aria-pressed', String(!p)); }
+setPlay(st.playing);
+bp.addEventListener('click', ()=>setPlay(!st.playing));
+function setLoad(v){ st.loaded=v; $('btnLoad').setAttribute('aria-pressed',String(v)); $('btnIdle').setAttribute('aria-pressed',String(!v)); }
+$('btnLoad').addEventListener('click', ()=>setLoad(true));
+$('btnIdle').addEventListener('click', ()=>setLoad(false));
+// kesit çizgisini sürükleme (dokunmatikte dikey kaydırma serbest kalır)
+let drag=false;
+function setX(ev){ if(!drawMain.Xinv) return; const r=cvM.getBoundingClientRect();
+  let x = drawMain.Xinv(ev.clientX-r.left); x=Math.max(0,Math.min(0.300,x)); st.xs=x; $('inX').value=Math.round(x*1000); $('oX').textContent=Math.round(x*1000)+' mm'; }
+cvM.addEventListener('pointerdown', e=>{drag=true; try{cvM.setPointerCapture(e.pointerId);}catch(_){} setX(e);});
+cvM.addEventListener('pointermove', e=>{ if(drag) setX(e); });
+cvM.addEventListener('pointerup', ()=>drag=false);
+cvM.addEventListener('pointercancel', ()=>drag=false);
+requestAnimationFrame(tick);
+window.__state = st; window.__shaft = ()=>S;   // test erişimi
+})();
+</script>
+</body>
+</html>
