@@ -52,9 +52,6 @@ canvas{display:block;width:100%}
 .status .big{font-size:1.02rem;font-weight:600}
 .status.bad .big{color:var(--com)}
 .status .nums{font-size:.88rem;color:var(--muted)}
-.cap{margin:0 12px;font-size:.9rem;min-height:2.9em}
-.cap b{font-weight:600}
-.cap.bad{color:var(--com)}
 .vals{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:6px 12px 10px;font-size:.88rem;margin:0}
 .vals dt{color:var(--muted)} .vals dd{margin:0;text-align:right;font-weight:500}
 .controls{border-top:1px solid var(--line);margin:8px 12px 0;padding:10px 0 10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 20px;align-items:end}
@@ -137,7 +134,6 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--mb);outline-off
     <h2>Dönen mil (Şekil 2.9)</h2>
     <p class="sub hide-sm">Mile yandan ve biraz yukarıdan bakıyoruz. Disk üzerindeki kırmızı ağırlık dengesizliği gösterir.</p>
     <canvas id="cvMain" role="img" aria-label="İki yatak arasında dönen düşey mil ve ortasındaki disk. Devir arttıkça mil eğilerek döner."></canvas>
-    <p class="cap" id="cap" aria-live="polite"></p>
     <div id="status" class="status" role="status" aria-live="polite"></div>
     <div class="controls" aria-label="Ayarlar">
       <div class="ctl btnrow">
@@ -160,7 +156,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--mb);outline-off
       <li><svg viewBox="0 0 28 18"><ellipse cx="14" cy="9" rx="7" ry="4" fill="var(--mark)" stroke="var(--ink)" stroke-width="1"/></svg><span class="t">Eşdeğer dengesiz kütle m<sub>u</sub> (u: İng. <i>unbalance</i>, dengesizlik), mil ekseninden r<sub>u</sub> = 80 mm uzakta (varsayım). Toplam kütlenin (m) ağırlık merkezini mil ekseninden e kadar kaydırır: m·e = m<sub>u</sub>·r<sub>u</sub>. <span id="mu"></span></span></li>
       <li><svg viewBox="0 0 28 18"><line x1="14" y1="0" x2="14" y2="18" stroke="var(--muted)" stroke-dasharray="6 2 1.5 2"/></svg><span class="t">Yatak ekseni. Mil hiç eğilmeseydi bu çizgi üzerinde dönerdi.</span></li>
       <li><svg viewBox="0 0 28 18"><ellipse cx="14" cy="9" rx="13" ry="5" fill="none" stroke="var(--ten)" stroke-width="1.5" stroke-dasharray="3 3"/></svg><span class="t">Milin disk hizasındaki merkezinin çizdiği yol. Yarıçapı sehim δ'dır.</span></li>
-      <li><svg viewBox="0 0 28 18"><line x1="1" y1="9" x2="21" y2="9" stroke="var(--ten)" stroke-width="2.2"/><path d="M27 9 L19 5 L19 13Z" fill="var(--ten)"/></svg><span class="t">Sehim δ: milin yatak ekseninden kaçıklığı (çizimde büyütüldü).</span></li>
+      <li><svg viewBox="0 0 28 18"><line x1="1" y1="9" x2="21" y2="9" stroke="var(--ten)" stroke-width="2.2"/><path d="M27 9 L19 5 L19 13Z" fill="var(--ten)"/></svg><span class="t">Sehim δ: milin yatak ekseninden kaçıklığı. Çizimde "Sehimi büyütme" ayarındaki kat kadar büyütüldü.</span></li>
     </ul>
   </section>
   <div class="right">
@@ -446,7 +442,6 @@ function drawMain(){
     rich(ctx, 'm = '+st.m+' kg', lx, ly, {size:12, color:C.muted, align:al, bg:true});
     rich(ctx, t2, lx, ly+16, {size:12, weight:600, color:C.mark, align:al, bg:true}); }
   if (clamped) rich(ctx, 'çizim sınırı', ax, yAx - D*SE - 26, {size:11.5, weight:600, color:C.com, align:'center', bg:true});
-  st.Dpx = D;                                    // açıklama yazısı için çizimdeki sehim (px)
 }
 
 // ---------------- Rezonans eğrisi
@@ -543,7 +538,7 @@ function showMain(){ const r = cvM.getBoundingClientRect(); if (r.bottom < 60 ||
 // ---------------- Durum ve değerler
 let lastSig = '';
 function updateText(){
-  const zn = zone(S.r), sig = [st.n,st.d,st.L,st.m,st.e,st.z,st.k,zn,!!st.prev,(st.Dpx||0)<25].join('|');
+  const zn = zone(S.r), sig = [st.n,st.d,st.L,st.m,st.e,st.z,st.k,zn,!!st.prev].join('|');
   if (sig===lastSig) return; lastSig = sig;
   const s = $('status');
   s.className = 'status' + (zn==='res' ? ' bad' : '');
@@ -570,14 +565,6 @@ function updateText(){
   const muTxt = muText();
   $('mu').innerHTML = 'Şu an m<sub>u</sub> = '+muTxt+' g: '+st.m+' kg × '+fmt(st.e,2)+' mm = '+muTxt+' g × 80 mm = '+fmtInt(U)+' g·mm.';
   renderFix(zn);
-  // şeklin altındaki açıklama: yalnız çizimde görülebilen şeyi söyler
-  const dmm = S.delta*1000, pd = S.phi*180/Math.PI;
-  const side = (st.Dpx||0) < 25 ? '' : pd < 45 ? ' Kırmızı ağırlık yolun dış tarafında.' : pd > 135 ? ' Kırmızı ağırlık yolun iç tarafına geçti.' : '';
-  const msg = zn==='below' ? 'Sehim henüz küçük; mil neredeyse düz dönüyor.'+side
-            : zn==='res'   ? 'Rezonans: sehim e\'nin '+fmt(S.A,1)+' katına çıktı; mil eğik hâliyle büyük bir yol çizerek dönüyor.'+side
-                           : 'Sehim yeniden küçüldü ve e\'ye yaklaştı; mil kendini merkezliyor.'+side;
-  const cap = $('cap'); cap.className = 'cap' + (zn==='res' ? ' bad' : '');
-  cap.innerHTML = '<b>δ = '+fmt(dmm, dmm<0.1?3:2)+' mm, δ/e = '+fmt(S.A, S.A<10?2:1)+'</b> (çizimde ×'+st.k+'). '+msg;
 }
 
 function draw(){ drawMain(); drawRes(); updateText(); }
