@@ -154,6 +154,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--mb);outline-off
     <ul class="legend" aria-label="Şekildeki işaretler">
       <li class="sm-only"><svg viewBox="0 0 28 18"><path d="M3 14 L14 4 L25 14" fill="none" stroke="var(--muted)" stroke-width="1.3"/></svg><span class="t">Mile yandan ve biraz yukarıdan bakıyoruz.</span></li>
       <li><svg viewBox="0 0 28 18"><ellipse cx="14" cy="9" rx="7" ry="4" fill="var(--mark)" stroke="var(--ink)" stroke-width="1"/></svg><span class="t">Eşdeğer dengesiz kütle m<sub>u</sub> (u: İng. <i>unbalance</i>, dengesizlik), mil ekseninden r<sub>u</sub> = 80 mm uzakta (varsayım). Toplam kütlenin (m) ağırlık merkezini mil ekseninden e kadar kaydırır: m·e = m<sub>u</sub>·r<sub>u</sub>. <span id="mu"></span></span></li>
+      <li><svg viewBox="0 0 28 18"><path d="M1 12 H9 A5 5 0 0 1 19 12 H27 V3 H1 Z" fill="var(--sheet)" stroke="var(--ink)" stroke-width="1"/><path d="M4 12 L9 7 M1 8 L6 3 M10 4 L11 3 M19 9 L25 3 M22 12 L27 7" stroke="var(--hatch)" stroke-width="0.8"/><circle cx="14" cy="12" r="5" fill="var(--steel2)" stroke="var(--ink)" stroke-width="1"/></svg><span class="t">Yatak (kesit). Mil ucu bir küreye takılıdır; küre yatak gövdesindeki yuvasında döner. Böylece mil yatakta eğilebilir: k = 48EI/ℓ³ bağıntısının basit mesnet kabulü. ℓ, iki kürenin merkezleri arasıdır.</span></li>
       <li><svg viewBox="0 0 28 18"><line x1="14" y1="0" x2="14" y2="18" stroke="var(--muted)" stroke-dasharray="6 2 1.5 2"/></svg><span class="t">Yatak ekseni. Mil hiç eğilmeseydi bu çizgi üzerinde dönerdi.</span></li>
       <li><svg viewBox="0 0 28 18"><ellipse cx="14" cy="9" rx="13" ry="5" fill="none" stroke="var(--ten)" stroke-width="1.5" stroke-dasharray="3 3"/></svg><span class="t">Milin disk hizasındaki merkezinin çizdiği yol. Yarıçapı sehim δ'dır.</span></li>
       <li><svg viewBox="0 0 28 18"><line x1="1" y1="9" x2="21" y2="9" stroke="var(--ten)" stroke-width="2.2"/><path d="M27 9 L19 5 L19 13Z" fill="var(--ten)"/></svg><span class="t">Sehim δ: milin yatak ekseninden kaçıklığı. Çizimde "Sehimi büyütme" ayarındaki kat kadar büyütüldü.</span></li>
@@ -329,6 +330,15 @@ function dot(ctx, x, y, r, fill, ring){
 }
 // basit mesnetli kirişte ortadan tekil yük için sehim biçimi, ortada 1 (Tablo-Diy. s. 7, 1. yükleme)
 function shape(xi){ const u = xi<=0.5 ? xi : 1-xi; return u*(3-4*u*u); }
+// taranmış kesit (yatak gövdesi). path: yolu çizen fonksiyon, box: [x0, y0, w, h]
+function hatchPath(ctx, path, box){
+  const [x0, y0, w, h] = box;
+  ctx.save(); path(); ctx.fillStyle=C.sheet; ctx.fill(); ctx.clip();
+  ctx.strokeStyle=C.hatch; ctx.lineWidth=0.8; ctx.beginPath();
+  for (let s=-h; s<w+h; s+=7){ ctx.moveTo(x0+s, y0+h); ctx.lineTo(x0+s+h, y0); }
+  ctx.stroke(); ctx.restore();
+  path(); ctx.strokeStyle=C.ink; ctx.lineWidth=1.2; ctx.stroke();
+}
 // eşdeğer dengesiz kütle m_u = m·e/r_u [g], r_u = 80 mm; tam sayıysa ondalıksız yazılır
 function muText(){ const mu = st.m*st.e/80*1000, r1 = Math.round(mu*10)/10; return fmt(r1, Number.isInteger(r1) ? 0 : 1); }
 function zone(r){ return r<=0.8 ? 'below' : r>=1.2 ? 'above' : 'res'; }
@@ -359,11 +369,23 @@ function drawMain(){
   const sMid = Lp/2, sT = sMid - T/2, sB = sMid + T/2;
   const tw = Math.max(6, Math.min(12, st.d*0.40)), rr = tw/2;
 
-  // yataklar
-  const bw = 76;
-  hatchRect(ctx, ax-bw/2, y1-16, bw, 12); hatchRect(ctx, ax-bw/2, y1+Lp+4, bw, 12);
-  rich(ctx, 'yatak', ax+bw/2+6, y1-6, {size:11.5, color:C.muted});
-  rich(ctx, 'yatak', ax+bw/2+6, y1+Lp+14, {size:11.5, color:C.muted});
+  // yataklar: gövde kesiti taranmış; gövdedeki küresel yuvada bir küre, mil ucu kürenin deliğine takılı.
+  // Küre yuvasında döner, mil yatakta eğilebilir (basit mesnet, k = 48EI/ℓ³ kabulü).
+  // Mesnet noktası (ℓ ölçüsünün ucu) kürenin merkezidir. Çizim sırası: mil → gövde → küre.
+  const bw = 76, rb = Math.round(tw/2 + 6), cap = 7;                     // gövde genişliği, küre yarıçapı, küre üstü et kalınlığı
+  const bearing = (yc, dir) => {   // dir = −1: üst yatak (yuva aşağı açık), +1: alt yatak (yuva yukarı açık)
+    const L = ax-bw/2, Rr = ax+bw/2, yb = yc + dir*(rb + cap);
+    const path = () => { ctx.beginPath(); ctx.moveTo(L, yc); ctx.lineTo(ax-rb, yc);
+      if (dir < 0) ctx.arc(ax, yc, rb, Math.PI, 0, false); else ctx.arc(ax, yc, rb, Math.PI, 0, true);
+      ctx.lineTo(Rr, yc); ctx.lineTo(Rr, yb); ctx.lineTo(L, yb); ctx.closePath(); };
+    hatchPath(ctx, path, [L, Math.min(yc, yb), bw, rb + cap]);
+    const gb = ctx.createRadialGradient(ax - rb*0.35, yc - rb*0.35, rb*0.1, ax, yc, rb);
+    gb.addColorStop(0, C.steel1); gb.addColorStop(0.6, C.steel2); gb.addColorStop(1, C.steel3);
+    ctx.beginPath(); ctx.arc(ax, yc, rb, 0, 2*Math.PI); ctx.fillStyle=gb; ctx.fill();
+    ctx.strokeStyle=C.ink; ctx.lineWidth=1.2; ctx.stroke();
+  };
+  rich(ctx, 'yatak', ax+bw/2+6, y1-(rb+cap)/2+4, {size:11.5, color:C.muted});
+  rich(ctx, 'yatak', ax+bw/2+6, y1+Lp+(rb+cap)/2+4, {size:11.5, color:C.muted});
   // yatak ekseni
   ctx.setLineDash([12,4,2,4]); ctx.strokeStyle=C.muted; ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(ax, y1-26); ctx.lineTo(ax, y1+Lp+26); ctx.stroke(); ctx.setLineDash([]);
@@ -383,6 +405,7 @@ function drawMain(){
   }
   // 1) alt mil (diskin arkasında kalır)
   shaft(sB, Lp);
+  bearing(y1+Lp, +1);                           // alt yatak gövdesi milin üstüne
   // 2) disk: yan yüz + üst yüz
   const [cxT, cyT] = P(sT), [cxB, cyB] = P(sB);
   ctx.beginPath();
@@ -417,6 +440,7 @@ function drawMain(){
   ctx.strokeStyle=C.ink; ctx.lineWidth=1; ctx.stroke();
   // 5) üst mil ve diske giriş halkası
   shaft(0, sT);
+  bearing(y1, -1);                              // üst yatak gövdesi milin üstüne
   ctx.beginPath(); ctx.ellipse(cxT, cyT, rr+3, (rr+3)*SE, 0, 0, 2*Math.PI); ctx.fillStyle=C.steel2; ctx.fill(); ctx.strokeStyle=C.ink; ctx.lineWidth=1; ctx.stroke();
   // 6) sehim oku: eksenden mil merkezine
   if (D>16){ arrow(ctx, ax, yAx, cxT - (cxT-ax)*(rr+3)/Math.max(D,1e-6), cyT - (cyT-yAx)*(rr+3)/Math.max(D,1e-6), C.ten, 2, 8);
