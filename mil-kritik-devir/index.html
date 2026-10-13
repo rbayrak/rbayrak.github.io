@@ -148,7 +148,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--mb);outline-off
       </div>
       <div class="ctl"><label for="inN"><span><span class="lg">Devir sayısı n</span><span class="sm">Devir n</span></span> <output id="oN"></output></label><input id="inN" type="range" min="0" max="6000" step="10" value="800"></div>
       <div class="ctl"><label for="inD">Mil çapı d <output id="oD"></output></label><input id="inD" type="range" min="16" max="30" step="1" value="20"></div>
-      <div class="ctl"><label for="inL"><span><span class="lg">Yataklar arası ℓ</span><span class="sm">Açıklık ℓ</span></span> <output id="oL"></output></label><input id="inL" type="range" min="400" max="900" step="10" value="600"></div>
+      <div class="ctl"><label for="inL"><span><span class="lg">Yataklar arası ℓ</span><span class="sm">Açıklık ℓ</span></span> <output id="oL"></output></label><input id="inL" type="range" min="400" max="900" step="10" value="520"></div>
       <div class="ctl"><label for="inM"><span><span class="lg">Toplam kütle m</span><span class="sm">Kütle m</span><small class="lbl2"><span class="lg">disk + dengesiz kütle</span><span class="sm">disk + dengesiz</span></small></span> <output id="oM"></output></label><input id="inM" type="range" min="10" max="40" step="1" value="20"></div>
       <div class="ctl"><label for="inE"><span><span class="lg">Eksantriklik e</span><span class="sm">Kaçıklık e</span></span> <output id="oE"></output></label><input id="inE" type="range" min="0.02" max="0.30" step="0.01" value="0.10"></div>
       <div class="ctl"><label for="inZ"><span><span class="lg">Sönüm oranı ζ</span><span class="sm">Sönüm ζ</span></span> <output id="oZ"></output></label><input id="inZ" type="range" min="0.02" max="0.30" step="0.01" value="0.05"></div>
@@ -263,7 +263,7 @@ function fixOptions(p, n, lim) {
 
 (function(){
 const E = 210e9, NMAX = 6000, LIM = {dMax:30, LMin:400, mMin:10};
-const DEF = {n:800, d:20, L:600, m:20, e:0.10, z:0.05, k:150, spd:1};
+const DEF = {n:800, d:20, L:520, m:20, e:0.10, z:0.05, k:150, spd:1};
 const st = Object.assign({}, DEF, {playing:true, ramp:false, th:0, last:null, prev:null});
 const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (reduce) st.playing = false;
@@ -356,7 +356,7 @@ function drawMain(){
   const Lp = (yBot-yTop)*(0.68 + 0.32*(st.L-400)/500), y1 = (yTop+yBot)/2 - Lp/2;
   const g = Lp/st.L;                             // px/mm
   const Rd = Math.min(w*0.12, 46), T = 14, ry = Rd*SE;
-  const xd = Math.max(20, ax - 150);             // boy ölçüsünün yeri: şekle yakın
+  const xd = Math.max(20, ax - 165);             // boy ölçüsünün yeri: şekle yakın
   const Dfull = st.k*dmm*g, Dmax = ax - Rd - xd - 14, clamped = Dfull > Dmax, D = Math.min(Dfull, Dmax);
   const dx = D*Math.cos(al), dz = D*Math.sin(al);
   const P = s => { const f = shape(s/Lp); return [ax + dx*f, y1 + s + dz*f*SE]; };
