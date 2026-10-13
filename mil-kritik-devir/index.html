@@ -157,7 +157,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--mb);outline-off
       <li><svg viewBox="0 0 28 18"><path d="M1 12 H9 A5 5 0 0 1 19 12 H27 V3 H1 Z" fill="var(--sheet)" stroke="var(--ink)" stroke-width="1"/><path d="M4 12 L9 7 M1 8 L6 3 M10 4 L11 3 M19 9 L25 3 M22 12 L27 7" stroke="var(--hatch)" stroke-width="0.8"/><circle cx="14" cy="12" r="5" fill="var(--steel2)" stroke="var(--ink)" stroke-width="1"/></svg><span class="t">Yatak (kesit). Mil ucu bir küreye takılıdır; küre yatak gövdesindeki yuvasında döner. Böylece mil yatakta eğilebilir: k = 48EI/ℓ³ bağıntısının basit mesnet kabulü. ℓ, iki kürenin merkezleri arasıdır.</span></li>
       <li><svg viewBox="0 0 28 18"><line x1="14" y1="0" x2="14" y2="18" stroke="var(--muted)" stroke-dasharray="6 2 1.5 2"/></svg><span class="t">Yatak ekseni. Mil hiç eğilmeseydi bu çizgi üzerinde dönerdi.</span></li>
       <li><svg viewBox="0 0 28 18"><ellipse cx="14" cy="9" rx="13" ry="5" fill="none" stroke="var(--ten)" stroke-width="1.5" stroke-dasharray="3 3"/></svg><span class="t">Milin disk hizasındaki merkezinin çizdiği yol. Yarıçapı sehim δ'dır.</span></li>
-      <li><svg viewBox="0 0 28 18"><line x1="1" y1="9" x2="21" y2="9" stroke="var(--ten)" stroke-width="2.2"/><path d="M27 9 L19 5 L19 13Z" fill="var(--ten)"/></svg><span class="t">Sehim δ: milin yatak ekseninden kaçıklığı. Çizimde "Sehimi büyütme" ayarındaki kat kadar büyütüldü.</span></li>
+      <li><svg viewBox="0 0 28 18"><line x1="1" y1="9" x2="21" y2="9" stroke="var(--ten)" stroke-width="2.2"/><path d="M27 9 L19 5 L19 13Z" fill="var(--ten)"/></svg><span class="t">Sehim δ: milin yatak ekseninden kaçıklığı. Çizimde "Sehimi büyütme" ayarındaki kat kadar büyütüldü. Şekle sığmayacak kadar büyürse çizimde sınırda tutulur ve sol üstte "δ çizim sınırında" yazar.</span></li>
     </ul>
   </section>
   <div class="right">
@@ -372,7 +372,7 @@ function drawMain(){
   // yataklar: gövde kesiti taranmış; gövdedeki küresel yuvada bir küre, mil ucu kürenin deliğine takılı.
   // Küre yuvasında döner, mil yatakta eğilebilir (basit mesnet, k = 48EI/ℓ³ kabulü).
   // Mesnet noktası (ℓ ölçüsünün ucu) kürenin merkezidir. Çizim sırası: mil → gövde → küre.
-  const bw = 76, rb = Math.round(tw/2 + 6), cap = 7;                     // gövde genişliği, küre yarıçapı, küre üstü et kalınlığı
+  const bw = 76, rb = Math.round(tw/2 + 4), cap = 7;                     // gövde genişliği, küre yarıçapı, küre üstü et kalınlığı
   const bearing = (yc, dir) => {   // dir = −1: üst yatak (yuva aşağı açık), +1: alt yatak (yuva yukarı açık)
     const L = ax-bw/2, Rr = ax+bw/2, yb = yc + dir*(rb + cap);
     const path = () => { ctx.beginPath(); ctx.moveTo(L, yc); ctx.lineTo(ax-rb, yc);
@@ -386,9 +386,21 @@ function drawMain(){
   };
   rich(ctx, 'yatak', ax+bw/2+6, y1-(rb+cap)/2+4, {size:11.5, color:C.muted});
   rich(ctx, 'yatak', ax+bw/2+6, y1+Lp+(rb+cap)/2+4, {size:11.5, color:C.muted});
-  // yatak ekseni
-  ctx.setLineDash([12,4,2,4]); ctx.strokeStyle=C.muted; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(ax, y1-26); ctx.lineTo(ax, y1+Lp+26); ctx.stroke(); ctx.setLineDash([]);
+  // yatak ekseni (x = 0, z = 0 doğrusu). Önce tamamı en arkaya çizilir; önde kalan parçaları sonra
+  // axisSeg ile yeniden çizilir. Kesikli desen tek parça gibi sürer (lineDashOffset).
+  const yA0 = y1 - 26;
+  const axisSeg = (sa, sb) => { if (sb <= sa) return;
+    ctx.save(); ctx.setLineDash([12,4,2,4]); ctx.lineDashOffset = y1 + sa - yA0;
+    ctx.strokeStyle=C.muted; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(ax, y1+sa); ctx.lineTo(ax, y1+sb); ctx.stroke(); ctx.restore(); };
+  axisSeg(-26, Lp + 26);
+  // Eksenin mile göre önü/arkası: milin s yüksekliğindeki merkezi (dx·f, dz·f).
+  //  dz < 0: mil eksenin arkasında, eksen milin üstüne çizilir.
+  //  Mesnetlere yakın, merkez uzaklığı D·f < rr olan bölgede eksen milin içinden geçer: görünmez.
+  //  Bu bölgenin sınırı sc: D·shape(sc/Lp) = rr (shape monoton artan, ikiye bölme ile).
+  let sc = Lp/2;
+  if (D > rr){ let lo = 0, hi = 0.5; for (let it=0; it<40; it++){ const mid = (lo+hi)/2; if (D*shape(mid) < rr) lo = mid; else hi = mid; } sc = hi*Lp; }
+  const sIn = Math.max(sc, rb + 1);            // küre de ekseni örter
+  const shaftBehind = dz < 0 && D > rr;
 
   // mil parçası: gövde + dönmeyi gösteren iki ana doğru
   function shaft(s0, s1){
@@ -405,6 +417,7 @@ function drawMain(){
   }
   // 1) alt mil (diskin arkasında kalır)
   shaft(sB, Lp);
+  if (shaftBehind) axisSeg(sB, Lp - sIn);       // alt mil eksenin arkasında
   bearing(y1+Lp, +1);                           // alt yatak gövdesi milin üstüne
   // 2) disk: yan yüz + üst yüz
   const [cxT, cyT] = P(sT), [cxB, cyB] = P(sB);
@@ -438,10 +451,14 @@ function drawMain(){
   ctx.ellipse(wx, wy-2, wr, wr*SE, 0, Math.PI, 0, true); ctx.closePath(); ctx.fillStyle=C.mark; ctx.fill();
   ctx.beginPath(); ctx.ellipse(wx, wy-2, wr, wr*SE, 0, 0, 2*Math.PI); ctx.fillStyle=C.mark; ctx.fill();
   ctx.strokeStyle=C.ink; ctx.lineWidth=1; ctx.stroke();
+  // eksenin diskin üstündeki parçası diskin önündedir (bakış yukarıdan); kalınlık içindeki parçası
+  // yalnız eksen diskin dışında kalırsa (D > Rd) ve disk arkadaysa (dz < 0) görünür
+  axisSeg(0, (D > Rd && dz < 0) ? sB : sT);
   // 5) üst mil ve diske giriş halkası
   shaft(0, sT);
   bearing(y1, -1);                              // üst yatak gövdesi milin üstüne
   ctx.beginPath(); ctx.ellipse(cxT, cyT, rr+3, (rr+3)*SE, 0, 0, 2*Math.PI); ctx.fillStyle=C.steel2; ctx.fill(); ctx.strokeStyle=C.ink; ctx.lineWidth=1; ctx.stroke();
+  if (shaftBehind) axisSeg(sIn, sT);           // üst mil eksenin arkasında
   // 6) sehim oku: eksenden mil merkezine
   if (D>16){ arrow(ctx, ax, yAx, cxT - (cxT-ax)*(rr+3)/Math.max(D,1e-6), cyT - (cyT-yAx)*(rr+3)/Math.max(D,1e-6), C.ten, 2, 8);
     const mx = (ax+cxT)/2, my = (yAx+cyT)/2;
@@ -465,7 +482,8 @@ function drawMain(){
     const left = ax+100+lw2 <= w-6, lx = left ? ax+100 : w-6, ly = y1+Lp-34, al = left ? 'left' : 'right';
     rich(ctx, 'm = '+st.m+' kg', lx, ly, {size:12, color:C.muted, align:al, bg:true});
     rich(ctx, t2, lx, ly+16, {size:12, weight:600, color:C.mark, align:al, bg:true}); }
-  if (clamped) rich(ctx, 'çizim sınırı', ax, yAx - D*SE - 26, {size:11.5, weight:600, color:C.com, align:'center', bg:true});
+  // sabit yer: üst yatağın solu (dönen mil ve n oku buraya hiç gelmez)
+  if (clamped) rich(ctx, 'δ çizim sınırında', ax-bw/2-8, y1-(rb+cap)/2+4, {size:11.5, weight:600, color:C.com, align:'right'});
 }
 
 // ---------------- Rezonans eğrisi
