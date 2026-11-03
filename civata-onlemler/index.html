@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cıvatada k_c ve k_p önlemleri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E6ECEE; --sheet:#F4F7F8; --ink:#1C2A35; --muted:#55666F; --line:#B9C5CB;
+  --steel1:#DCE3E7; --steel2:#8996A0; --steel3:#5E6B75;
+  --mb:#0B6E6E; --ten:#24589B; --com:#B5372B; --fis:#7B3FA0; --warn:#A8650C;
+  --hatch:#3A4A55; --tenbg:rgba(36,88,155,0.12); --combg:rgba(181,55,43,0.12); --fisbg:rgba(123,63,160,0.10);
+  --okbg:rgba(11,110,110,0.10); --warnbg:rgba(168,101,12,0.13);
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141C22; --sheet:#1B252C; --ink:#DCE5EA; --muted:#93A4AE; --line:#34444E;
+    --steel1:#4A5660; --steel2:#5C6872; --steel3:#3B464F;
+    --mb:#3FB6B0; --ten:#6EA0E0; --com:#E26A5C; --fis:#B98AE0; --warn:#E0A84A; --hatch:#9FB0BB;
+    --tenbg:rgba(110,160,224,0.16); --combg:rgba(226,106,92,0.16); --fisbg:rgba(185,138,224,0.14);
+    --okbg:rgba(63,182,176,0.14); --warnbg:rgba(224,168,74,0.16); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141C22; --sheet:#1B252C; --ink:#DCE5EA; --muted:#93A4AE; --line:#34444E;
+  --steel1:#4A5660; --steel2:#5C6872; --steel3:#3B464F;
+  --mb:#3FB6B0; --ten:#6EA0E0; --com:#E26A5C; --fis:#B98AE0; --warn:#E0A84A; --hatch:#9FB0BB;
+  --tenbg:rgba(110,160,224,0.16); --combg:rgba(226,106,92,0.16); --fisbg:rgba(185,138,224,0.14);
+  --okbg:rgba(63,182,176,0.14); --warnbg:rgba(224,168,74,0.16); color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;font-variant-numeric:tabular-nums}
+.wrap{max-width:1320px;margin:0 auto;padding:16px 16px 36px}
+header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 24px;align-items:start;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:12px}
+h1{font-size:clamp(1.4rem,2.6vw,2.15rem);font-weight:600;line-height:1.15;margin:0;letter-spacing:-0.01em}
+.figref{display:block;margin-top:4px;font-family:"IBM Plex Serif",Georgia,serif;font-style:italic;color:var(--muted)}
+.author{text-align:right;font-size:.85rem;line-height:1.35;color:var(--muted)}
+.author b{display:block;font-weight:600;color:var(--ink)}
+.author a{color:var(--muted);text-decoration:none}
+.author a:hover{text-decoration:underline}
+.lead{grid-column:1/-1;margin:4px 0 0;max-width:80ch;color:var(--muted)}
+.stage{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);gap:12px;align-items:start}
+.panel{background:var(--sheet);border:1px solid var(--line);border-radius:3px;position:relative}
+.panel h2{font-size:.95rem;font-weight:600;margin:0;padding:8px 12px 0}
+.panel .sub{font-size:.84rem;color:var(--muted);margin:2px 0 0;padding:0 12px}
+canvas{display:block;width:100%}
+#cvF{height:280px}
+.right{display:grid;gap:12px;align-content:start}
+.caption{margin:2px 12px 0;font-size:.88rem;min-height:2.7em;color:var(--ink)}
+.status{margin:6px 12px 0;padding:6px 12px;border-radius:3px;border-left:5px solid var(--mb);background:var(--okbg);display:flex;flex-wrap:wrap;gap:2px 16px;align-items:baseline}
+.status.warn{border-left-color:var(--warn);background:var(--warnbg)}
+.status .big{font-size:1.02rem;font-weight:600}
+.status.warn .big{color:var(--warn)}
+.status .nums{font-size:.88rem;color:var(--muted)}
+.vals{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:6px 12px 10px;font-size:.88rem;margin:0}
+.vals dt{color:var(--muted)} .vals dd{margin:0;text-align:right;font-weight:500}
+.vals .grp{grid-column:1/-1;font-weight:600;color:var(--ink);margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin:8px 12px 0;align-items:center}
+.steps .lab{font-size:.84rem;color:var(--muted);margin-right:2px}
+.controls{border-top:1px solid var(--line);margin:8px 12px 0;padding:10px 0 10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 20px;align-items:end}
+.ctl label{display:flex;justify-content:space-between;align-items:baseline;font-size:.86rem;color:var(--muted);gap:8px}
+.ctl output{color:var(--ink);font-weight:500;white-space:nowrap}
+input[type=range]{width:100%;accent-color:var(--mb);margin:4px 0 0}
+select{font:inherit;font-size:.9rem;width:100%;margin-top:4px;padding:4px 6px;min-height:34px;border:1px solid var(--line);border-radius:2px;background:var(--paper);color:var(--ink)}
+.hint{font-size:.84rem;color:var(--muted)}
+.sm{display:none}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;grid-column:1/-1}
+button{font:inherit;font-size:.9rem;border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:6px 12px;border-radius:2px;cursor:pointer;min-height:36px}
+button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--mb);outline-offset:2px}
+.steps button{padding:4px 10px;min-height:32px;font-size:.86rem}
+.legend{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0 12px;padding:8px 0 10px;border-top:1px solid var(--line);font-size:.84rem;list-style:none}
+.legend li{display:flex;align-items:center;gap:8px;line-height:1.3;flex:1 1 300px}
+.legend svg{flex:none;width:30px;height:20px;overflow:visible}
+.legend .t{color:var(--muted)}
+.cmp{margin-top:12px;padding-bottom:12px}
+.cmp h3{font-size:.92rem;font-weight:600;margin:12px 12px 4px}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 20px;margin:6px 12px 0;font-size:.88rem}
+.facts p{margin:0}
+.opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 12px}
+.opts-in{margin-top:8px}
+.opt .fr{font-weight:400;color:var(--muted)}
+.lead a{color:var(--ink)}
+.right .panel h2 + .sub{margin-bottom:4px}
+.right .tblwrap{margin-top:4px}
+.opt{border:1px solid var(--line);border-radius:3px;padding:10px 12px;background:var(--paper);display:flex;flex-direction:column;gap:6px}
+.opt.on{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--ink)}
+.opt .ttl{font-weight:600;font-size:.92rem}
+.opt .res{font-size:.84rem;color:var(--muted)}
+.opt .chg{font-size:.9rem;font-weight:500}
+.opt .nt{font-size:.82rem;color:var(--muted)} .opt .nt.w{color:var(--warn)}
+.opt button{align-self:flex-start;margin-top:auto}
+.opt .ctl label{font-size:.82rem}
+.tblwrap{overflow-x:auto;margin:0 12px}
+.ctab{border-collapse:collapse;font-size:.88rem;width:100%;max-width:900px}
+@media (max-width:600px){.ctab{font-size:.82rem}.ctab th,.ctab td{padding:4px 5px}}
+.ctab th,.ctab td{padding:4px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.ctab th:first-child,.ctab td:first-child{text-align:left;white-space:normal}
+.ctab th{font-weight:600;color:var(--muted)}
+.ctab td.up{color:var(--warn)} .ctab td.dn{color:var(--mb)}
+.cmp .btnrow{margin:10px 12px 0}
+@media (max-width:1150px){.opts-in{grid-template-columns:1fr}}
+@media (max-width:900px){.opts,.facts{grid-template-columns:1fr}}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px 28px;margin-top:20px}
+.notes > div:last-child{grid-column:1/-1;border-top:1px solid var(--line);padding-top:10px}
+.notes > div:last-child .refs{max-width:115ch}
+.notes h3{font-size:1.05rem;font-weight:600;margin:0 0 6px}
+.notes p{margin:0 0 8px;max-width:70ch}
+.eqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 32px}
+.eq{font-family:"IBM Plex Serif",Georgia,serif;font-size:1rem;margin:0 0 4px}
+.refs{font-size:.85rem;color:var(--muted)}
+.yorum{color:var(--muted);font-style:italic}
+@media (max-width:1050px){.controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.stage{grid-template-columns:1fr}}
+@media (min-width:901px) and (min-height:760px){.stage > .panel{position:sticky;top:8px}}
+@media (max-width:600px){
+  .wrap{padding:12px 10px 32px}
+  .controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px}
+  .ctl label{font-size:.8rem}
+  .lg{display:none} .sm{display:inline}
+  .author{font-size:.75rem}
+  input[type=range]{height:28px}
+  .status .big{font-size:.95rem}
+  .hide-sm{display:none}
+  .legend{font-size:.8rem}
+  .caption{font-size:.84rem}
+  .steps{gap:4px} .steps .lab{display:none}
+  .steps button{padding:3px 8px;font-size:.8rem}
+  .vals{grid-template-columns:minmax(0,1fr) auto} .vals dd{white-space:nowrap}
+  .stage > .panel:first-child{display:flex;flex-direction:column}
+  .stage > .panel:first-child > .status{order:2} .stage > .panel:first-child > .controls{order:3}
+  .stage > .panel:first-child > .caption{order:4;margin-top:6px} .stage > .panel:first-child > .opts{order:5}
+  .stage > .panel:first-child > .legend{order:6}
+  .stage > .panel:first-child > h2, .stage > .panel:first-child > canvas{order:1}
+  .stage > .panel:first-child{display:flex;flex-direction:column}
+  .stage > .panel:first-child > .caption{order:5;margin-top:8px}
+  .stage > .panel:first-child > .legend{order:6}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>Uzar cıvata, yaylı rondela ve conta işletme kuvvetinin bölüşümünü nasıl değiştirir?</h1>
+    <span class="figref">Şekil 3.47 ve 3.48: Esnek (uzar) cıvata, yaylı rondela ve parçalar arasında esnek conta</span>
+  </div>
+  <div class="author"><b>Ramazan Bayrak</b><a href="mailto:rbayrak@yildiz.edu.tr"><i>rbayrak@yildiz.edu.tr</i></a></div>
+  <p class="lead">Ön gerilme üçgenini <a href="../civata-on-gerilme/">ilk sayfada</a> kurmuştuk. F<sub>iş</sub>'in cıvataya gelen kısmı F<sub>z</sub> = F<sub>iş</sub>·k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>) idi. Bu sayfada k<sub>c</sub> ya da k<sub>p</sub>'yi düşüren üç önlemi uygulayın ve doğruların eğiminin nasıl değiştiğini izleyin. <span class="hide-sm">Gri kesikli üçgen önlemsiz bağlantıdır.</span></p>
+</header>
+
+<div class="stage">
+  <section class="panel" aria-label="Kesit, ön gerilme üçgeni, önlemler ve ayarlar">
+    <h2><span class="lg">Kesit ve ön gerilme üçgeni (Şekil 3.46–3.48)</span><span class="sm">Kesit ve ön gerilme üçgeni</span></h2>
+    <canvas id="cvMain" role="img" aria-label="Solda önlemleri gösteren cıvata bağlantısı kesiti, sağda önlemli ve önlemsiz ön gerilme üçgeni."></canvas>
+    <p id="caption" class="caption" aria-live="polite"></p>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <div class="opts opts-in" aria-label="Önlemler">
+      <div class="opt" id="optU"><span class="ttl">Uzar cıvata <span class="fr">(k<sub>c</sub> ↓)</span></span>
+        <span class="res hide-sm">Gövde ℓ<sub>s</sub> = 0,8·ℓ<sub>c</sub> (varsayım) boyunca d<sub>s</sub> çapına inceltilir. DIN 2510: d<sub>s</sub> = 0,9·d<sub>k</sub> (d<sub>k</sub> = d<sub>3</sub>).</span>
+        <div class="ctl"><label for="inUz"><span>d<sub>s</sub>/d<sub>3</sub></span> <output id="oUz"></output></label><input id="inUz" type="range" min="0.6" max="0.9" step="0.05" value="0.9"></div>
+        <span class="chg" id="rU"></span>
+        <button id="bU" aria-pressed="false">Uygula</button></div>
+      <div class="opt" id="optR"><span class="ttl">Konik yaylı rondela <span class="fr">(k<sub>c</sub> ↓)</span></span>
+        <span class="res hide-sm">DIN 6796. Cıvataya seri bağlı yay. Düzleşme kuvveti F<sub>düz</sub> tablodan, rijitlik k<sub>r</sub> = F<sub>düz</sub>/h<sub>0</sub> (h<sub>0</sub>: koni yüksekliği). Düzleşince rijit.</span>
+        <span class="chg" id="rR"></span><span class="nt" id="nR"></span>
+        <button id="bR" aria-pressed="false">Uygula</button></div>
+      <div class="opt" id="optC"><span class="ttl">Esnek conta <span class="fr">(k<sub>p</sub> ↓)</span></span>
+        <span class="res hide-sm">Parçalara seri bağlı yay (s. 76). k<sub>conta</sub> = E·A<sub>p</sub>/t (notta yok).</span>
+        <div class="ctl"><label for="selCm">Malzeme (Tablo-Diy. s. 1)</label><select id="selCm"><option value="pvc" selected>Sert PVC (E = 2300 N/mm²)</option><option value="al">Alüminyum alaşımı (70 000)</option><option value="cu">Bakır alaşımı (90 000)</option></select></div>
+        <div class="ctl"><label for="inCt"><span>Kalınlık t</span> <output id="oCt"></output></label><input id="inCt" type="range" min="0.5" max="3" step="0.5" value="1"></div>
+        <span class="chg" id="rC"></span><span class="nt" id="nC"></span>
+        <button id="bC" aria-pressed="false">Uygula</button></div>
+    </div>
+    <div class="controls" aria-label="Ayarlar">
+      <div class="ctl btnrow">
+        <button id="bUndo">Geri al: ilk değerler</button>
+        <button id="btnDyn" aria-pressed="false">Dinamik yük</button>
+        <button id="btnPlay">Durdur</button>
+        <span class="hint hide-sm" id="hUndo"></span>
+      </div>
+      <div class="ctl"><label for="inFon"><span><span class="lg">Ön gerilme kuvveti F<sub>ön</sub></span><span class="sm">F<sub>ön</sub></span></span> <output id="oFon"></output></label><input id="inFon" type="range" min="5" max="90" step="1" value="40"></div>
+      <div class="ctl"><label for="inFis"><span><span class="lg">İşletme kuvveti F<sub>iş</sub></span><span class="sm">F<sub>iş</sub></span></span> <output id="oFis"></output></label><input id="inFis" type="range" min="0" max="90" step="1" value="20"></div>
+      <div class="ctl"><label for="inLp"><span><span class="lg">Parçaların toplam boyu ℓ<sub>p</sub></span><span class="sm">Boy ℓ<sub>p</sub></span></span> <output id="oLp"></output></label><input id="inLp" type="range" min="20" max="80" step="2" value="40"></div>
+      <div class="ctl"><label for="selBolt"><span class="lg">Cıvata, 8.8 (Tablo-Diy. s. 10–11)</span><span class="sm">Cıvata (8.8)</span></label><select id="selBolt"><option>M10</option><option>M12</option><option selected>M16</option><option>M20</option><option>M24</option></select></div>
+      <div class="ctl"><label for="selMat"><span class="lg">Sıkılan parçaların malzemesi</span><span class="sm">Parça malzemesi</span></label><select id="selMat"><option value="celik" selected>Çelik</option><option value="dokum">Dökme demir (GG30)</option><option value="al">Alüminyum alaşımı</option></select></div>
+    </div>
+    <ul class="legend" aria-label="Şekildeki işaretler">
+      <li><svg viewBox="0 0 30 20"><rect x="1" y="1" width="28" height="9" fill="var(--sheet)" stroke="var(--ink)"/><path d="M4 10 L13 1 M10 10 L19 1 M16 10 L25 1 M22 10 L29 3" stroke="var(--hatch)" stroke-width="0.8"/><rect x="1" y="10" width="28" height="9" fill="var(--sheet)" stroke="var(--ink)"/><path d="M1 13 L7 19 M5 10 L14 19 M11 10 L20 19 M17 10 L26 19 M23 10 L29 16" stroke="var(--hatch)" stroke-width="0.8"/></svg><span class="t">Sıkılan iki parça, kesit. Kalınlıkları ℓ<sub>p</sub>/2. Komşu parçalar zıt yönde taranır.</span></li>
+      <li><svg viewBox="0 0 30 20"><rect x="3" y="12" width="24" height="7" fill="var(--steel1)" stroke="var(--ink)"/><rect x="10" y="1" width="10" height="11" fill="var(--steel1)" stroke="var(--ink)"/><line x1="9" y1="12" x2="9" y2="19" stroke="var(--ink)" stroke-width="0.8"/><line x1="21" y1="12" x2="21" y2="19" stroke="var(--ink)" stroke-width="0.8"/></svg><span class="t">Cıvata. Baş altta, somun üstte (Şekil 3.44 gibi). Cıvata ve somun kesitte taranmaz. Baş sabit tutuldu, somun gerçek açısıyla döner. Noktalı-kesikli çizgi eksen; ince çizgi diş dibi (d<sub>3</sub>), kalın enine çizgi diş bitimidir.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--muted)" stroke-dasharray="3 2"/><line x1="1" y1="15" x2="29" y2="15" stroke="var(--muted)" stroke-dasharray="3 2"/></svg><span class="t">Kesikli ince çizgi: sıkılmamış bağlantıdaki konum. Üstteki çizgi cıvata ucunun, alttaki üst parça yüzeyinin eski yerini gösterir.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="9" y1="2" x2="9" y2="18" stroke="var(--ten)" stroke-width="1.4"/><path d="M9 2 L6 7 L12 7Z M9 18 L6 13 L12 13Z" fill="var(--ten)"/><line x1="21" y1="5" x2="21" y2="15" stroke="var(--com)" stroke-width="1.4"/><path d="M21 5 L18 10 L24 10Z M21 15 L18 10 L24 10Z" fill="var(--com)"/></svg><span class="t">Ölçüler: mavi, cıvatanın uzaması; kırmızı, parçaların kısalması. Şekil değiştirmeler çizimde <span id="lgN"></span> kat büyütüldü.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="8" y1="10" x2="8" y2="2" stroke="var(--ten)" stroke-width="2"/><path d="M8 1 L4.5 7 L11.5 7Z" fill="var(--ten)"/><line x1="8" y1="10" x2="8" y2="18" stroke="var(--ten)" stroke-width="2"/><path d="M8 19 L4.5 13 L11.5 13Z" fill="var(--ten)"/><line x1="22" y1="1" x2="22" y2="8" stroke="var(--com)" stroke-width="2"/><path d="M22 10 L18.5 4 L25.5 4Z" fill="var(--com)"/><line x1="22" y1="19" x2="22" y2="12" stroke="var(--com)" stroke-width="2"/><path d="M22 10 L18.5 16 L25.5 16Z" fill="var(--com)"/></svg><span class="t">İç kuvvetler: cıvatada çekme (mavi, dışa bakan oklar), parçalarda basma (kırmızı, birbirine bakan oklar). Ok boyu kuvvetle orantılıdır, iki renkte ölçek ortaktır.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="6" y1="18" x2="6" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M6 2 L2.5 8 L9.5 8Z" fill="var(--fis)"/><line x1="24" y1="18" x2="24" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M24 2 L20.5 8 L27.5 8Z" fill="var(--fis)"/></svg><span class="t">Mor: işletme kuvveti F<sub>iş</sub>. δ': F<sub>iş</sub>'in doğurduğu ek şekil değiştirme (kesitteki ölçülerde). Kesitte dört ok vardır: üst yüzde iki ok yukarı, alt yüzde iki ok aşağı çeker. Her ok F<sub>iş</sub>/2'yi gösterir, bir yüzdeki iki okun toplamı F<sub>iş</sub>'tir. Mor okların ölçeği ayrıdır.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="2" y1="18" x2="16" y2="3" stroke="var(--ten)" stroke-width="2.2"/><line x1="16" y1="3" x2="28" y2="18" stroke="var(--com)" stroke-width="2.2"/></svg><span class="t">Diyagramda mavi doğru cıvatanın karakteristiği, eğimi k<sub>c</sub> = tan φ. İnce kısmı doğrunun devamıdır. Kırmızı doğru sıkılan parçaların karakteristiği, eğimi k<sub>p</sub> = tan ψ.</span></li>
+      <li><svg viewBox="0 0 30 20"><path d="M2 18 L14 3 L14 18Z" fill="var(--tenbg)" stroke="none"/><path d="M14 18 L14 3 L28 18Z" fill="var(--combg)" stroke="none"/><line x1="14" y1="3" x2="14" y2="18" stroke="var(--ink)" stroke-width="1"/></svg><span class="t">Açık mavi alan cıvatanın, açık kırmızı alan parçaların üçgenidir. Düşey ok F<sub>ön</sub>'ü gösterir. Mavi ve kırmızı nokta cıvatanın ve parçaların şu anki durumudur.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="1" y1="12" x2="29" y2="12" stroke="var(--ink)" stroke-width="1.2"/><path d="M3 12 L7 6 M9 12 L13 6 M15 12 L19 6 M21 12 L25 6 M27 12 L29 9" stroke="var(--ink)" stroke-width="0.8"/></svg><span class="t">Cıvatanın akma sınırı F<sub>0,2</sub> = R<sub>p0,2</sub>·A<sub>c</sub>, 8.8 kalite (R<sub>p0,2</sub> = 640 N/mm², d &gt; 16 mm için 660 N/mm²).</span></li>
+      <li><svg viewBox="0 0 30 20"><path d="M3 12 L13 8 L13 12 L3 16Z" fill="var(--sheet)" stroke="var(--ink)"/><path d="M17 8 L27 12 L27 16 L17 12Z" fill="var(--sheet)" stroke="var(--ink)"/><rect x="1" y="17" width="28" height="2.2" fill="var(--ink)"/></svg><span class="t">Önlemler: konik yaylı rondela somunun altında, taranmış kesit; conta iki parça arasında, dolu ince kesit. Uzar cıvatanın gövdesi inceltilmiş çizilir. Rondelanın konisi ve contanın çökmesi şekil değiştirmeyle aynı katta büyütüldü (gerçek koni açısı yaklaşık 5°). Conta kalınlığı çizimde kesitin sol üstünde yazan kat (×q) kadar kalın çizildi; t ile orantılıdır.</span></li>
+      <li><svg viewBox="0 0 30 20"><path d="M2 18 L10 3 L22 18" fill="none" stroke="var(--muted)" stroke-width="1.3" stroke-dasharray="4 2"/><path d="M2 18 L18 13 L26 3" fill="none" stroke="var(--ten)" stroke-width="2"/></svg><span class="t">Gri kesikli üçgen: önlemsiz bağlantının üçgeni, karşılaştırma için. Rondela takılıyken mavi doğru kırılır: düzleşene kadar yumuşak, sonra cıvatanın kendi eğiminde. Kesitteki uç ölçüsü δ<sub>cıv</sub> yalnız cıvatanın uzamasıdır; diyagramdaki δ<sub>c</sub> ise buna rondelanın çökmesi eklenerek bulunur.</span></li>
+      <li><svg viewBox="0 0 30 20"><rect x="1" y="1" width="16" height="12" fill="var(--sheet)" stroke="var(--muted)"/><rect x="21" y="9" width="7" height="9" fill="none" stroke="var(--muted)"/></svg><span class="t">"Yakından" kutusu: üçgenin sağ ucu çok darsa çıkar. Diyagramdaki ince çerçeveli bölgeyi gösterir; δ ekseni kutuda yazan kat kadar büyütüldü, F ölçeği aynıdır (sığmazsa kutuda yazar).</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="4" y1="10" x2="26" y2="10" stroke="var(--ink)" stroke-width="1.2"/><path d="M4 10 L9 7 L9 13Z M26 10 L21 7 L21 13Z" fill="var(--ink)"/></svg><span class="t">Ayrılma aralığı ("aralık" ölçüsü). Yalnız parçalar birbirinden ayrılınca çıkar.</span></li>
+    </ul>
+  </section>
+  <div class="right">
+    <section class="panel" aria-label="Önlemsiz ve şu anki bağlantının karşılaştırması">
+      <h2>F<sub>iş</sub> büyüdükçe kuvvetler</h2>
+      <p class="sub">Mavi: cıvatadaki toplam kuvvet F<sub>top</sub>. Kırmızı: parçalarda kalan ön gerilme F'<sub>ön</sub>. Soluk kesikli mavi ve kırmızı eğriler önlemsiz bağlantınındır. Gri kesikli çapraz çizgi F = F<sub>iş</sub>'tir; ayrılmadan sonra F<sub>top</sub> bu çizgiyi izler. Mor kesikli çizgi şu anki F<sub>iş</sub>; dinamik yükte açık mor bant F<sub>iş</sub>'in gidip geldiği aralıktır. Grafik notta yok, aynı bağıntılardan çizildi. <b>Bu grafik üçgenin kendisi değildir:</b> Yatay eksende δ yerine F<sub>iş</sub> vardır. Üçgendeki mor çizginin üst ucu burada mavi nokta (F<sub>top</sub>), alt ucu kırmızı noktadır (F'<sub>ön</sub>). Yatay eksende δ yerine F<sub>iş</sub> olduğu için eğimler de farklıdır: Ayrılmaya kadar mavi eğim k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>), kırmızı eğim −k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>); üçgende ise eğimler k<sub>c</sub> ve k<sub>p</sub>'dir.</p>
+      <canvas id="cvF" role="img" aria-label="İşletme kuvvetine göre cıvata kuvveti ve parçalarda kalan ön gerilme, önlemli ve önlemsiz"></canvas>
+      <h2>Önlemsiz bağlantı ile şu anki bağlantı</h2>
+      <p class="sub">Aynı F<sub>ön</sub> ve F<sub>iş</sub> ile. Turkuaz istenen yönü, turuncu istenmeyen yönü gösterir; k<sub>c</sub> ve k<sub>p</sub> satırları renklendirilmez.</p>
+      <div class="tblwrap"><table class="ctab" id="ctab"></table></div>
+      <dl class="vals" id="vals"></dl>
+    </section>
+  </div>
+</div>
+
+<section class="notes">
+  <div>
+    <h3>Nasıl okunur?</h3>
+    <p>Bir önlemi uyguladığınızda doğrular eski eğiminden yenisine döner. Gri kesikli üçgen önlemsiz bağlantıdır. Mavi doğru yatıklaşırsa k<sub>c</sub>, kırmızı doğru yatıklaşırsa k<sub>p</sub> düşmüştür. F<sub>iş</sub>'i gösteren mor çizginin mavi ve kırmızı paylarına bakın: mavi pay F<sub>z</sub>, kırmızı pay F<sub>b</sub>'dir.</p>
+  </div>
+  <div>
+    <h3>Not ne diyor? (s. 74)</h3>
+    <p>Kırılmaya karşı F<sub>top</sub> düşük olmalı, bunun için k<sub>c</sub> düşürülür: cıvata uzar yapılır ya da somun altına yaylı rondela konur. Gevşemeye karşı F'<sub>ön</sub> yüksek olmalı, bunun için k<sub>p</sub> düşürülür: parçalar arasına esnek conta konur. Not ayrıca k<sub>c</sub> ve k<sub>p</sub>'nin eşit oranda düşürülmemesini ister. <span class="yorum">Yorumum:</span> O zaman F<sub>z</sub>/F<sub>iş</sub> = k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>) değişmez.</p>
+  </div>
+  <div>
+    <h3>Gerçek parçada</h3>
+    <p><span class="yorum">Notta yok:</span> Şekil 3.47'deki uzar cıvata biyel kolu cıvatasıdır; dinamik yükte genliği düşürmek için kullanılır. Konik yaylı rondela yalnız düzleşmediği sürece işe yarar; DIN 6796 tablosundaki düzleşme kuvveti, 8.8 cıvatanın tipik ön gerilmesine yakındır. Conta k<sub>p</sub>'yi düşürür ama F<sub>z</sub>'yi artırır; ayrıca gerçek conta yüksek basınçta ezilir, zamanla oturur ve bağlantı gevşer.</p>
+  </div>
+  <div>
+    <h3>Bağıntılar</h3>
+    <div class="eqs">
+    <p class="eq">F<sub>z</sub> = F<sub>iş</sub>·k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>), &nbsp;F<sub>b</sub> = F<sub>iş</sub>·k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>)</p>
+    <p class="eq">1/k<sub>cıv</sub> = ℓ<sub>s</sub>/(E<sub>c</sub>·A<sub>s</sub>) + (ℓ<sub>c</sub> − ℓ<sub>s</sub>)/(E<sub>c</sub>·A<sub>c</sub>) &nbsp;(uzar; seri yay, s. 75)</p>
+    <p class="eq">1/k<sub>c eş</sub> = 1/k<sub>cıv</sub> + 1/k<sub>r</sub>, &nbsp;k<sub>r</sub> = F<sub>düz</sub>/h<sub>0</sub> &nbsp;(rondela; notta yok)</p>
+    <p class="eq">1/k<sub>p eş</sub> = 1/k<sub>p</sub> + 1/k<sub>conta</sub> &nbsp;(s. 76), &nbsp;k<sub>conta</sub> = E·A<sub>p</sub>/t &nbsp;(notta yok)</p>
+    <p class="refs">D<sub>eş</sub> ℓ<sub>p</sub> ile büyür: Parçalar kalınlaştıkça sıkılan bölge yanlara doğru genişler (s. 75, Şekil 3.49), bu yüzden A<sub>p</sub> de büyür. k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub> yine de azalır, çünkü ℓ<sub>p</sub> daha hızlı büyür.</p>
+    <p class="refs">k<sub>cıv</sub>: cıvatanın kendi rijitliği (uzar değilse k<sub>c</sub>). F<sub>düz</sub>: rondelanın düzleşme kuvveti, h<sub>0</sub>: koni yüksekliği. t: conta kalınlığı.</p>
+    </div>
+    <p class="refs">Kabuller. Hesaplar ilk sayfadaki gibidir (k<sub>c</sub> = E<sub>c</sub>·A<sub>c</sub>/ℓ<sub>c</sub>, k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub>, 8.8 kalite). Uzar cıvatada ℓ<sub>s</sub> = 0,8·ℓ<sub>c</sub>. Rondelanın düzleşme kuvveti DIN 6796 tablosundan, koni yüksekliği h<sub>0</sub> ortalama serbest yükseklikten alındı; Almen–László bağıntısı eğrinin doğrusala yakın olduğunu gösterir. Conta alanı A<sub>p</sub>. Rondela ve conta kalınlıklarının ℓ<sub>c</sub>'ye etkisi ihmal edildi. Conta kalınlığı çizimde ×q, çökmesi ×N büyütüldü. Geçiş animasyonu 1,2 s sürer, zaman ölçeksizdir; dinamik yük 0,5 Hz.</p>
+    <p class="refs">Kaynaklar. F. Dikmen, <i>Makine Elemanları 1 Ders Notları</i>, YTÜ, s. 72–76; Tablo-Diy. s. 1, 10, 11. DIN 2510 (d<sub>s</sub> = 0,9·d<sub>k</sub>, TRD 309'daki aktarımıyla). DIN 6796:2009 (konik yaylı rondela). DIN EN 16983 (disk yaylar, Almen–László). ISO 898-1:2013 (8.8). Conta basıncı sınırları: sert PVC için çekmede akma ≈ 50 N/mm² (Perspex Rigid PVC veri sayfası, ASTM D-638); düz metal conta için en küçük oturma basıncı y (ASME BPVC VIII-1, Tablo 2-5.1).</p>
+  </div>
+</section>
+</div>
+
+<script>
+// Ön gerilmeli cıvata bağlantısı: hesap modülü (birimler: N, mm, MPa = N/mm²)
+// Kaynak: F. Dikmen, ME1 Ders Notları, Bölüm 3.5.6 (s. 72–76); Tablo-Diy. s. 1, 10, 11.
+//   k_c = E_c·A_c/ℓ_c, A_c = (π/4)·d₃² (s. 75)
+//   k_p = E_p·A_p/ℓ_p, A_p = (π/4)·(D_eş² − d_h²), D_eş = AA + k_malz·ℓ_p (s. 75)
+//   δ' = F_iş/(k_c + k_p), F_z = F_iş·k_c/(k_c + k_p), F_b = F_iş·k_p/(k_c + k_p) (s. 73)
+//   F_top = F_ön + F_z, F'_ön = F_ön − F_b (s. 73)
+// Notta olmayan, aynı modelden çıkan: ayrılma kuvveti F_ayr = F_ön·(k_c + k_p)/k_p (F'_ön = 0 olduğu F_iş).
+// Ayrılmadan sonra parçalar kuvvet taşımaz, F_top = F_iş.
+// Önlemler (s. 74–76):
+//   uzar cıvata: 1/k_c eş = ℓ_s/(E_c·A_s) + (ℓ_c − ℓ_s)/(E_c·A_c), A_s = (π/4)·d_s² (seri yay, not s. 75 not 2)
+//     d_s = 0,9·d₃ (DIN 2510; TRD 309: "ds = 0,9 dk"), ℓ_s = 0,8·ℓ_c (varsayım)
+//   konik yaylı rondela (DIN 6796): cıvataya seri yay. F_düz DIN 6796 tablosundan, k_r = F_düz/h0 (sekant);
+//     eğrinin doğrusala yakınlığı Almen–László ile (DIN EN 16983) kontrol edildi.
+//     Düzleşince rondela rijit sayılır: cıvata tarafının karakteristiği iki eğimli olur (notta yok).
+//   conta: 1/k_p eş = 1/k_p + 1/k_conta, k_conta = E_conta·A_p/t (not s. 76; A_conta = A_p varsayım)
+// Rondela yüzünden karakteristik doğrusal olmayabildiğinden çözüm genel yapılır (ikiye bölme).
+var CIV = (function () {
+  // Tablo-Diy. s. 10 (TS 61/3) ve s. 11 (TS EN ISO 4014): d, P, d₃, A_c, AA, e (köşe), k (baş), m (somun), d_h (delik), b (vida uzunluğu)
+  const BOLTS = {
+    M10: { d: 10, P: 1.5,  d3: 8.16,  Ac: 52.3, AA: 17, e: 18.90, k: 6.4,  m: 8.4,  dh: 11,   b: 26 },
+    M12: { d: 12, P: 1.75, d3: 9.85,  Ac: 76.2, AA: 19, e: 21.10, k: 7.5,  m: 10.8, dh: 13.5, b: 30 },
+    M16: { d: 16, P: 2.0,  d3: 13.55, Ac: 144,  AA: 24, e: 26.75, k: 10,   m: 14.8, dh: 17.5, b: 38 },
+    M20: { d: 20, P: 2.5,  d3: 16.93, Ac: 225,  AA: 30, e: 33.53, k: 12.5, m: 18,   dh: 22,   b: 46 },
+    M24: { d: 24, P: 3.0,  d3: 20.32, Ac: 324,  AA: 36, e: 39.98, k: 15,   m: 21.5, dh: 26,   b: 54 },
+  };
+  // Parça malzemesi: E [N/mm²] Tablo-Diy. s. 1; k_malz ders notu s. 75
+  const MATS = {
+    celik: { ad: 'Çelik', E: 210000, kmalz: 0.1 },
+    dokum: { ad: 'Dökme demir (GG30)', E: 125000, kmalz: 0.125 },
+    al:    { ad: 'Alüminyum alaşımı', E: 70000, kmalz: 0.167 },
+  };
+  const EC = 210000;                       // cıvata çeliği, Tablo-Diy. s. 1
+  // Conta malzemeleri, E [N/mm²] Tablo-Diy. s. 1
+  // Basınç sınırları: PVC için çekmede akma dayanımı (sert PVC ~50 N/mm², ASTM D-638, Perspex/Palram veri sayfası; basma değeri
+  // verilmemiş, yaklaşık sınır). Yumuşak Al ve Cu düz metal conta için ASME BPVC VIII-1 Tablo 2-5.1'deki en küçük oturma
+  // basıncı y (61 ve 90 N/mm²): metal conta bu basınçta akarak oturur.
+  const GASKETS = {
+    pvc: { ad: 'Sert PVC', E: 2300, sAk: 50 },
+    al:  { ad: 'Alüminyum alaşımı', E: 70000, y: 61 },
+    cu:  { ad: 'Bakır alaşımı', E: 90000, y: 90 },
+  };
+  // DIN 6796 konik yaylı rondela: d1, d2, s, h_max, h_min [mm] ve yaklaşık düzleşme kuvveti Fd [N] ("approx. load to flat")
+  const WASHERS = {
+    M10: { d1: 10.5, d2: 23, s: 2.5, hmax: 3.2,  hmin: 2.8,  Fd: 22100 },
+    M12: { d1: 13,   d2: 29, s: 3,   hmax: 3.95, hmin: 3.43, Fd: 34100 },
+    M16: { d1: 17,   d2: 39, s: 4,   hmax: 5.25, hmin: 4.58, Fd: 59700 },
+    M20: { d1: 21,   d2: 45, s: 5,   hmax: 6.4,  hmin: 5.6,  Fd: 93200 },
+    M24: { d1: 25,   d2: 56, s: 6,   hmax: 7.75, hmin: 6.77, Fd: 131000 },
+  };
+  // Almen–László, sürtünmesiz (DIN EN 16983): F(f) = 4E/(1−μ²)·t⁴/(K1·De²)·(f/t)·[(h0/t − f/t)(h0/t − f/(2t)) + 1]
+  function washer(key) {
+    const W = WASHERS[key], E = 206000, mu = 0.3, De = W.d2, Di = W.d1, t = W.s;
+    const h0 = (W.hmax + W.hmin) / 2 - t;  // ortalama serbest yükseklikten koni yüksekliği (varsayım)
+    const dl = De / Di, K1 = (1 / Math.PI) * Math.pow((dl - 1) / dl, 2) / ((dl + 1) / (dl - 1) - 2 / Math.log(dl));
+    const F = f => 4 * E / (1 - mu * mu) * Math.pow(t, 4) / (K1 * De * De) * (f / t) * ((h0 / t - f / t) * (h0 / t - f / (2 * t)) + 1);
+    // F_düz DIN 6796 tablosundan; k_r = F_düz/h0 (sekant, doğrusallaştırma). Almen–László yalnız eğrinin
+    // doğrusala yakın olduğunu (h0/t küçük) göstermek için kullanılır; onun düzleşme kuvveti FdAL tablodan ~%20 düşüktür.
+    return Object.assign({}, W, { h0, K1, Fd: W.Fd, kr: W.Fd / h0, FdAL: F(h0), Fcurve: F });
+  }
+  // Cıvata kalitesi: akma sınırı [N/mm²], ISO 898-1 (4.6 ve 5.6 için alt akma sınırı R_eL, diğerleri için R_p0,2).
+  // Notta kalite verilmez: seçim kullanıcıya bırakıldı. E_c kaliteye bağlı değildir, bu yüzden k_c değişmez.
+  const GRADES = {
+    '4.6':  { sym: 'R_eL',   Rp: () => 240 },
+    '5.6':  { sym: 'R_eL',   Rp: () => 300 },
+    '8.8':  { sym: 'R_p0,2', Rp: d => (d <= 16 ? 640 : 660) },
+    '10.9': { sym: 'R_p0,2', Rp: () => 940 },
+    '12.9': { sym: 'R_p0,2', Rp: () => 1100 },
+  };
+  const rp02 = (d, g) => GRADES[g || '8.8'].Rp(d);
+
+  // p: {bolt, lp, mat, grade, uzar: d_s/d₃ ya da 0, rondela: bool, conta: {mat, t} ya da null}
+  function joint(p) {
+    const B = BOLTS[p.bolt], M = MATS[p.mat];
+    const lc = p.lp;                       // ℓ_c = ℓ_p (s. 75: "çoğu kez ℓ_p = ℓ_c")
+    const kc0 = EC * B.Ac / lc;            // önlemsiz (not)
+    let kcb = kc0, uz = null;              // cıvatanın kendi rijitliği
+    if (p.uzar) { const ds = p.uzar * B.d3, As = Math.PI / 4 * ds * ds, ls = 0.8 * lc;
+      kcb = 1 / (ls / (EC * As) + (lc - ls) / (EC * B.Ac)); uz = { r: p.uzar, ds, As, ls }; }
+    const W = p.rondela ? washer(p.bolt) : null;
+    const Des = B.AA + M.kmalz * p.lp;
+    const Ap = Math.PI / 4 * (Des * Des - B.dh * B.dh);
+    const kp0 = M.E * Ap / p.lp;           // parçalar (not)
+    let kp = kp0, G = null;
+    if (p.conta) { const GM = GASKETS[p.conta.mat], kg = GM.E * Ap / p.conta.t;
+      kp = 1 / (1 / kp0 + 1 / kg); G = { mat: p.conta.mat, ad: GM.ad, E: GM.E, t: p.conta.t, kg }; }
+    // cıvata tarafının uzaması: e(F) = F/k_cıv + rondela çökmesi w(F)
+    const wF = F => W ? Math.min(F, W.Fd) / W.kr : 0;
+    const e = F => F / kcb + wF(F);
+    const eInv = s => {                    // e(F) = s'nin çözümü (parça parça doğrusal)
+      if (!W) return s * kcb;
+      const ks = 1 / (1 / kcb + 1 / W.kr), sd = W.Fd / ks;
+      return s <= sd ? s * ks : W.Fd + (s - sd) * kcb; };
+    const kc = W ? 1 / (1 / kcb + 1 / W.kr) : kcb;   // düzleşmeden önceki cıvata tarafı rijitliği
+    const grade = p.grade || '8.8', Rp = rp02(B.d, grade);
+    const F02 = Rp * B.Ac;                 // akma sınırı kuvveti (A_c ile, notla tutarlı)
+    const F02ref = rp02(B.d, '12.9') * B.Ac, F02_88 = rp02(B.d, '8.8') * B.Ac;   // çizim ölçeği için
+    return { B, M, lc, kc, kc0, kcb, kp, kp0, uz, W, G, Des, Ap, e, wF, eInv, F02, F02ref, F02_88, grade, Rp, sym: GRADES[grade].sym,
+             phi: kc / (kc + kp), phi0: kc0 / (kc0 + kp0),
+             kAt: F => (W && F >= W.Fd ? kcb : kc) };        // F kuvvetindeki cıvata tarafı eğimi
+  }
+
+  // Sıkılmış bağlantıda işletme kuvveti. J: joint(), Fon, Fis [N]
+  // Uygunluk: e(F_c) + F_p/k_p = s (sıkmadaki girişim, s = e(F_ön) + F_ön/k_p), denge: F_c = F_p + F_iş.
+  function state(J, Fon, Fis) {
+    const kp = J.kp, s = J.e(Fon) + Fon / kp;
+    const dc = J.e(Fon), dp = Fon / kp;    // δ_c (cıvata tarafı, rondela dahil), δ_p
+    const Fsep = J.eInv(s);                // F_p = 0 olduğu cıvata kuvveti = F_iş
+    let Fp, Ftop, gap = 0, sep = false;
+    if (Fis >= Fsep) { sep = true; Fp = 0; Ftop = Fis; gap = J.e(Fis) - s; }
+    else {
+      const g = x => J.e(x + Fis) + x / kp - s;       // x = F_p, artan
+      let lo = 0, hi = Fon;
+      for (let i = 0; i < 90; i++) { const m = (lo + hi) / 2; if (g(m) < 0) lo = m; else hi = m; }
+      Fp = (lo + hi) / 2; Ftop = Fp + Fis;
+    }
+    const Fz = Ftop - Fon, Fb = Fon - Fp, dpr = J.e(Ftop) - dc;
+    const dth = 360 * s / J.B.P;           // somunun dönme açısı [°] (ideal: oturma anından itibaren)
+    const flatOn = !!J.W && Fon >= J.W.Fd, flatTop = !!J.W && Ftop >= J.W.Fd;
+    return { dc, dp, dpr, Fz, Fb, Ftop, Fpon: Fp, Fsep, sep, gap, dth, s, flatOn, flatTop,
+             sig: Ftop / J.B.Ac, yield: Ftop > J.F02 };
+  }
+
+  // Dinamik yük: F_iş 0 ile F_iş arasında değişir (s. 81: F_o = F_ön + F_z/2, F_g = F_z/2, ayrılma yoksa)
+  function dyn(J, Fon, Fis) {
+    const lo = Fon, hi = state(J, Fon, Fis).Ftop;
+    return { Fmin: lo, Fmax: hi, Fo: (lo + hi) / 2, Fg: (hi - lo) / 2 };
+  }
+  return { BOLTS, MATS, GRADES, GASKETS, WASHERS, EC, rp02, washer, joint, state, dyn };
+})();
+if (typeof module !== 'undefined') module.exports = CIV;
+
+</script>
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+const BOLT_KEYS = ['M10','M12','M16','M20','M24'];
+const TW = 1.2;                               // önlem geçiş animasyonu süresi [s] (zaman ölçeksiz)
+const MDEF = { uzar:false, uzR:0.9, rondela:false, conta:false, cMat:'pvc', cT:1 };
+const st = { bolt:'M16', lp:40, mat:'celik', grade:'8.8', Fon:40e3, Fis:20e3, ...MDEF,
+             phase:3, p:1, auto:false, playing:false, dyn:false, dynT:0, tw:null, last:null, needs:true };   // bu sayfada üçgen hep kurulu (4. adım)
+let J = null, J0 = null, SC = null;           // önlemli ve önlemsiz bağlantı, çizim ölçekleri
+
+const NICE = [5,10,15,20,25,40,50,75,100,150,200,250,300,400,500,750,1000,1500,2000];
+const niceFloor = v => { let N = NICE[0]; for (const x of NICE) if (x <= v) N = x; return N; };
+function measures(){ return { uzar: st.uzar ? st.uzR : 0, rondela: st.rondela, conta: st.conta ? { mat:st.cMat, t:st.cT } : null }; }
+function rebuild(){
+  const base = { bolt:st.bolt, lp:st.lp, mat:st.mat, grade:st.grade };
+  J0 = CIV.joint(base);
+  J = CIV.joint(Object.assign({}, base, measures()));
+  // Çizim ölçekleri F ayarlarından ve kaliteden bağımsızdır: büyütme 8.8'in, eksenler 12.9'un akma kuvvetine göre.
+  // Büyütme N: akma kuvvetinde cıvata tarafının şekil değiştirmesi çizimde yaklaşık 1,2·d, parçalarınki 0,35·ℓ_p'yi geçmesin.
+  // Önlem (özellikle rondela) şekil değiştirmeyi çok büyütürse N küçülür ve δ ekseni genişler; önlemsiz üçgen aynı eksende gri kalır.
+  // Ölçekler yalnız hangi önlemlerin açık olduğuna bağlıdır, kaydırıcı değerlerine bağlı değildir: en elverişsiz değerlerle
+  // (d_s/d_3 = 0,6, conta t = 3 mm) hesaplanır. Böylece d_s ya da t değişince yalnız ilgili çizgi değişir, ölçek değişmez.
+  const Jw = CIV.joint(Object.assign({}, base, { uzar: st.uzar ? 0.6 : 0, rondela: st.rondela, conta: st.conta ? { mat:st.cMat, t:3 } : null }));
+  const Fr = J0.F02_88;
+  const N = niceFloor(Math.min(1.2*J.B.d/(Fr/J0.kc), 1.2*J.B.d/Jw.e(Fr), 0.35*st.lp/(J.F02ref/Jw.kp)));
+  const xb = J0.F02ref*(1/J0.kc + 1/J0.kp), xm = Jw.e(J.F02ref) + J.F02ref/Jw.kp;
+  // conta kalınlığı çizimde q kat: en büyük kuvvetteki büyütülmüş çökme (N·F/k_conta) kalınlığın %70'ini geçmesin.
+  // N·F/k_conta = N·F·t/(E·A_p) olduğundan q t'den bağımsızdır; çizilen kalınlık t ile orantılı kalır.
+  const q = J.G ? Math.max(2, Math.ceil(N*J.F02ref/(J.G.E*J.Ap)/0.7)) : 1;
+  SC = { N, q, kcbW: Jw.kcb, tW: J.G ? 3 : 0, XM: 1.04*Math.max(xb, xm), YM: 1.06*J0.F02ref };
+  $('lgN').textContent = N;
+}
+
+// ---- geçiş animasyonu: eski ve yeni bağlantının esneklikleri (1/k ve e(F)) karıştırılır, doğrular döner
+const ease = t => t<0?0 : t>1?1 : t*t*(3-2*t);
+function blend(A, B, u){
+  if (u >= 1) return B;
+  const e = F => (1-u)*A.e(F) + u*B.e(F);
+  const eInv = sv => { let lo = 0, hi = 10*B.F02ref; for (let i=0;i<80;i++){ const m=(lo+hi)/2; if (e(m) < sv) lo = m; else hi = m; } return (lo+hi)/2; };
+  const kp = 1/((1-u)/A.kp + u/B.kp), kc = 1/((1-u)/A.kc + u/B.kc);
+  return Object.assign({}, B, { e, eInv, kp, kc, W: u < 0.5 ? A.W : B.W, kAt: F => 1/((1-u)/A.kAt(F) + u/B.kAt(F)) });
+}
+function shown(){                              // çizimde kullanılan bağlantı ve ölçek
+  if (!st.tw) return { Jd: J, SCd: SC };
+  const u = ease(st.tw.t), A = st.tw.SCa;
+  return { Jd: blend(st.tw.A, J, u), SCd: { N: SC.N, XM: A.XM + (SC.XM - A.XM)*u, YM: SC.YM } };
+}
+function fisNow(){ return st.dyn ? st.Fis*(1-Math.cos(2*Math.PI*0.5*st.dynT))/2 : st.Fis; }
+function view(){
+  const ph = st.phase, p = st.p;
+  const V = { ph, p, slide:0, pan:0, F:0, Fis:0, sep:false, gap:0, S:null };
+  if (ph === 0){ V.F = 0; }
+  else if (ph === 1){ V.F = p*st.Fon; }
+  else { V.F = st.Fon; }
+  if (ph === 2){ V.slide = ease(p/0.7); V.pan = ease((p-0.7)/0.3); }
+  if (ph === 3){ V.slide = 1; V.pan = 1; V.Fis = (p<1 ? p : 1)*fisNow(); }
+  if (ph <= 1){ V.Fc = V.F; V.Fp = V.F; }
+  else {
+    const S = CIV.state(shown().Jd, st.Fon, V.Fis); V.S = S;
+    V.Fc = S.Ftop; V.Fp = S.Fpon; V.sep = S.sep; V.gap = S.gap;
+  }
+  V.dth = 360*(J.e(V.F) + V.F/J.kp)/J.B.P;   // somunun dönme açısı (gerçek): sıkmadaki girişim / P
+  V.tw = !!st.tw;
+  return V;
+}
+
+// ---- çizim yardımcıları
+const cvM = $('cvMain'), cvF = $('cvF');
+function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+let C = {};
+function readColors(){ ['paper','sheet','ink','muted','line','steel1','steel2','steel3','ten','com','fis','warn','hatch','tenbg','combg','fisbg','mb'].forEach(k=>C[k]=css('--'+k)); }
+readColors();
+if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ()=>{ readColors(); st.needs=true; });
+function fit(cv, vh){
+  const cssW = Math.max(10, cv.getBoundingClientRect().width), dpr = window.devicePixelRatio||1;
+  if (vh){ const want = Math.round(vh(cssW)); if (Math.abs(cv.getBoundingClientRect().height-want)>0.5) cv.style.height = want+'px'; }
+  const cssH = cv.getBoundingClientRect().height;
+  const W = Math.round(cssW*dpr), H = Math.round(cssH*dpr);
+  if (cv.width!==W || cv.height!==H){ cv.width=W; cv.height=H; }
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w:cssW, h:cssH};
+}
+function font(px, w){ return (w||400)+' '+px+'px "IBM Plex Sans", system-ui, sans-serif'; }
+const fmt = (v,n)=>v.toFixed(n).replace('.',',');
+const kN = v => fmt(v/1000, Math.abs(v)<9950 ? 2 : 1);
+function richW(ctx, str, size, wgt){
+  const re=/_\{([^}]*)\}/g; let last=0, m, W=0;
+  while ((m=re.exec(str))){ ctx.font=font(size,wgt); W+=ctx.measureText(str.slice(last,m.index)).width; ctx.font=font(size*0.72,wgt); W+=ctx.measureText(m[1]).width; last=re.lastIndex; }
+  ctx.font=font(size,wgt); W+=ctx.measureText(str.slice(last)).width; return W;
+}
+function rich(ctx, str, x, y, o){
+  o = o || {};
+  const size=o.size||12.5, wgt=o.weight||400, al=o.align||'left';
+  const parts=[]; const re=/_\{([^}]*)\}/g; let last=0, m;
+  while ((m=re.exec(str))){ if (m.index>last) parts.push([str.slice(last,m.index),0]); parts.push([m[1],1]); last=re.lastIndex; }
+  if (last<str.length) parts.push([str.slice(last),0]);
+  const fN=font(size,wgt), fS=font(size*0.72,wgt);
+  const W = richW(ctx, str, size, wgt);
+  let cx = al==='center' ? x-W/2 : al==='right' ? x-W : x;
+  if (o.bg){ ctx.save(); ctx.globalAlpha=0.88; ctx.fillStyle=C.sheet; ctx.fillRect(cx-2, y-size*0.88, W+4, size*1.22); ctx.restore(); }
+  ctx.fillStyle=o.color||C.ink; ctx.textAlign='left';
+  for (const [t,sb] of parts){ ctx.font=sb?fS:fN; ctx.fillText(t, cx, sb ? y+size*0.28 : y); cx+=ctx.measureText(t).width; }
+  return W;
+}
+function arrow(ctx, x1,y1,x2,y2, col, lw, head){
+  const len = Math.hypot(x2-x1,y2-y1); if (len<0.5) return;
+  head = Math.min(head||9, len*0.7); const a=Math.atan2(y2-y1,x2-x1);
+  ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=lw||2;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2-Math.cos(a)*head*0.7,y2-Math.sin(a)*head*0.7); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-head*Math.cos(a-0.38), y2-head*Math.sin(a-0.38));
+  ctx.lineTo(x2-head*Math.cos(a+0.38), y2-head*Math.sin(a+0.38)); ctx.closePath(); ctx.fill();
+}
+function dot(ctx, x, y, r, fill, ring){ ctx.beginPath(); ctx.arc(x,y,r,0,2*Math.PI); ctx.fillStyle=fill; ctx.fill(); if (ring){ ctx.strokeStyle=ring; ctx.lineWidth=1.5; ctx.stroke(); } }
+function line(ctx, x1,y1,x2,y2, col, lw, dash){ ctx.save(); if (dash) ctx.setLineDash(dash); ctx.strokeStyle=col; ctx.lineWidth=lw||1; ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore(); }
+// ölçü çizgisi (düşey ya da yatay). Kısa ölçüde oklar dışarıdan gelir.
+function dimV(ctx, x, ya, yb, col){
+  const y1 = Math.min(ya,yb), y2 = Math.max(ya,yb), L = y2-y1; if (L < 0.6) return;
+  if (L >= 14){ arrow(ctx, x, (y1+y2)/2, x, y1, col, 1.2, 6); arrow(ctx, x, (y1+y2)/2, x, y2, col, 1.2, 6); }
+  else { arrow(ctx, x, y1-9, x, y1, col, 1.2, 5); arrow(ctx, x, y2+9, x, y2, col, 1.2, 5); line(ctx, x, y1, x, y2, col, 1.2); }
+}
+function dimH(ctx, xa, xb, y, col){
+  const x1 = Math.min(xa,xb), x2 = Math.max(xa,xb), L = x2-x1; if (L < 0.6) return;
+  if (L >= 14){ arrow(ctx, (x1+x2)/2, y, x1, y, col, 1.2, 6); arrow(ctx, (x1+x2)/2, y, x2, y, col, 1.2, 6); }
+  else { arrow(ctx, x1-9, y, x1, y, col, 1.2, 5); arrow(ctx, x2+9, y, x2, y, col, 1.2, 5); line(ctx, x1, y, x2, y, col, 1.2); }
+}
+// 45° tarama; dir = +1 "/" , −1 "\"
+function hatchRect(ctx, x, y, w, h, dir){
+  if (w<=0 || h<=0) return;
+  ctx.save(); ctx.beginPath(); ctx.rect(x,y,w,h); ctx.fillStyle=C.sheet; ctx.fill(); ctx.clip();
+  ctx.strokeStyle=C.hatch; ctx.lineWidth=0.8; ctx.beginPath();
+  const s0 = Math.floor((x-h)/7)*7;
+  for (let s=s0; s<x+w+h; s+=7){ if (dir>0){ ctx.moveTo(s, y+h); ctx.lineTo(s+h, y); } else { ctx.moveTo(s, y); ctx.lineTo(s+h, y+h); } }
+  ctx.stroke(); ctx.restore();
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1.2; ctx.strokeRect(x,y,w,h);
+}
+// altıköşenin yandan görünüşü: köşeler θ + j·60°. x = R·sin, derinlik z = R·cos (bakana doğru)
+function hexSide(ctx, cx, yTop, yBot, R, th){
+  const xs = [], zs = [];
+  for (let j=0;j<6;j++){ const a = th + j*Math.PI/3; xs.push(R*Math.sin(a)); zs.push(R*Math.cos(a)); }
+  const xm = Math.max(...xs.map(Math.abs));
+  ctx.fillStyle=C.steel1; ctx.fillRect(cx-xm, yTop, 2*xm, yBot-yTop);
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1.2; ctx.strokeRect(cx-xm, yTop, 2*xm, yBot-yTop);
+  ctx.lineWidth=0.9; ctx.beginPath();
+  for (let j=0;j<6;j++) if (zs[j] > 1e-6 && Math.abs(xs[j]) < xm-0.6){ ctx.moveTo(cx+xs[j], yTop); ctx.lineTo(cx+xs[j], yBot); }
+  ctx.stroke();
+}
+
+// ---- ana tuval: solda kesit, sağda üçgen
+const calcPhoneH = w => Math.round(Math.min(420, Math.max(330, w*0.95)));
+function fitMain(){
+  const phone = cvM.getBoundingClientRect().width < 560;
+  const r = fit(cvM, vw => phone ? calcPhoneH(vw) : Math.round(Math.min(540, Math.max(430, vw*0.62))));
+  r.ctx.clearRect(0,0,r.w,r.h); return r;
+}
+function drawMain(V){
+  const {ctx,w,h} = fitMain(), phone = w < 560;
+  const wS = Math.round(w*(phone?0.40:0.38));
+  drawSection(ctx, 0, 0, wS, h, V, phone);
+  line(ctx, wS+2, 10, wS+2, h-10, C.line, 1);
+  drawTri(ctx, wS+6, 0, w-wS-6, h, V, phone);
+}
+
+function drawSection(ctx, x0, y0, wS, h, V, phone){
+  const B = J.B, N = SC.N, lp = st.lp, W = J.W, G = J.G;
+  const hw = Math.max(1.45*B.d, 0.56*J.Des, W ? 0.62*W.d2 : 0), pr = Math.max(2*B.P, 0.35*B.d);
+  // şekil değiştirmeler [mm, gerçek]: cıvata uzaması, rondela çökmesi, parça ve conta kısalması
+  const FcD = Math.min(V.Fc, SC.YM);                        // çizim sınırı
+  const eB = FcD/J.kcb, w = J.wF(FcD), cP = V.Fp/J.kp0, cG = G ? V.Fp/G.kg : 0;
+  const gap = Math.min(V.gap, SC.YM/J.kcb);
+  // çizimde kalınlıklar: conta kalınlığı ×q (t ile orantılı), çökmesi ve rondela konisi ×N
+  const tgFree = G ? SC.q*G.t : 0, tg = G ? tgFree - N*cG : 0;   // conta: kalınlık ×q, çökme ×N
+  const rise0 = W ? N*W.h0 : 0, rise = W ? N*(W.h0 - w) : 0, ws = W ? W.s : 0;
+  const nutSn = lp + tgFree + ws + rise0;                   // 1. adımda somunun alt yüzü
+  const ySn = nutSn + B.m + pr;                             // 1. adımda cıvata ucu
+  const top = ySn + N*SC.YM/J.kcb;                          // cıvata ucunun çizilebilecek en üst noktası [mm]
+  // çizim ölçeği g, kaydırıcılar (d_s/d_3, t) oynarken değişmesin diye en elverişsiz değerlerle hesaplanır
+  const topL = lp + SC.q*SC.tW + ws + rise0 + B.m + pr + N*SC.YM/SC.kcbW;
+  const dimCol = phone ? 44 : 60, fs = phone ? 11 : 12;
+  const Lfis = phone ? 60 : 90, tTop = (G ? 3 : 2)*fs + 14, lab = fs + 6;
+  const g = Math.min((h - 16 - tTop)/(B.k + topL), (h - Lfis - 8 - lab - tTop)/topL, (wS - dimCol - 10)/(2*hw));
+  const ax = x0 + 6 + hw*g, yb = y0 + tTop + topL*g;       // eksen ve başın üst yüzü (y = 0)
+  const X = xm => ax + xm*g, Y = ym => yb - ym*g;
+  const Fsc = 0.42*lp*g/J.F02ref;                           // iç kuvvet oku: px/N (kaliteden bağımsız)
+  const l1 = lp/2;
+  const yInt1 = l1 - N*cP*0.5;                              // alt parçanın üst yüzü
+  const yG2 = yInt1 + tg;                                   // contanın üst yüzü (conta yoksa yInt1)
+  const yInt2 = yG2 + N*gap;                                // üst parçanın alt yüzü
+  const yT = yInt2 + l1 - N*cP*0.5;                         // üst parçanın üst yüzü
+  const yNut = yT + ws + rise;                              // somunun alt yüzü
+  const yTip = ySn + N*eB;                                  // cıvata ucu
+  const xR = X(hw), xD = xR + (phone?12:16);                // ölçü sütunu
+  const hx = B.dh/2;
+  // parçalar
+  hatchRect(ctx, X(-hw), Y(yInt1), (hw-hx)*g, yInt1*g, -1);
+  hatchRect(ctx, X(hx),  Y(yInt1), (hw-hx)*g, yInt1*g, -1);
+  hatchRect(ctx, X(-hw), Y(yT), (hw-hx)*g, (yT-yInt2)*g, +1);
+  hatchRect(ctx, X(hx),  Y(yT), (hw-hx)*g, (yT-yInt2)*g, +1);
+  // conta: ince kesit, dolu çizilir (ISO 128-50)
+  if (G){ ctx.fillStyle=C.ink; for (const sg of [-1,1]){ const xa = sg<0 ? X(-hw) : X(hx); ctx.fillRect(xa, Y(yG2), (hw-hx)*g, Math.max(1.2, tg*g)); } }
+  // rondela: konik halka, kesit taranır (üst parçaya zıt yön)
+  if (W){
+    for (const sg of [-1,1]){
+      const xi = sg*W.d1/2, xo = sg*W.d2/2;
+      const path = () => { ctx.beginPath(); ctx.moveTo(X(xi), Y(yT+rise)); ctx.lineTo(X(xo), Y(yT)); ctx.lineTo(X(xo), Y(yT+ws)); ctx.lineTo(X(xi), Y(yT+ws+rise)); ctx.closePath(); };
+      ctx.save(); path(); ctx.fillStyle=C.sheet; ctx.fill(); ctx.clip();
+      const xa = Math.min(X(xi),X(xo)), wd = Math.abs(X(xo)-X(xi)), ya = Y(yT+ws+rise), hd = (ws+rise)*g;
+      ctx.strokeStyle=C.hatch; ctx.lineWidth=0.8; ctx.beginPath();
+      for (let q=Math.floor((xa-hd)/5)*5; q<xa+wd+hd; q+=5){ ctx.moveTo(q, ya); ctx.lineTo(q+hd, ya+hd); }
+      ctx.stroke(); ctx.restore(); path(); ctx.strokeStyle=C.ink; ctx.lineWidth=1.2; ctx.stroke();
+    }
+  }
+  // cıvata gövdesi (başın üstünden uca); uzar cıvatada ℓ_s boyunca d_s'ye inceltilmiş
+  const rd = B.d/2, r3 = B.d3/2, ch = 0.1*B.d, sc = 1 + N*eB/lp;   // gövdedeki büyütülmüş birim uzama
+  ctx.beginPath();
+  if (J.uz){
+    const rs = J.uz.ds/2, a = 0.1*lp*sc, b2 = 0.9*lp*sc, tp = Math.min(0.3*B.d, 0.05*lp);
+    ctx.moveTo(X(-rd), Y(0)); ctx.lineTo(X(-rd), Y(a)); ctx.lineTo(X(-rs), Y(a+tp)); ctx.lineTo(X(-rs), Y(b2-tp)); ctx.lineTo(X(-rd), Y(b2));
+    ctx.lineTo(X(-rd), Y(yTip-ch)); ctx.lineTo(X(-rd+ch), Y(yTip)); ctx.lineTo(X(rd-ch), Y(yTip)); ctx.lineTo(X(rd), Y(yTip-ch));
+    ctx.lineTo(X(rd), Y(b2)); ctx.lineTo(X(rs), Y(b2-tp)); ctx.lineTo(X(rs), Y(a+tp)); ctx.lineTo(X(rd), Y(a)); ctx.lineTo(X(rd), Y(0)); ctx.closePath();
+  } else {
+    ctx.moveTo(X(-rd), Y(0)); ctx.lineTo(X(-rd), Y(yTip-ch)); ctx.lineTo(X(-rd+ch), Y(yTip)); ctx.lineTo(X(rd-ch), Y(yTip)); ctx.lineTo(X(rd), Y(yTip-ch)); ctx.lineTo(X(rd), Y(0)); ctx.closePath();
+  }
+  ctx.fillStyle=C.steel1; ctx.fill(); ctx.strokeStyle=C.ink; ctx.lineWidth=1.2; ctx.stroke();
+  // diş dibi (ince) ve diş bitimi (kalın); uzar cıvatada diş inceltilmiş bölgenin üstünden başlar
+  const yThr0 = J.uz ? nutSn : Math.max(0.12*lp, ySn - B.b);
+  const yThrN0 = yThr0*sc, thrVis = yThrN0 < yNut - 1;     // diş somunun içinde başlıyorsa diş bitimi görünmez
+  const yThrN = thrVis ? yThrN0 : yNut + B.m;
+  line(ctx, X(-r3), Y(yThrN), X(-r3), Y(yTip-ch*0.5), C.ink, 0.7);
+  line(ctx, X(r3),  Y(yThrN), X(r3),  Y(yTip-ch*0.5), C.ink, 0.7);
+  if (thrVis) line(ctx, X(-rd), Y(yThrN), X(rd), Y(yThrN), C.ink, 1.4);
+  // baş (sabit, köşeden bakış) ve somun (gerçek açıyla döner)
+  hexSide(ctx, ax, Y(0), Y(-B.k), B.e/2*g, Math.PI/6);
+  hexSide(ctx, ax, Y(yNut+B.m), Y(yNut), B.e/2*g, Math.PI/6 - V.dth*Math.PI/180);
+  // eksen
+  ctx.save(); ctx.setLineDash([10,3,2,3]); ctx.strokeStyle=C.muted; ctx.lineWidth=0.9;
+  ctx.beginPath(); ctx.moveTo(ax, Y(-B.k)+8); ctx.lineTo(ax, Y(yTip)-8); ctx.stroke(); ctx.restore();
+  // iç kuvvetler: cıvatada çekme (ara yüzden dışa), parçalarda basma (ara yüze doğru)
+  const yI = (yInt1+yInt2)/2, rIn = J.uz ? J.uz.ds/2 : rd;
+  if (V.Fc > 1){ const L = V.Fc*Fsc, xa = ax + rIn*g*0.35; arrow(ctx, xa, Y(yI), xa, Y(yI)-L, C.ten, 2.2, 8); arrow(ctx, xa, Y(yI), xa, Y(yI)+L, C.ten, 2.2, 8); }
+  if (V.Fp > 1){ const L = V.Fp*Fsc, xa = X(-(hx+hw)/2);
+    ctx.save(); ctx.fillStyle=C.sheet; ctx.globalAlpha=0.85; ctx.fillRect(xa-6, Y(yInt2)-L-2, 12, L+2); ctx.fillRect(xa-6, Y(yInt1), 12, L+2); ctx.restore();
+    arrow(ctx, xa, Y(yInt2)-L, xa, Y(yInt2), C.com, 2.2, 8); arrow(ctx, xa, Y(yInt1)+L, xa, Y(yInt1), C.com, 2.2, 8); }
+  // işletme kuvveti: üst parçanın üst yüzünde ve alt parçanın alt yüzünde, baş ve somunun (rondelanın) hemen yanında
+  if (V.Fis > 1){
+    const L = Math.max(4, V.Fis/J.F02ref*Lfis), xo = Math.max(B.e/2, W ? W.d2/2 : 0) + 0.25*B.d;
+    for (const sg of [-1, 1]){
+      arrow(ctx, X(sg*xo), Y(yT), X(sg*xo), Y(yT)-L, C.fis, 2.2, 8);
+      arrow(ctx, X(sg*xo), Y(0), X(sg*xo), Y(0)+L, C.fis, 2.2, 8);
+    }
+    { const f2 = phone ? 10 : fs, tw = richW(ctx, 'F_{iş}/2', f2, 600), yl = Math.max(Y(0)+L+f2+2, Y(-B.k)+f2+3);
+      for (const sg of [-1, 1]){ let cx = X(sg*xo)+sg*4; cx = Math.max(x0+2+tw/2, Math.min(x0+wS-4-tw/2, cx));
+        rich(ctx, 'F_{iş}/2', cx, yl, {size:f2, weight:600, color:C.fis, align:'center', bg:true}); } }
+  }
+  // 1. adımdaki konumlar (kesikli) ve ölçüler
+  if (V.ph >= 1 && V.F > 0){
+    line(ctx, X(rd)+3, Y(ySn), xD+6, Y(ySn), C.muted, 1, [3,2]);
+    line(ctx, X(rd)+3, Y(yTip), xD+6, Y(yTip), C.muted, 0.8);
+    dimV(ctx, xD, Y(ySn), Y(yTip), C.ten);
+    const tipLab = W ? 'δ_{cıv}' : V.sep ? 'F_{iş}/k_{c}' : V.ph===3 && V.Fis>1 ? "δ_{c} + δ'" : 'δ_{c}';
+    { const tw = richW(ctx, tipLab, fs, 600), ty = Math.max(y0 + tTop + fs, (Y(ySn)+Y(yTip))/2 - 9);
+      const tx = Math.min(xD+4, x0+wS-6-tw);              // kesit sınırını (ayırıcı çizgiyi) aşmasın
+      rich(ctx, tipLab, tx, ty, {size:fs, weight:600, color:C.ten, bg:true}); }
+    const pSn = lp + tgFree;                                // 1. adımda üst parçanın üst yüzü
+    if (!V.sep){
+      line(ctx, xR+2, Y(pSn), xD+6, Y(pSn), C.muted, 1, [3,2]);
+      dimV(ctx, xD, Y(pSn), Y(yT), C.com);
+      rich(ctx, V.ph===3 && V.Fis>1 ? "δ_{p} − δ'" : 'δ_{p}', xD+4, Y(yT)+fs+8, {size:fs, weight:600, color:C.com, bg:true});
+    } else {
+      line(ctx, xR+2, Y(yG2), xD+6, Y(yG2), C.ink, 0.8);
+      line(ctx, xR+2, Y(yInt2), xD+6, Y(yInt2), C.ink, 0.8);
+      dimV(ctx, xD, Y(yG2), Y(yInt2), C.ink);
+      rich(ctx, 'aralık', xD+4, Y(yG2)+fs+6, {size:fs, weight:600, color:C.ink, bg:true});
+    }
+  }
+  rich(ctx, 'şekil değiştirme ×'+N, x0+6, y0+14, {size:fs-0.5, color:C.muted, bg:true});
+  rich(ctx, 'somun Δθ = '+fmt(V.dth,1)+'°', x0+6, y0+14+fs+3, {size:fs-0.5, color:C.muted, bg:true});
+  if (G) rich(ctx, 'conta kalınlığı ×'+SC.q, x0+6, y0+14+2*(fs+3), {size:fs-0.5, color:C.muted, bg:true});
+}
+
+function drawTri(ctx, x0, y0, w, h, V, phone){
+  const fs = phone ? 11 : 12.5, colW = phone ? 24 : 32;
+  const padL = phone ? 30 : 40, padB = phone ? 34 : 40, padT = 22;
+  const pw = w - padL - 3*colW - 6, ph = h - padT - padB;
+  const sx = pw/SC.XM, sy = ph/SC.YM;
+  const kc = J.kc, kp = J.kp, Fon = st.Fon, E = J.e;     // E(F): cıvata tarafının uzaması (rondela varsa iki eğimli)
+  const dcF = E(Fon), dpF = Fon/kp;                       // tam F_ön'deki δ_c, δ_p
+  const zoomOn = dpF*(pw/SC.XM) < 30 && V.S;              // üçgenin sağ ucu çok darsa "yakından" kutusu çizilir
+  const ox = x0 + padL + (1-V.pan)*dpF*sx, oy = y0 + padT + ph;
+  const X = d => ox + d*sx, Y = F => oy - F*sy;
+  const xPlotR = x0 + padL + pw;
+  // akma sınırı
+  { const yy = Y(J.F02); line(ctx, x0+padL, yy, xPlotR, yy, C.ink, 1.2);
+    ctx.strokeStyle=C.ink; ctx.lineWidth=0.8; ctx.beginPath(); for (let x=x0+padL+3; x<xPlotR; x+=7){ ctx.moveTo(x, yy); ctx.lineTo(x+5, yy-6); } ctx.stroke();
+    rich(ctx, 'F_{0,2}', x0+padL-4, yy+4, {size:fs, color:C.ink, align:'right'});
+    // yazı, mavi doğrunun akma çizgisini kestiği yerin karşı tarafına
+    const right = zoomOn || X(E(J.F02)) < (x0+padL+xPlotR)/2;
+    if (!phone && !zoomOn) rich(ctx, 'akma sınırı ('+st.grade+')', right ? xPlotR-2 : x0+padL+6, yy-9, {size:fs-1, color:C.muted, align: right?'right':'left', bg:true}); }
+  // eksenler
+  arrow(ctx, X(0), oy, X(0), y0+padT-12, C.ink, 1.2, 8);
+  arrow(ctx, x0+padL-6, oy, xPlotR+8, oy, C.ink, 1.2, 8);
+  rich(ctx, 'F', X(0)-8, y0+padT-6, {size:fs+1, weight:600, align:'right'});
+  rich(ctx, 'δ', xPlotR+8, oy+fs+4, {size:fs+1, weight:600, align:'right'});
+  if (V.ph === 0){ rich(ctx, 'Kuvvet yok: diyagram boş', (x0+padL+xPlotR)/2, oy-ph*0.45, {size:fs, color:C.muted, align:'center'}); return; }
+  ctx.save(); ctx.beginPath(); ctx.rect(x0+padL-2, y0+padT-4, pw+8, ph+5); ctx.clip();
+  const F = V.F;
+  const tR = V.slide*(dcF+dpF);                           // kırmızı doğrunun kayması [mm]
+  // üçgen alanları (üçgen oluşunca)
+  if (V.ph >= 2 && V.slide >= 1){
+    ctx.globalAlpha = V.ph===2 ? ease((V.p-0.6)/0.4) : 1;
+    ctx.fillStyle=C.tenbg; ctx.beginPath(); ctx.moveTo(X(0),Y(0));
+    if (J.W && J.W.Fd < Fon) ctx.lineTo(X(E(J.W.Fd)),Y(J.W.Fd));          // alan, kırık mavi doğruyu izler
+    ctx.lineTo(X(dcF),Y(Fon)); ctx.lineTo(X(dcF),Y(0)); ctx.closePath(); ctx.fill();
+    ctx.fillStyle=C.combg; ctx.beginPath(); ctx.moveTo(X(dcF),Y(0)); ctx.lineTo(X(dcF),Y(Fon)); ctx.lineTo(X(dcF+dpF),Y(0)); ctx.closePath(); ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+  // önlemsiz üçgen (gri, ince): önlem uygulanınca karşılaştırma için
+  const anyM = st.uzar || st.rondela || st.conta;
+  if (anyM && V.ph >= 2 && V.slide >= 1){
+    const d0 = Fon/J0.kc, p0 = Fon/J0.kp;
+    ctx.save(); ctx.strokeStyle=C.muted; ctx.lineWidth=1.3; ctx.setLineDash([5,3]);
+    ctx.beginPath(); ctx.moveTo(X(0),Y(0)); ctx.lineTo(X(d0),Y(Fon)); ctx.lineTo(X(d0+p0),Y(0)); ctx.stroke(); ctx.restore();
+  }
+  // cıvata doğrusu: ince uzantı + kalın dolu kısım (rondela düzleşince eğim değişir)
+  const FcTop = V.ph<=1 ? F : V.Fc;
+  const bpath = (F1, lw) => { const pts = [0]; if (J.W && J.W.Fd < F1) pts.push(J.W.Fd); pts.push(F1);
+    ctx.strokeStyle=C.ten; ctx.lineWidth=lw; ctx.beginPath(); pts.forEach((q,i)=> i ? ctx.lineTo(X(E(q)),Y(q)) : ctx.moveTo(X(0),Y(0))); ctx.stroke(); };
+  bpath(SC.YM, 1); bpath(FcTop, 2.6);
+  // parça doğrusu
+  if (V.ph <= 1){ line(ctx, X(0), Y(0), X(-F/kp), Y(F), C.com, 2.6); }
+  else { line(ctx, X(tR - dpF), Y(Fon), X(tR), Y(0), C.com, 2.6); }
+  ctx.restore();
+  // doğru adları
+  { const yN = Y(SC.YM*0.74), xN = X(E(SC.YM*0.74));
+    if (zoomOn && phone) {}                                 // telefonda kutuyla çakışmasın (mavi doğru lejantta)
+    else if (zoomOn) rich(ctx, 'cıvata', xN+8, yN, {size:fs, weight:600, color:C.ten, bg:true});   // solda yakından kutusu var
+    else rich(ctx, 'cıvata', xN-8, yN, {size:fs, weight:600, color:C.ten, align:'right', bg:true}); }
+  if (V.ph <= 1 && F > 0) rich(ctx, 'parçalar', X(-F/kp)-7, Y(F)+4, {size:fs, weight:600, color:C.com, align:'right', bg:true});
+  else if (V.ph >= 2){
+    const sepNow = V.ph===3 && V.S && V.S.sep && V.Fis > 1;
+    if (dpF*sx < 45) {}                                 // küçük üçgende ad yazılmaz (renk lejantta)
+    else if (!sepNow){ const xm = X(tR - dpF*0.35), ym = Y(Fon*0.35); rich(ctx, 'parçalar', xm+8, ym-4, {size:fs, weight:600, color:C.com, bg:true}); }
+    } 
+  // sıkma adımı: noktalar ve ölçüler (Şekil 3.45 sol)
+  const yD = oy + (phone?14:16);
+  if (V.ph === 1 || (V.ph === 2 && V.pan < 1)){
+    const Fv = V.ph===1 ? F : Fon;
+    if (Fv > 0){
+      line(ctx, X(V.ph===1 ? -Fv/kp : tR-dpF), Y(Fv), X(E(Fv)), Y(Fv), C.muted, 0.8);
+      dot(ctx, X(E(Fv)), Y(Fv), 4.5, C.ten, C.sheet);
+      if (V.ph===1) dot(ctx, X(-Fv/kp), Y(Fv), 4.5, C.com, C.sheet);
+      if (V.ph===1) rich(ctx, 'F', X(E(Fv))+8, Y(Fv)+4, {size:fs, weight:600});
+      else rich(ctx, 'F_{ön}', X(E(Fv))+8, Y(Fv)+4, {size:fs, weight:600});
+      dimH(ctx, X(0), X(E(Fv)), yD, C.ten); rich(ctx, 'δ_{c}', (X(0)+X(E(Fv)))/2, yD+fs+2, {size:fs, weight:600, color:C.ten, align:'center'});
+      const xa = V.ph===1 ? -Fv/kp : tR-dpF, xb = V.ph===1 ? 0 : tR;
+      if (!(V.ph===2 && V.slide>0 && V.slide<1)){        // kayarken δ_p ölçüsü gizlenir (δ_c ile üst üste binmesin)
+        dimH(ctx, X(xa), X(xb), yD, C.com);
+        rich(ctx, 'δ_{p}', (X(xa)+X(xb))/2, yD+fs+2, {size:fs, weight:600, color:C.com, align:'center'}); }
+      if (V.ph===1 && !phone && Fv/kp*sx > 30){ rich(ctx, '(−)', X(-Fv/kp*0.5), oy-5, {size:fs-1, color:C.muted, align:'center'}); rich(ctx, '(+)', X(E(Fv)*0.5), oy-5, {size:fs-1, color:C.muted, align:'center'}); }
+    }
+    return;
+  }
+  // üçgen ve işletme (Şekil 3.45 sağ, 3.46)
+  const S = V.S, xop = S.sep ? E(V.Fis) : dcF + S.dpr;
+  // F_ön düşey çizgisi
+  arrow(ctx, X(dcF), Y(0), X(dcF), Y(Fon), C.ink, 1.3, 8);
+  { const d = Y(Fon) - Y(J.F02), lim = fs + 5, sh = Math.abs(d) < lim ? (d >= 0 ? 1 : -1)*(lim - Math.abs(d)) : 0;   // F_0,2 etiketinden uzaklaş
+    rich(ctx, 'F_{ön}', X(0)-6, Y(Fon)+4+sh, {size:fs, weight:600, align:'right'}); }
+  line(ctx, X(0), Y(Fon), X(dcF)-2, Y(Fon), C.muted, 0.7);
+  // açılar
+  { const r = phone?14:18, a = Math.atan2(kc*sy, sx), b = Math.atan2(kp*sy, sx), xf = X(dcF+dpF);
+    const ok = dcF*sx > r+16 && dpF*sx > r+12;          // yay ve harf üçgenin içine sığmazsa çizilmez
+    if (ok){
+      ctx.strokeStyle=C.ten; ctx.lineWidth=1.2; ctx.beginPath(); ctx.arc(X(0), Y(0), r, -a, 0); ctx.stroke();
+      rich(ctx, 'φ', X(0)+r+3, Y(0)-r*0.3, {size:fs, weight:600, color:C.ten});
+      ctx.strokeStyle=C.com; ctx.beginPath(); ctx.arc(xf, Y(0), r, Math.PI, Math.PI+b); ctx.stroke();
+      rich(ctx, 'ψ', xf-r-3, Y(0)-r*0.3, {size:fs, weight:600, color:C.com, align:'right'}); } }
+  // taban ölçüleri
+  { const wc = richW(ctx, 'δ_{c}', fs, 600), wp = richW(ctx, 'δ_{p}', fs, 600);
+    const xc = (X(0)+X(dcF))/2; let xp = (X(dcF)+X(dcF+dpF))/2; xp = Math.max(xp, xc + (wc+wp)/2 + 5);   // etiketler birleşmesin
+    dimH(ctx, X(0), X(dcF), yD, C.ten); rich(ctx, 'δ_{c}', xc, yD+fs+2, {size:fs, weight:600, color:C.ten, align:'center'});
+    dimH(ctx, X(dcF), X(dcF+dpF), yD, C.com); rich(ctx, 'δ_{p}', xp, yD+fs+2, {size:fs, weight:600, color:C.com, align:'center'}); }
+  const colX = i => xPlotR + 8 + colW*i + colW/2;
+  if (zoomOn) drawZoom(ctx, { x0, padL, padT, y0, ph, sx, sy, X, Y, E, Fon, dcF, dpF, S, phone, fs });
+  if (V.Fis <= 1) return;
+  // işletme kuvveti: mor düşey
+  const yTop = Y(Math.min(V.Fc, SC.YM)), yPon = Y(V.Fp);
+  arrow(ctx, X(xop), yPon, X(xop), yTop, C.fis, 2.6, 9);
+  dot(ctx, X(xop), yTop, 4.5, C.ten, C.sheet);
+  dot(ctx, X(S.sep ? dcF+dpF : xop), yPon, 4.5, C.com, C.sheet);
+  // δ' ve ayrılma aralığı
+
+  if (S.sep){ dimH(ctx, X(dcF+dpF), X(xop), yD, C.ink); rich(ctx, 'aralık', Math.max((X(dcF+dpF)+X(xop))/2, X(dcF+dpF)+28), yD+fs+2, {size:fs-1, weight:600, align:'center'}); }
+  // ölçü sütunları: 1) F'_ön, F_b, F_z  2) F_iş  3) F_top
+  const ext = (y, xa) => line(ctx, xa+5, y, colX(2)+5, y, C.muted, 0.7);
+  ext(yTop, X(xop)); ext(Y(Fon), X(dcF)); if (V.Fp > 1) ext(yPon, X(xop)); else ext(Y(0), X(xop));
+  const seg = (i, Fa, Fb, col, lab) => {
+    const ya = Y(Fa), yb2 = Y(Math.min(Fb, SC.YM)); if (Math.abs(ya-yb2) < 0.8) return;
+    dimV(ctx, colX(i), ya, yb2, col);
+    const L = Math.abs(ya-yb2), tw = richW(ctx, lab, fs, 600);
+    if (L >= tw + 8){ ctx.save(); ctx.translate(colX(i)-4, (ya+yb2)/2); ctx.rotate(-Math.PI/2); rich(ctx, lab, 0, 0, {size:fs, weight:600, color:col, align:'center', bg:true}); ctx.restore(); }
+    else if (L >= 12) rich(ctx, lab, colX(i)-3, (ya+yb2)/2+4, {size:fs-1, weight:600, color:col, align:'right', bg:true});
+  };
+  seg(0, 0, V.Fp, C.com, "F'_{ön}");
+  seg(0, V.Fp, Fon, C.com, 'F_{b}');
+  seg(0, Fon, V.Fc, C.ten, 'F_{z}');
+  seg(1, V.Fp, V.Fc, C.fis, 'F_{iş}');
+  seg(2, 0, V.Fc, C.ten, 'F_{top}');
+
+}
+
+// ---- yakından kutusu: kuvvet ölçeği ana diyagramla aynı (sığmazsa küçültülür), yalnız δ ekseni büyütülür
+function drawZoom(ctx, o){
+  const { X, Y, E, Fon, dcF, dpF, S, fs } = o, V = { Fc: S.Ftop, Fp: S.Fpon };
+  const xop = S.sep ? E(Math.max(S.Ftop, Fon)) : dcF + S.dpr;
+  const xa = dcF - 0.6*dpF, xb = Math.max(dcF + dpF, xop) + 0.3*dpF;
+  const Fmax = Math.max(V.Fc, Fon)*1.12;
+  let iw = o.phone ? 104 : 170; const ix = o.x0 + o.padL + 8, iy = o.y0 + o.padT + 4;
+  let fy = o.sy, ih = Fmax*fy; if (ih > o.ph*0.6){ ih = o.ph*0.6; fy = ih/Fmax; }
+  ih += fs + 6;                                           // başlık satırı
+  // kutu mavi doğruyu örtmesin: kutunun alt kenarı hizasında doğru nerede, kutu oraya kadar
+  const Fat = Math.max(0, (Y(0) - (iy + ih))/o.sy);
+  iw = Math.min(iw, X(E(Fat)) - ix - 12); if (iw < (o.phone ? 56 : 80)) return false;
+  const zx = iw/(xb - xa), Z = zx/o.sx;
+  const LX = d => ix + (d - xa)*zx, LY = F => iy + ih - F*fy;
+  // ana diyagramda büyütülen bölge
+  ctx.save(); ctx.strokeStyle=C.muted; ctx.lineWidth=1; ctx.strokeRect(X(xa), Y(Fmax), X(xb)-X(xa), Y(0)-Y(Fmax)); ctx.restore();
+  // kutu
+  ctx.save(); ctx.fillStyle=C.sheet; ctx.strokeStyle=C.muted; ctx.lineWidth=1; ctx.fillRect(ix, iy, iw, ih); ctx.strokeRect(ix, iy, iw, ih);
+  rich(ctx, 'yakından: δ ×'+fmt(Z, Z < 10 ? 1 : 0)+(fy/o.sy < 0.995 ? ', F ×'+fmt(fy/o.sy,2) : ''), ix+5, iy+fs, {size:fs-1.5, weight:600, color:C.muted});
+  ctx.beginPath(); ctx.rect(ix+1, iy+fs+4, iw-2, ih-fs-5); ctx.clip();
+  ctx.fillStyle=C.combg; ctx.beginPath(); ctx.moveTo(LX(dcF),LY(0)); ctx.lineTo(LX(dcF),LY(Fon)); ctx.lineTo(LX(dcF+dpF),LY(0)); ctx.closePath(); ctx.fill();
+  line(ctx, ix, LY(0), ix+iw, LY(0), C.ink, 1);
+  // cıvata doğrusu (kırılma noktası dahil) ve parça doğrusu
+  const pts = [0]; if (J.W && J.W.Fd < Fmax) pts.push(J.W.Fd); pts.push(Fmax);
+  ctx.strokeStyle=C.ten; ctx.lineWidth=2.2; ctx.beginPath(); pts.forEach((q,i)=> i ? ctx.lineTo(LX(E(q)),LY(q)) : ctx.moveTo(LX(E(q)),LY(q))); ctx.stroke();
+  line(ctx, LX(dcF), LY(Fon), LX(dcF+dpF), LY(0), C.com, 2.2);
+  arrow(ctx, LX(dcF), LY(0), LX(dcF), LY(Fon), C.ink, 1.2, 7);
+  if (V.Fc - V.Fp > 1) arrow(ctx, LX(xop), LY(V.Fp), LX(xop), LY(V.Fc), C.fis, 2.2, 8);
+  dot(ctx, LX(xop), LY(V.Fc), 3.5, C.ten, C.sheet); dot(ctx, LX(S.sep ? dcF+dpF : xop), LY(V.Fp), 3.5, C.com, C.sheet);
+  ctx.restore();
+  // F_z ve F_b, mor çizginin sağında (yer varsa)
+  const lab = (Fa, Fb, t, col) => { const ya = LY(Fa), yb = LY(Fb); if (Math.abs(ya-yb) >= 11) rich(ctx, t, Math.min(LX(xop)+6, ix+iw-22), (ya+yb)/2+4, {size:fs-1.5, weight:600, color:col, bg:true}); };
+  if (S.Ftop - S.Fpon > 1){ lab(Fon, V.Fc, 'F_{z}', C.ten); lab(V.Fp, Fon, 'F_{b}', C.com); }
+  return true;
+}
+
+// ---- sağ grafik: F_iş'e göre kuvvetler
+function drawF(V){
+  const {ctx,w,h} = fit(cvF);
+  ctx.clearRect(0,0,w,h);
+  const pl=46, pr=12, pt=24, pb=34, pw=w-pl-pr, ph=h-pt-pb;
+  const XM = Math.floor(J.F02ref/1000)*1000, YM = SC.YM;
+  const X = F => pl + F/XM*pw, Y = F => pt + ph*(1 - Math.min(F,YM)/YM);
+  const step = XM > 120e3 ? 40e3 : XM > 60e3 ? 20e3 : 10e3;
+  ctx.strokeStyle=C.line; ctx.lineWidth=1;
+  for (let F=0; F<=XM+1; F+=step){ ctx.beginPath(); ctx.moveTo(X(F),pt); ctx.lineTo(X(F),pt+ph); ctx.stroke(); rich(ctx, String(F/1000), X(F), pt+ph+15, {size:11, color:C.muted, align:'center'}); }
+  for (let F=0; F<=YM; F+=step){ ctx.beginPath(); ctx.moveTo(pl,Y(F)); ctx.lineTo(pl+pw,Y(F)); ctx.stroke(); rich(ctx, String(F/1000), pl-6, Y(F)+4, {size:11, color:C.muted, align:'right'}); }
+  rich(ctx, 'F_{iş} [kN]', pl+pw, h-4, {size:11.5, color:C.muted, align:'right'});
+  rich(ctx, 'F [kN]', pl-40, pt-10, {size:11.5, color:C.muted});
+  // akma
+  { const yy = Y(J.F02); line(ctx, pl, yy, pl+pw, yy, C.ink, 1.2); ctx.lineWidth=0.8; ctx.beginPath(); for (let x=pl+3; x<pl+pw; x+=7){ ctx.moveTo(x,yy); ctx.lineTo(x+5,yy-6); } ctx.stroke();
+    rich(ctx, 'F_{0,2} ('+st.grade+')', pl+pw-4, yy-9, {size:11, color:C.ink, align:'right', bg:true}); }
+  ctx.save(); ctx.beginPath(); ctx.rect(pl,pt,pw,ph); ctx.clip();
+  if (st.dyn && st.phase===3){ ctx.fillStyle=C.fisbg; ctx.fillRect(X(0), pt, X(st.Fis)-X(0), ph); }
+  line(ctx, X(0), Y(0), X(XM), Y(XM), C.muted, 1, [4,3]);
+  const S0 = CIV.state(J, st.Fon, 0), Fs = S0.Fsep;
+  // eğriler örneklenir (rondela düzleşince kırılır); ayrılma ve düzleşme noktaları örneklere eklenir
+  const xs = []; for (let i=0;i<=160;i++) xs.push(XM*i/160); if (Fs < XM) xs.push(Fs);
+  xs.sort((a,b)=>a-b); const SS = xs.map(x => [x, CIV.state(J, st.Fon, x)]);
+  if (st.uzar || st.rondela || st.conta || st.tw){        // önlemsiz eğriler
+    const S0s = xs.map(x => CIV.state(J0, st.Fon, x));
+    ctx.save(); ctx.setLineDash([5,3]); ctx.lineWidth=1.4;
+    ctx.strokeStyle=C.ten; ctx.globalAlpha=0.55; ctx.beginPath(); S0s.forEach((S,i)=> i ? ctx.lineTo(X(xs[i]),Y(S.Ftop)) : ctx.moveTo(X(xs[i]),Y(S.Ftop))); ctx.stroke();
+    ctx.strokeStyle=C.com; ctx.beginPath(); S0s.forEach((S,i)=> i ? ctx.lineTo(X(xs[i]),Y(S.Fpon)) : ctx.moveTo(X(xs[i]),Y(S.Fpon))); ctx.stroke(); ctx.restore(); }
+  ctx.strokeStyle=C.ten; ctx.lineWidth=2.4; ctx.beginPath(); SS.forEach(([x,S],i)=> i ? ctx.lineTo(X(x),Y(S.Ftop)) : ctx.moveTo(X(x),Y(S.Ftop))); ctx.stroke();
+  ctx.strokeStyle=C.com; ctx.beginPath(); SS.forEach(([x,S],i)=> i ? ctx.lineTo(X(x),Y(S.Fpon)) : ctx.moveTo(X(x),Y(S.Fpon))); ctx.stroke();
+  ctx.restore();
+  const sepLab = Fs < XM ? [X(Fs), Y(Fs)] : null;          // etiketi diğer yazılardan sonra, çakışmayan yere
+  const boxes = [[pl+pw-90, pl+pw, Y(J.F02)-21, Y(J.F02)-5]];   // F_0,2 etiketi
+  // şu anki nokta
+  if (st.phase===3){
+    const Fi = V.Fis, S = CIV.state(J, st.Fon, Fi), xn = X(Fi);
+    line(ctx, xn, pt, xn, pt+ph, C.fis, 1.4, [3,3]);
+    dot(ctx, xn, Y(S.Ftop), 5, C.ten, C.sheet); dot(ctx, xn, Y(S.Fpon), 5, C.com, C.sheet);
+    const rt = xn > pl+pw*0.6;
+    // etiket, uzandığı aralıkta çizginin üstünde (mavi) ya da altında (kırmızı) kalır
+    const tT = 'F_{top} = '+kN(S.Ftop)+' kN', tP = "F'_{ön} = "+kN(S.Fpon)+' kN';
+    const span = t => (richW(ctx, t, 12, 600)+12)/pw*XM*(rt?-1:1);
+    const fT = x => CIV.state(J, st.Fon, Math.max(0,Math.min(XM,x))).Ftop, fP = x => CIV.state(J, st.Fon, Math.max(0,Math.min(XM,x))).Fpon;
+    let yTl = Math.min(Y(fT(Fi)), Y(fT(Fi+span(tT)))) - 7, yPl = Math.max(Y(fP(Fi)), Y(fP(Fi+span(tP)))) + 17;
+    const yF = Y(J.F02);                                    // F_0,2 çizgisi ve etiketinden uzak dur
+    if (Math.abs(yTl - yF) < 15) yTl = yF + (yTl > yF ? 15 : -12);
+    if (Math.abs(yPl - yF) < 15) yPl = yF + 22;
+    if (yPl > pt+ph-4) yPl = Y(S.Fpon) - 8;              // eksene inen kırmızı çizgide yazı çizginin üstüne
+    rich(ctx, tT, xn+(rt?-8:8), Math.max(pt+12, yTl), {size:12, weight:600, color:C.ten, align: rt?'right':'left', bg:true});
+    rich(ctx, tP, xn+(rt?-8:8), Math.min(pt+ph-4, yPl), {size:12, weight:600, color:C.com, align: rt?'right':'left', bg:true});
+    const wT = richW(ctx, tT, 12, 600), wP = richW(ctx, tP, 12, 600);
+    const rx = (x, w) => rt ? [x-w, x] : [x, x+w];
+    boxes.push([...rx(xn+(rt?-8:8), wT), Math.max(pt+12, yTl)-12, Math.max(pt+12, yTl)+3]);
+    boxes.push([...rx(xn+(rt?-8:8), wP), Math.min(pt+ph-4, yPl)-12, Math.min(pt+ph-4, yPl)+3]);
+  }
+  if (sepLab){
+    const [sx0, sy0] = sepLab; dot(ctx, sx0, sy0, 3.5, C.ink);
+    const w = richW(ctx, 'ayrılma', 11.5, 600);
+    const cand = [[8,-8,0],[8,18,0],[-8,-8,1],[-8,18,1],[8,32,0],[-8,32,1]];
+    const hit = (a,b,c,d) => boxes.some(([x1,x2,y1,y2]) => a < x2 && b > x1 && c < y2 && d > y1);
+    let pick = cand[0];
+    for (const c of cand){ const x1 = c[2] ? sx0+c[0]-w : sx0+c[0], y = sy0+c[1];
+      if (x1 >= pl && x1+w <= pl+pw && y-11 >= pt && y <= pt+ph && !hit(x1, x1+w, y-12, y+3)){ pick = c; break; } }
+    rich(ctx, 'ayrılma', sx0+pick[0], sy0+pick[1], {size:11.5, weight:600, align: pick[2] ? 'right' : 'left', bg:true});
+  }
+}
+
+// ---- durum, açıklama ve değerler
+let lastSig = '';
+function updateText(V){
+  const S = V.S, B = J.B;
+  const sig = [JSON.stringify(measures()),!!st.tw,st.bolt,st.lp,st.mat,st.grade,st.Fon,st.Fis,st.phase,V.p>=1,Math.round(V.p*20),st.dyn,V.sep,Math.round(V.Fis/100),Math.round(V.F/100)].join('|');
+  if (sig === lastSig) return; lastSig = sig;
+  const s = $('status'), cap = $('caption');
+  const n = '×'+SC.N;
+  let head = '', nums = '', warn = false, txt = '';
+  const S0 = CIV.state(J0, st.Fon, V.Fis), on = [st.uzar && 'uzar cıvata', st.rondela && 'yaylı rondela', st.conta && 'conta'].filter(Boolean);
+  const seq = 1.3*st.Fon/B.Ac, Rp = J.Rp, Rs = J.sym.replace('_','<sub>')+'</sub>';
+  if (S.yield){ warn = true; head = 'Akma: F<sub>top</sub> &gt; F<sub>0,2</sub>'; nums = 'F<sub>top</sub> = '+kN(S.Ftop)+' kN · F<sub>0,2</sub> = '+kN(J.F02)+' kN · doğrusal model geçerli değil'; }
+  else if (seq > Rp){ warn = true; head = 'Sıkmada akma'; nums = 'σ<sub>eş</sub> ≈ 1,3·F<sub>ön</sub>/A<sub>c</sub> = '+fmt(seq,0)+' N/mm² &gt; '+Rs+' = '+Rp+' N/mm² (s. 80)'; }
+  else if (V.sep){ warn = true; head = "Parçalar ayrıldı: F'<sub>ön</sub> = 0"; nums = 'F<sub>iş</sub> = '+kN(V.Fis)+' kN &gt; F<sub>ayr</sub> = '+kN(S.Fsep)+' kN'; }
+  else if (J.W && !V.tw && S.flatOn){ warn = true; head = 'Rondela sıkmada düzleşti'; nums = 'F<sub>ön</sub> = '+kN(st.Fon)+' kN &gt; F<sub>düz</sub> = '+kN(J.W.Fd)+' kN · rondela rijit, k<sub>c</sub>\'ye katkısı yok'; }
+  else if (J.W && !V.tw && S.flatTop){ warn = true; head = 'Rondela işletmede düzleşti'; nums = 'F<sub>top</sub> = '+kN(S.Ftop)+' kN &gt; F<sub>düz</sub> = '+kN(J.W.Fd)+' kN · bundan sonra eğim rondelasız cıvatanınkine döner'; }
+  else if (V.tw){ const St = CIV.state(J, st.Fon, V.Fis); head = 'Geçiş: '+(on.length ? 'önlemli bağlantıya' : 'önlemsiz bağlantıya');
+    nums = V.Fis >= 1 ? 'Sonunda F<sub>z</sub>/F<sub>iş</sub> = '+fmt(St.Fz/V.Fis,3)+" · F'<sub>ön</sub> = "+kN(St.Fpon)+' kN' : ''; }
+  else { head = on.length ? 'Önlemli bağlantı' : 'Önlemsiz bağlantı';
+    nums = V.Fis >= 1 ? 'F<sub>z</sub>/F<sub>iş</sub> = '+fmt(S.Fz/V.Fis,3)+(on.length ? ' (önlemsiz '+fmt(S0.Fz/V.Fis,3)+')' : '')+" · F'<sub>ön</sub> = "+kN(S.Fpon)+' kN' : 'F<sub>iş</sub> = 0'; }
+  if (V.tw) txt = 'Doğrular yeni eğimlerine dönüyor.'+(on.length ? ' Gri kesikli üçgen önlemsiz bağlantıdır.' : '');
+  else if (V.Fis < 1) txt = 'F<sub>iş</sub> yok. Cıvata ve parçalar aynı F<sub>ön</sub> = '+kN(st.Fon)+' kN kuvvetini taşıyor. '+(on.length ? 'Uygulanan: '+on.join(', ')+'.' : 'Bir önlem uygulayın.');
+  else if (V.sep) txt = 'F<sub>iş</sub> = '+kN(V.Fis)+' kN, ayrılma kuvvetini ('+kN(S.Fsep)+' kN) aştı. Parçalar ayrıldı, F<sub>iş</sub>\'in tamamını cıvata taşıyor.';
+  else if (!on.length) txt = 'Önlem uygulanmadı. F<sub>iş</sub> = '+kN(V.Fis)+' kN\'un F<sub>z</sub> = '+kN(S.Fz)+' kN\'luk kısmı cıvataya, F<sub>b</sub> = '+kN(S.Fb)+' kN\'luk kısmı parçalara geliyor. Aşağıdan bir önlem uygulayın.';
+  else txt = 'Uygulanan: '+on.join(', ')+'. F<sub>iş</sub> = '+kN(V.Fis)+' kN\'un F<sub>z</sub> = '+kN(S.Fz)+' kN\'luk kısmı cıvataya geliyor (önlemsiz '+kN(S0.Fz)+' kN). Parçalarda F\'<sub>ön</sub> = '+kN(S.Fpon)+' kN kalıyor (önlemsiz '+kN(S0.Fpon)+' kN). Gri kesikli üçgen önlemsiz bağlantıdır.';
+  if (st.dyn && st.Fis > 0 && !V.tw){ const D = CIV.dyn(J, st.Fon, st.Fis), D0 = CIV.dyn(J0, st.Fon, st.Fis);
+    txt += ' Dinamik yük: F<sub>iş</sub> 0 ile '+kN(st.Fis)+' kN arasında gidip geliyor, cıvatadaki genlik F<sub>g</sub> = '+kN(D.Fg)+' kN'+(on.length ? ' (önlemsiz '+kN(D0.Fg)+' kN)' : '')+'.'; }
+  s.className = 'status' + (warn ? ' warn' : '');
+  s.innerHTML = '<span class="big">'+head+'</span><span class="nums">'+nums+'</span>';
+  if (V.Fc > SC.YM) txt += ' F<sub>top</sub> diyagramın üst sınırını aştı; çizimde sınırda tutuldu.';
+  cap.innerHTML = txt;
+  // değerler (sıkılmış durum ve ayardaki F_iş için)
+  const S1 = CIV.state(J, st.Fon, st.Fis), D = CIV.dyn(J, st.Fon, st.Fis);
+  const kc1 = J.kAt(st.Fon), sub = t => t.replace('_','<sub>')+'</sub>';
+  const rows = [
+    ['grp','Rijitlikler ('+st.bolt+' '+st.grade+', ℓ<sub>p</sub> = '+st.lp+' mm, '+J.M.ad.toLowerCase()+')'],
+    ['A<sub>c</sub> = (π/4)·d<sub>3</sub>²', fmt(B.Ac, B.Ac<100?1:0)+' mm² (d<sub>3</sub> = '+fmt(B.d3,2)+' mm)'],
+    ['k<sub>c</sub> = E<sub>c</sub>·A<sub>c</sub>/ℓ<sub>c</sub>'+(J.uz||J.W ? ' (önlemsiz)' : ''), fmt(J0.kc/1000,0)+' kN/mm'],
+  ];
+  if (J.uz) rows.push(['Uzar: 1/k<sub>cıv</sub> = ℓ<sub>s</sub>/(E<sub>c</sub>·A<sub>s</sub>) + (ℓ<sub>c</sub> − ℓ<sub>s</sub>)/(E<sub>c</sub>·A<sub>c</sub>)', fmt(J.kcb/1000,0)+' kN/mm (d<sub>s</sub> = '+fmt(J.uz.ds,2)+' mm)']);
+  if (J.W){ rows.push(['Rondela: k<sub>r</sub>, F<sub>düz</sub> (DIN 6796)', fmt(J.W.kr/1000,1)+' kN/mm, '+kN(J.W.Fd)+' kN']);
+            rows.push(['k<sub>c eş</sub> = 1/(1/k<sub>cıv</sub> + 1/k<sub>r</sub>), F &lt; F<sub>düz</sub> (k<sub>cıv</sub>: rondelasız cıvata)', fmt(J.kc/1000,1)+' kN/mm']); }
+  rows.push(['D<sub>eş</sub> = AA + k<sub>malz</sub>·ℓ<sub>p</sub>', B.AA+' + '+fmt(J.M.kmalz, 3).replace(/0+$/,'')+'·'+st.lp+' = '+fmt(J.Des,1)+' mm'],
+    ['A<sub>p</sub> = (π/4)·(D<sub>eş</sub>² − d<sub>h</sub>²)', fmt(J.Ap,0)+' mm² (d<sub>h</sub> = '+fmt(B.dh,1)+' mm)'],
+    ['k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub>'+(J.G ? ' (önlemsiz)' : ''), fmt(J0.kp/1000,0)+' kN/mm']);
+  if (J.G){ rows.push(['Conta: k<sub>conta</sub> = E·A<sub>p</sub>/t ('+J.G.ad+', t = '+fmt(J.G.t,1)+' mm)', fmt(J.G.kg/1000,0)+' kN/mm']);
+            rows.push(['1/k<sub>p eş</sub> = 1/k<sub>p</sub> + 1/k<sub>conta</sub>', fmt(J.kp/1000,0)+' kN/mm']); }
+  rows.push(['k<sub>p</sub>/k<sub>c</sub> (F<sub>ön</sub>\'deki eğimlerle)', fmt(J.kp/kc1,2)],
+    ['F<sub>z</sub>/F<sub>iş</sub> = k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>)', fmt(kc1/(kc1+J.kp),3)],
+    ['δ<sub>c</sub>'+(J.W ? ', cıvata + rondela' : ' = F<sub>ön</sub>/k<sub>c</sub>')+', δ<sub>p</sub>', fmt(S1.dc*1000,1)+' µm, '+fmt(S1.dp*1000,1)+' µm'],
+    ['Somunun dönmesi Δθ (yorum)', fmt(S1.dth,1)+'°']);
+  $('vals').innerHTML = rows.map(r => r[0]==='grp' ? '<dt class="grp">'+r[1]+'</dt>' : '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('');
+  renderCmp();
+}
+// ---- önlemler paneli: kartlar tek önlemi, tablo şu anki (birleşik) durumu önlemsizle karşılaştırır
+function pct(a, b){ const p = 100*(b/a - 1); return '<span style="white-space:nowrap">'+(p >= 0 ? '+' : '−')+'%'+fmt(Math.abs(p), Math.abs(p) < 9.95 ? 1 : 0)+'</span>'; }
+function renderCmp(){
+  const base = { bolt:st.bolt, lp:st.lp, mat:st.mat, grade:st.grade };
+  const S0 = CIV.state(J0, st.Fon, st.Fis);
+  // tek önlemli bağlantılar
+  const Ju = CIV.joint(Object.assign({}, base, { uzar: st.uzR })), Su = CIV.state(Ju, st.Fon, st.Fis);
+  const Jr = CIV.joint(Object.assign({}, base, { rondela: true })), Sr = CIV.state(Jr, st.Fon, st.Fis);
+  const Jc = CIV.joint(Object.assign({}, base, { conta: { mat:st.cMat, t:st.cT } })), Sc = CIV.state(Jc, st.Fon, st.Fis);
+  const k = v => fmt(v/1000, v < 99500 ? 1 : 0);
+  $('rU').innerHTML = 'k<sub>c</sub>: '+k(J0.kc)+' → '+k(Ju.kcb)+' kN/mm ('+pct(J0.kc, Ju.kcb)+')<br>F<sub>z</sub>: '+kN(S0.Fz)+' → '+kN(Su.Fz)+' kN';
+  $('rR').innerHTML = 'k<sub>c</sub>: '+k(J0.kc)+' → '+k(Jr.kc)+' kN/mm (F &lt; F<sub>düz</sub> = '+kN(Jr.W.Fd)+' kN)<br>F<sub>z</sub>: '+kN(S0.Fz)+' → '+kN(Sr.Fz)+' kN';
+  $('nR').classList.toggle('w', Sr.flatOn || Sr.flatTop);
+  $('nR').innerHTML = Sr.flatOn ? 'F<sub>ön</sub> = '+kN(st.Fon)+' kN &gt; F<sub>düz</sub>: rondela sıkmada düzleşir ve F<sub>z</sub> değişmez. Etkiyi görmek için F<sub>ön</sub>\'ü örneğin '+fmt(Math.round(0.65*Jr.W.Fd/1000),0)+' kN\'a indirin.'
+                     : Sr.flatTop ? 'Rondela işletmede (F<sub>top</sub> &gt; F<sub>düz</sub>) düzleşir.' : 'Rondela düzleşmiyor.';
+  $('rC').innerHTML = 'k<sub>p</sub>: '+k(J0.kp)+' → '+k(Jc.kp)+' kN/mm ('+pct(J0.kp, Jc.kp)+')<br>F\'<sub>ön</sub>: '+kN(S0.Fpon)+' → '+kN(Sc.Fpon)+' kN, F<sub>z</sub>: '+kN(S0.Fz)+' → '+kN(Sc.Fz)+' kN';
+  // conta basıncı, malzemeye göre koşullu not (sınırlar hesap modülünde, kaynaklarıyla)
+  const pg = st.Fon/Jc.Ap, GM = CIV.GASKETS[st.cMat]; let cw = false, ct;
+  if (GM.sAk){ cw = pg > GM.sAk;
+    ct = 'Contadaki basınç F<sub>ön</sub>/A<sub>p</sub> = '+fmt(pg,0)+' N/mm². '+(cw ? 'Bu, sert PVC\'nin çekmedeki akma dayanımının (≈'+GM.sAk+' N/mm²) üstünde: Gerçek conta kalıcı olarak ezilir ve ön gerilme düşer. Sayfa yalnız rijitliği hesaba katar.' : 'Sert PVC\'nin çekmedeki akma dayanımının (≈'+GM.sAk+' N/mm²) altında.'); }
+  else { cw = pg < GM.y;
+    ct = 'Contadaki basınç F<sub>ön</sub>/A<sub>p</sub> = '+fmt(pg,0)+' N/mm². '+(cw ? 'Bu, ASME\'deki en küçük oturma basıncının (yumuşak '+(st.cMat==='al'?'Al':'Cu')+' için y = '+GM.y+' N/mm²) altında: Conta yeterince oturmayabilir.' : 'Basınç, ASME\'deki en küçük oturma basıncının (yumuşak '+(st.cMat==='al'?'Al':'Cu')+' için y = '+GM.y+' N/mm²) üstünde: Conta akarak oturur, bu istenir. Akmadan sonraki davranış doğrusal modelin dışındadır.'); }
+  $('nC').innerHTML = ct; $('nC').classList.toggle('w', cw);
+  $('oUz').textContent = fmt(st.uzR,2); $('oCt').textContent = fmt(st.cT,1)+' mm';
+  [['bU','optU',st.uzar],['bR','optR',st.rondela],['bC','optC',st.conta]].forEach(([b,o,on])=>{
+    $(b).textContent = on ? 'Kaldır' : 'Uygula'; $(b).setAttribute('aria-pressed', String(on)); $(o).classList.toggle('on', on); });
+  // tablo
+  const S = CIV.state(J, st.Fon, st.Fis), D0 = CIV.dyn(J0, st.Fon, st.Fis), D = CIV.dyn(J, st.Fon, st.Fis);
+  const kc0 = J0.kc, kc1 = J.kAt(st.Fon);
+  const R = [
+    ['k<sub>c</sub> <span class="lg">cıvata tarafı, F<sub>ön</sub>\'deki eğim</span> [kN/mm]', kc0/1000, kc1/1000, 0],
+    ['k<sub>p</sub> <span class="lg">parçalar</span> [kN/mm]', J0.kp/1000, J.kp/1000, 0],
+    ['F<sub>z</sub>/F<sub>iş</sub>', st.Fis>0 ? S0.Fz/st.Fis : J0.phi, st.Fis>0 ? S.Fz/st.Fis : kc1/(kc1+J.kp), -1],
+    ['F<sub>z</sub> <span class="lg">cıvataya gelen</span> [kN]', S0.Fz/1000, S.Fz/1000, -1],
+    ['F<sub>top</sub> <span class="lg">cıvatadaki toplam</span> [kN]', S0.Ftop/1000, S.Ftop/1000, -1],
+    ["F'<sub>ön</sub> <span class=\"lg\">parçalarda kalan</span> [kN]", S0.Fpon/1000, S.Fpon/1000, +1],
+    ['F<sub>ayr</sub> <span class="lg">ayrılmanın başladığı F<sub>iş</sub></span> [kN]', S0.Fsep/1000, S.Fsep/1000, +1],
+    ['F<sub>g</sub> <span class="lg">dinamik yükte genlik</span> [kN]', D0.Fg/1000, D.Fg/1000, -1],
+  ];
+  const f3 = v => fmt(v, Math.abs(v) < 1 ? 3 : Math.abs(v) < 100 ? 2 : 0);
+  $('ctab').innerHTML = '<tr><th>Büyüklük</th><th>Önlemsiz</th><th>Şu an</th><th><span class="lg">Değişim</span><span class="sm">Fark</span></th></tr>' + R.map(([n,a,b,good]) => {
+    const same = Math.abs(b-a) <= 1e-6*Math.max(1,Math.abs(a));
+    const cls = same || !good ? '' : ((b-a)*good > 0 ? 'dn' : 'up');
+    return '<tr><td>'+n+'</td><td>'+f3(a)+'</td><td>'+f3(b)+'</td><td class="'+cls+'">'+(same ? 'aynı' : pct(a,b))+'</td></tr>'; }).join('');
+  const any = st.uzar || st.rondela || st.conta;
+  $('bUndo').disabled = !Object.keys(MDEF).some(k => st[k] !== MDEF[k]);
+  $('hUndo').innerHTML = any ? 'Uygulanan: '+[st.uzar && 'uzar cıvata', st.rondela && 'yaylı rondela', st.conta && 'conta'].filter(Boolean).join(', ') : '';
+}
+// düğmeler her çizimde güncellenir (değer değişmese de oynatma durumu değişebilir)
+function updateButtons(){
+  const anim = !!st.tw || st.dyn;
+  const bp = $('btnPlay'), t = st.playing ? 'Durdur' : 'Devam', dis = !st.playing && !anim;
+  if (bp.textContent !== t) bp.textContent = t;
+  if (bp.disabled !== dis) bp.disabled = dis;
+  $('btnDyn').setAttribute('aria-pressed', String(st.dyn));
+}
+
+function draw(){
+  const V = view(), { Jd, SCd } = shown(), Jt = J, SCt = SC;
+  // kesit hedef bağlantıyla (önlemin geometrisi), üçgen ve grafik karışımla (dönen doğrular) çizilir
+  const {ctx,w,h} = fitMain(); const phone = w < 560, wS = Math.round(w*(phone?0.40:0.38));
+  drawSection(ctx, 0, 0, wS, h, V, phone);
+  line(ctx, wS+2, 10, wS+2, h-10, C.line, 1);
+  J = Jd; SC = SCd; try { drawTri(ctx, wS+6, 0, w-wS-6, h, V, phone); drawF(V); } finally { J = Jt; SC = SCt; }
+  updateText(V); updateButtons();
+}
+
+function tick(ts){
+  if (st.last==null) st.last = ts;
+  const dt = Math.min(0.1, (ts-st.last)/1000); st.last = ts;
+  if (st.playing){
+    if (st.tw){ st.tw.t += dt/TW; if (st.tw.t >= 1){ st.tw = null; lastSig = ''; } }
+    if (st.dyn) st.dynT += dt;
+    if (!st.tw && !st.dyn) st.playing = false;
+    st.needs = true;
+  }
+  if (st.needs){ st.needs = false; draw(); }
+  requestAnimationFrame(tick);
+}
+
+// ---- kontroller
+const binds = {};
+function setRanges(){
+  const fmax = Math.floor(J.F02ref/1000);               // aralık kaliteden bağımsız: kalite değişince F ayarları kırpılmaz
+  const a = $('inFon'), b = $('inFis');
+  a.max = fmax; b.max = fmax; a.min = Math.ceil(0.12*J.F02_88/1000);   // çok küçük üçgen okunmaz
+  if (st.Fon/1000 < +a.min) st.Fon = +a.min*1000;
+  if (st.Fon/1000 > fmax){ st.Fon = fmax*1000; }
+  if (st.Fis/1000 > fmax){ st.Fis = fmax*1000; }
+  a.value = st.Fon/1000; b.value = st.Fis/1000;
+  $('oFon').textContent = fmt(st.Fon/1000,0)+' kN'; $('oFis').textContent = fmt(st.Fis/1000,0)+' kN';
+}
+function onConfig(){ rebuild(); setRanges(); lastSig=''; st.needs = true; }
+$('inFon').addEventListener('input', e => { st.Fon = +e.target.value*1000; $('oFon').textContent = fmt(st.Fon/1000,0)+' kN'; lastSig=''; draw(); });
+$('inFis').addEventListener('input', e => { st.Fis = +e.target.value*1000; $('oFis').textContent = fmt(st.Fis/1000,0)+' kN';
+  lastSig=''; draw(); });
+$('inLp').addEventListener('input', e => { st.tw = null; st.lp = +e.target.value; $('oLp').textContent = st.lp+' mm'; onConfig(); draw(); });
+$('selBolt').addEventListener('change', e => { st.tw = null; st.bolt = e.target.value; onConfig(); draw(); });
+$('selMat').addEventListener('change', e => { st.tw = null; st.mat = e.target.value; onConfig(); draw(); });
+
+function showMain(){ const r = cvM.getBoundingClientRect(); if (r.bottom < 60 || r.top > window.innerHeight-60) cvM.scrollIntoView({behavior:'smooth', block:'center'}); }
+function onMeasure(scroll){                     // yalnız önlemi uygular; doğrular eski eğiminden yenisine döner
+  const A = st.tw ? shown().Jd : J, SCa = st.tw ? shown().SCd : SC;
+  onConfig(); st.tw = { A, SCa, t: 0 }; st.playing = true; draw(); if (scroll) showMain(); }
+$('bU').addEventListener('click', () => { st.uzar = !st.uzar; onMeasure(true); });
+$('bR').addEventListener('click', () => { st.rondela = !st.rondela; onMeasure(true); });
+$('bC').addEventListener('click', () => { st.conta = !st.conta; onMeasure(true); });
+['inUz','inCt','selCm'].forEach(id => $(id).addEventListener('change', () => { if ((id==='inUz' && st.uzar) || (id!=='inUz' && st.conta)) showMain(); }));
+$('inUz').addEventListener('input', e => { st.uzR = +e.target.value; if (st.uzar) onMeasure(false); else { lastSig=''; draw(); } });
+$('inCt').addEventListener('input', e => { st.cT = +e.target.value; if (st.conta) onMeasure(false); else { lastSig=''; draw(); } });
+$('selCm').addEventListener('change', e => { st.cMat = e.target.value; if (st.conta) onMeasure(false); else { lastSig=''; draw(); } });
+$('bUndo').addEventListener('click', () => { Object.assign(st, MDEF); $('inUz').value = MDEF.uzR; $('inCt').value = MDEF.cT; $('selCm').value = MDEF.cMat; onMeasure(true); });
+binds.uz = (on, r) => { if (r) { $('inUz').value = r; st.uzR = r; } st.uzar = on; onMeasure(false); };
+binds.ron = on => { st.rondela = on; onMeasure(false); };
+binds.conta = (on, m, t) => { if (m) { st.cMat = m; $('selCm').value = m; } if (t) { st.cT = t; $('inCt').value = t; } st.conta = on; onMeasure(false); };
+binds.undo = () => $('bUndo').click();
+binds.Fon = v => { $('inFon').value = v; $('inFon').dispatchEvent(new Event('input')); };
+binds.Fis = v => { $('inFis').value = v; $('inFis').dispatchEvent(new Event('input')); };
+binds.lp  = v => { $('inLp').value = v; $('inLp').dispatchEvent(new Event('input')); };
+binds.bolt = v => { $('selBolt').value = v; $('selBolt').dispatchEvent(new Event('change')); };
+
+binds.mat = v => { $('selMat').value = v; $('selMat').dispatchEvent(new Event('change')); };
+binds.tw = t => { if (st.tw){ if (t >= 1) st.tw = null; else st.tw.t = t; st.playing = !!st.tw && false; } lastSig=''; draw(); };     // test: geçişin bir anı
+binds.dyn = t => { st.dyn = true; st.dynT = t; st.playing = false; lastSig=''; draw(); };
+binds.dynOff = () => { st.dyn = false; st.playing = !!st.tw; lastSig=''; draw(); };
+
+$('btnPlay').addEventListener('click', () => { st.playing = !st.playing; lastSig=''; st.needs = true; });
+$('btnDyn').addEventListener('click', () => {
+  if (st.dyn){ st.dyn = false; st.playing = st.playing && !!st.tw; }   // yalnız dinamik yük kapanır, süren geçiş devam eder
+  else { st.dyn = true; st.dynT = 0; if (!st.tw) st.playing = true; }   // duraklatılmış geçiş varsa ikisi birlikte "Devam" ile sürer
+  lastSig=''; st.needs = true;
+});
+let lastW = window.innerWidth;
+window.addEventListener('resize', () => { if (window.innerWidth !== lastW){ lastW = window.innerWidth; st.needs = true; } else st.needs = true; });
+
+$('oLp').textContent = st.lp+' mm';
+rebuild(); setRanges();
+requestAnimationFrame(tick);
+window.__st = st; window.__J = () => J; window.__SC = () => SC; window.__binds = binds; window.__view = view;   // test erişimi
+})();
+</script>
+</body>
+</html>
