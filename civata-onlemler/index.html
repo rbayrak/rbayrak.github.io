@@ -153,7 +153,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
     <span class="figref">Şekil 3.47 ve 3.48: Esnek (uzar) cıvata, yaylı rondela ve parçalar arasında esnek conta</span>
   </div>
   <div class="author"><b>Ramazan Bayrak</b><a href="mailto:rbayrak@yildiz.edu.tr"><i>rbayrak@yildiz.edu.tr</i></a></div>
-  <p class="lead">Ön gerilme üçgenini <a href="../civata-on-gerilme/">ilk sayfada</a> kurmuştuk. F<sub>iş</sub>'in cıvataya gelen kısmı F<sub>z</sub> = F<sub>iş</sub>·k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>) idi. Bu sayfada k<sub>c</sub> ya da k<sub>p</sub>'yi düşüren üç önlemi uygulayın ve doğruların eğiminin nasıl değiştiğini izleyin. <span class="hide-sm">Gri kesikli üçgen önlemsiz bağlantıdır.</span></p>
+  <p class="lead">Ön gerilme üçgenini <a href="../civata-on-gerilme/">ilk sayfada</a> kurmuştuk. F<sub>iş</sub>'in cıvataya gelen kısmı F<sub>z</sub> = F<sub>iş</sub>·k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>) idi. Bu sayfada k<sub>c</sub> ya da k<sub>p</sub>'yi düşüren üç önlemi uygulayın ve doğruların eğiminin nasıl değiştiğini izleyin.</p>
   <p class="series">Serinin diğer sayfaları: <a href="../civata-on-gerilme/">Ön gerilme üçgeni</a> · <a href="../civata-esdeger-silindir/">Eşdeğer silindir</a></p>
 </header>
 
@@ -165,16 +165,16 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
     <div id="status" class="status" role="status" aria-live="polite"></div>
     <div class="opts opts-in" aria-label="Önlemler">
       <div class="opt" id="optU"><span class="ttl">Uzar cıvata <span class="fr">(k<sub>c</sub> ↓)</span></span>
-        <span class="res hide-sm">Gövde ℓ<sub>s</sub> = 0,8·ℓ<sub>c</sub> (varsayım) boyunca d<sub>s</sub> çapına inceltilir. DIN 2510: d<sub>s</sub> = 0,9·d<sub>k</sub> (d<sub>k</sub> = d<sub>3</sub>).</span>
+        <span class="res hide-sm">Gövde d<sub>s</sub> çapına inceltilir (DIN 2510: d<sub>s</sub> = 0,9·d<sub>3</sub>).</span>
         <div class="ctl"><label for="inUz"><span>d<sub>s</sub>/d<sub>3</sub></span> <output id="oUz"></output></label><input id="inUz" type="range" min="0.6" max="0.9" step="0.05" value="0.9"></div>
         <span class="chg" id="rU"></span>
         <button id="bU" aria-pressed="false">Uygula</button></div>
       <div class="opt" id="optR"><span class="ttl">Konik yaylı rondela <span class="fr">(k<sub>c</sub> ↓)</span></span>
-        <span class="res hide-sm">DIN 6796. Cıvataya seri bağlı yay. Düzleşme kuvveti F<sub>düz</sub> tablodan, rijitlik k<sub>r</sub> = F<sub>düz</sub>/h<sub>0</sub> (h<sub>0</sub>: koni yüksekliği). Düzleşince rijit.</span>
+        <span class="res hide-sm">Cıvataya seri bağlı yay (DIN 6796). Düzleşince rijit olur.</span>
         <span class="chg" id="rR"></span><span class="nt" id="nR"></span>
         <button id="bR" aria-pressed="false">Uygula</button></div>
       <div class="opt" id="optC"><span class="ttl">Esnek conta <span class="fr">(k<sub>p</sub> ↓)</span></span>
-        <span class="res hide-sm">Parçalara seri bağlı yay (s. 76). k<sub>conta</sub> = E·A<sub>p</sub>/t.</span>
+        <span class="res hide-sm">Parçalara seri bağlı yay (s. 76).</span>
         <div class="ctl"><label for="selCm">Malzeme (Tablo-Diy. s. 1)</label><select id="selCm"><option value="pvc" selected>Sert PVC (E = 2300 N/mm²)</option><option value="al">Alüminyum alaşımı (70 000)</option><option value="cu">Bakır alaşımı (90 000)</option></select></div>
         <div class="ctl"><label for="inCt"><span>Kalınlık t</span> <output id="oCt"></output></label><input id="inCt" type="range" min="0.5" max="3" step="0.5" value="1"></div>
         <span class="chg" id="rC"></span><span class="nt" id="nC"></span>
@@ -185,7 +185,6 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
         <button id="bUndo">Geri al: ilk değerler</button>
         <button id="btnDyn" aria-pressed="false">Dinamik yük</button>
         <button id="btnPlay">Durdur</button>
-        <span class="hint hide-sm" id="hUndo"></span>
       </div>
       <div class="ctl"><label for="inFon"><span><span class="lg">Ön gerilme kuvveti F<sub>ön</sub></span><span class="sm">F<sub>ön</sub></span></span> <output id="oFon"></output></label><input id="inFon" type="range" min="5" max="90" step="1" value="40"></div>
       <div class="ctl"><label for="inFis"><span><span class="lg">İşletme kuvveti F<sub>iş</sub></span><span class="sm">F<sub>iş</sub></span></span> <output id="oFis"></output></label><input id="inFis" type="range" min="0" max="90" step="1" value="20"></div>
@@ -194,28 +193,28 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
       <div class="ctl"><label for="selMat"><span class="lg">Sıkılan parçaların malzemesi</span><span class="sm">Parça malzemesi</span></label><select id="selMat"><option value="celik" selected>Çelik</option><option value="dokum">Dökme demir (GG30)</option><option value="al">Alüminyum alaşımı</option></select></div>
     </div>
     <ul class="legend" aria-label="Şekildeki işaretler">
-      <li><svg viewBox="0 0 30 20"><rect x="1" y="1" width="28" height="9" fill="var(--sheet)" stroke="var(--ink)"/><path d="M4 10 L13 1 M10 10 L19 1 M16 10 L25 1 M22 10 L29 3" stroke="var(--hatch)" stroke-width="0.8"/><rect x="1" y="10" width="28" height="9" fill="var(--sheet)" stroke="var(--ink)"/><path d="M1 13 L7 19 M5 10 L14 19 M11 10 L20 19 M17 10 L26 19 M23 10 L29 16" stroke="var(--hatch)" stroke-width="0.8"/></svg><span class="t">Sıkılan iki parça, kesit. Kalınlıkları ℓ<sub>p</sub>/2. Komşu parçalar zıt yönde taranır.</span></li>
-      <li><svg viewBox="0 0 30 20"><rect x="3" y="12" width="24" height="7" fill="var(--steel1)" stroke="var(--ink)"/><rect x="10" y="1" width="10" height="11" fill="var(--steel1)" stroke="var(--ink)"/><line x1="9" y1="12" x2="9" y2="19" stroke="var(--ink)" stroke-width="0.8"/><line x1="21" y1="12" x2="21" y2="19" stroke="var(--ink)" stroke-width="0.8"/></svg><span class="t">Cıvata. Baş altta, somun üstte (Şekil 3.44 gibi). Cıvata ve somun kesitte taranmaz. Baş sabit tutuldu, somun gerçek açısıyla döner. Noktalı-kesikli çizgi eksen; ince çizgi diş dibi (d<sub>3</sub>), kalın enine çizgi diş bitimidir.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--muted)" stroke-dasharray="3 2"/><line x1="1" y1="15" x2="29" y2="15" stroke="var(--muted)" stroke-dasharray="3 2"/></svg><span class="t">Kesikli ince çizgi: sıkılmamış bağlantıdaki konum. Üstteki çizgi cıvata ucunun, alttaki üst parça yüzeyinin eski yerini gösterir.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="9" y1="2" x2="9" y2="18" stroke="var(--ten)" stroke-width="1.4"/><path d="M9 2 L6 7 L12 7Z M9 18 L6 13 L12 13Z" fill="var(--ten)"/><line x1="21" y1="5" x2="21" y2="15" stroke="var(--com)" stroke-width="1.4"/><path d="M21 5 L18 10 L24 10Z M21 15 L18 10 L24 10Z" fill="var(--com)"/></svg><span class="t">Ölçüler: mavi, cıvatanın uzaması; kırmızı, parçaların kısalması. Şekil değiştirmeler çizimde <span id="lgN"></span> kat büyütüldü.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="8" y1="10" x2="8" y2="2" stroke="var(--ten)" stroke-width="2"/><path d="M8 1 L4.5 7 L11.5 7Z" fill="var(--ten)"/><line x1="8" y1="10" x2="8" y2="18" stroke="var(--ten)" stroke-width="2"/><path d="M8 19 L4.5 13 L11.5 13Z" fill="var(--ten)"/><line x1="22" y1="1" x2="22" y2="8" stroke="var(--com)" stroke-width="2"/><path d="M22 10 L18.5 4 L25.5 4Z" fill="var(--com)"/><line x1="22" y1="19" x2="22" y2="12" stroke="var(--com)" stroke-width="2"/><path d="M22 10 L18.5 16 L25.5 16Z" fill="var(--com)"/></svg><span class="t">İç kuvvetler: cıvatada çekme (mavi, dışa bakan oklar), parçalarda basma (kırmızı, birbirine bakan oklar). Ok boyu kuvvetle orantılıdır, iki renkte ölçek ortaktır.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="6" y1="18" x2="6" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M6 2 L2.5 8 L9.5 8Z" fill="var(--fis)"/><line x1="24" y1="18" x2="24" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M24 2 L20.5 8 L27.5 8Z" fill="var(--fis)"/></svg><span class="t">Mor: işletme kuvveti F<sub>iş</sub>. δ': F<sub>iş</sub>'in doğurduğu ek şekil değiştirme (kesitteki ölçülerde). Kesitte dört ok vardır: üst yüzde iki ok yukarı, alt yüzde iki ok aşağı çeker. Her ok F<sub>iş</sub>/2'yi gösterir, bir yüzdeki iki okun toplamı F<sub>iş</sub>'tir. Mor okların ölçeği ayrıdır.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="2" y1="18" x2="16" y2="3" stroke="var(--ten)" stroke-width="2.2"/><line x1="16" y1="3" x2="28" y2="18" stroke="var(--com)" stroke-width="2.2"/></svg><span class="t">Diyagramda mavi doğru cıvatanın karakteristiği, eğimi k<sub>c</sub> = tan φ. İnce kısmı doğrunun devamıdır. Kırmızı doğru sıkılan parçaların karakteristiği, eğimi k<sub>p</sub> = tan ψ.</span></li>
-      <li><svg viewBox="0 0 30 20"><path d="M2 18 L14 3 L14 18Z" fill="var(--tenbg)" stroke="none"/><path d="M14 18 L14 3 L28 18Z" fill="var(--combg)" stroke="none"/><line x1="14" y1="3" x2="14" y2="18" stroke="var(--ink)" stroke-width="1"/></svg><span class="t">Açık mavi alan cıvatanın, açık kırmızı alan parçaların üçgenidir. Düşey ok F<sub>ön</sub>'ü gösterir. Mavi ve kırmızı nokta cıvatanın ve parçaların şu anki durumudur.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="1" y1="12" x2="29" y2="12" stroke="var(--ink)" stroke-width="1.2"/><path d="M3 12 L7 6 M9 12 L13 6 M15 12 L19 6 M21 12 L25 6 M27 12 L29 9" stroke="var(--ink)" stroke-width="0.8"/></svg><span class="t">Cıvatanın akma sınırı F<sub>0,2</sub> = R<sub>p0,2</sub>·A<sub>c</sub>, 8.8 kalite (R<sub>p0,2</sub> = 640 N/mm², d &gt; 16 mm için 660 N/mm²).</span></li>
-      <li><svg viewBox="0 0 30 20"><path d="M3 12 L13 8 L13 12 L3 16Z" fill="var(--sheet)" stroke="var(--ink)"/><path d="M17 8 L27 12 L27 16 L17 12Z" fill="var(--sheet)" stroke="var(--ink)"/><rect x="1" y="17" width="28" height="2.2" fill="var(--ink)"/></svg><span class="t">Önlemler: konik yaylı rondela somunun altında, taranmış kesit; conta iki parça arasında, dolu ince kesit. Uzar cıvatanın gövdesi inceltilmiş çizilir. Rondelanın konisi ve contanın çökmesi şekil değiştirmeyle aynı katta büyütüldü (gerçek koni açısı yaklaşık 5°). Conta kalınlığı çizimde kesitin sol üstünde yazan kat (×q) kadar kalın çizildi; t ile orantılıdır.</span></li>
-      <li><svg viewBox="0 0 30 20"><path d="M2 18 L10 3 L22 18" fill="none" stroke="var(--muted)" stroke-width="1.3" stroke-dasharray="4 2"/><path d="M2 18 L18 13 L26 3" fill="none" stroke="var(--ten)" stroke-width="2"/></svg><span class="t">Gri kesikli üçgen: önlemsiz bağlantının üçgeni, karşılaştırma için. Rondela takılıyken mavi doğru kırılır: düzleşene kadar yumuşak, sonra cıvatanın kendi eğiminde. Kesitteki uç ölçüsü δ<sub>cıv</sub> yalnız cıvatanın uzamasıdır; diyagramdaki δ<sub>c</sub> ise buna rondelanın çökmesi eklenerek bulunur.</span></li>
-      <li><svg viewBox="0 0 30 20"><rect x="1" y="1" width="16" height="12" fill="var(--sheet)" stroke="var(--muted)"/><rect x="21" y="9" width="7" height="9" fill="none" stroke="var(--muted)"/></svg><span class="t">"Yakından" kutusu: üçgenin sağ ucu çok darsa çıkar. Diyagramdaki ince çerçeveli bölgeyi gösterir; δ ekseni kutuda yazan kat kadar büyütüldü, F ölçeği aynıdır (sığmazsa kutuda yazar).</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="4" y1="10" x2="26" y2="10" stroke="var(--ink)" stroke-width="1.2"/><path d="M4 10 L9 7 L9 13Z M26 10 L21 7 L21 13Z" fill="var(--ink)"/></svg><span class="t">Ayrılma aralığı ("aralık" ölçüsü). Yalnız parçalar birbirinden ayrılınca çıkar.</span></li>
+      <li><svg viewBox="0 0 30 20"><rect x="1" y="1" width="28" height="9" fill="var(--sheet)" stroke="var(--ink)"/><path d="M4 10 L13 1 M10 10 L19 1 M16 10 L25 1 M22 10 L29 3" stroke="var(--hatch)" stroke-width="0.8"/><rect x="1" y="10" width="28" height="9" fill="var(--sheet)" stroke="var(--ink)"/><path d="M1 13 L7 19 M5 10 L14 19 M11 10 L20 19 M17 10 L26 19 M23 10 L29 16" stroke="var(--hatch)" stroke-width="0.8"/></svg><span class="t">Sıkılan iki parça (kesit, kalınlıkları ℓ<sub>p</sub>/2).</span></li>
+      <li><svg viewBox="0 0 30 20"><rect x="3" y="12" width="24" height="7" fill="var(--steel1)" stroke="var(--ink)"/><rect x="10" y="1" width="10" height="11" fill="var(--steel1)" stroke="var(--ink)"/><line x1="9" y1="12" x2="9" y2="19" stroke="var(--ink)" stroke-width="0.8"/><line x1="21" y1="12" x2="21" y2="19" stroke="var(--ink)" stroke-width="0.8"/></svg><span class="t">Cıvata: Baş altta, somun üstte (Şekil 3.44). Somun gerçek açısıyla döner. İnce çizgi diş dibi (d<sub>3</sub>), kalın enine çizgi diş bitimi.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--muted)" stroke-dasharray="3 2"/><line x1="1" y1="15" x2="29" y2="15" stroke="var(--muted)" stroke-dasharray="3 2"/></svg><span class="t">Kesikli ince çizgi: Sıkılmamış bağlantıda cıvata ucunun ve üst yüzeyin yeri.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="9" y1="2" x2="9" y2="18" stroke="var(--ten)" stroke-width="1.4"/><path d="M9 2 L6 7 L12 7Z M9 18 L6 13 L12 13Z" fill="var(--ten)"/><line x1="21" y1="5" x2="21" y2="15" stroke="var(--com)" stroke-width="1.4"/><path d="M21 5 L18 10 L24 10Z M21 15 L18 10 L24 10Z" fill="var(--com)"/></svg><span class="t">Ölçüler: Mavi cıvatanın uzaması, kırmızı parçaların kısalması. Şekil değiştirmeler <span id="lgN"></span> kat büyütüldü; dinamik yükte F<sub>iş</sub>'in etkisi ayrıca büyütülür (sol üstte yazar).</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="8" y1="10" x2="8" y2="2" stroke="var(--ten)" stroke-width="2"/><path d="M8 1 L4.5 7 L11.5 7Z" fill="var(--ten)"/><line x1="8" y1="10" x2="8" y2="18" stroke="var(--ten)" stroke-width="2"/><path d="M8 19 L4.5 13 L11.5 13Z" fill="var(--ten)"/><line x1="22" y1="1" x2="22" y2="8" stroke="var(--com)" stroke-width="2"/><path d="M22 10 L18.5 4 L25.5 4Z" fill="var(--com)"/><line x1="22" y1="19" x2="22" y2="12" stroke="var(--com)" stroke-width="2"/><path d="M22 10 L18.5 16 L25.5 16Z" fill="var(--com)"/></svg><span class="t">İç kuvvetler: Cıvatada çekme (mavi), parçalarda basma (kırmızı). Ok boyu kuvvetle orantılı.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="6" y1="18" x2="6" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M6 2 L2.5 8 L9.5 8Z" fill="var(--fis)"/><line x1="24" y1="18" x2="24" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M24 2 L20.5 8 L27.5 8Z" fill="var(--fis)"/></svg><span class="t">Mor: İşletme kuvveti F<sub>iş</sub> (her ok F<sub>iş</sub>/2) ve onun doğurduğu ek şekil değiştirme δ'.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="2" y1="18" x2="16" y2="3" stroke="var(--ten)" stroke-width="2.2"/><line x1="16" y1="3" x2="28" y2="18" stroke="var(--com)" stroke-width="2.2"/></svg><span class="t">Mavi doğru: Cıvata, eğimi k<sub>c</sub> = tan φ. Kırmızı doğru: Parçalar, eğimi k<sub>p</sub> = tan ψ.</span></li>
+      <li><svg viewBox="0 0 30 20"><path d="M2 18 L14 3 L14 18Z" fill="var(--tenbg)" stroke="none"/><path d="M14 18 L14 3 L28 18Z" fill="var(--combg)" stroke="none"/><line x1="14" y1="3" x2="14" y2="18" stroke="var(--ink)" stroke-width="1"/></svg><span class="t">Açık mavi ve kırmızı alan: Ön gerilme üçgeni. Noktalar cıvatanın ve parçaların şu anki durumu.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="1" y1="12" x2="29" y2="12" stroke="var(--ink)" stroke-width="1.2"/><path d="M3 12 L7 6 M9 12 L13 6 M15 12 L19 6 M21 12 L25 6 M27 12 L29 9" stroke="var(--ink)" stroke-width="0.8"/></svg><span class="t">Akma sınırı F<sub>0,2</sub> = R<sub>p0,2</sub>·A<sub>c</sub> (8.8).</span></li>
+      <li><svg viewBox="0 0 30 20"><path d="M3 12 L13 8 L13 12 L3 16Z" fill="var(--sheet)" stroke="var(--ink)"/><path d="M17 8 L27 12 L27 16 L17 12Z" fill="var(--sheet)" stroke="var(--ink)"/><rect x="1" y="17" width="28" height="2.2" fill="var(--ink)"/></svg><span class="t">Rondela somunun altında (taranmış), conta parçaların arasında (dolu). Uzar cıvatanın gövdesi inceltilmiş çizildi. Conta kalınlığı sol üstte yazan kat kadar kalın çizildi.</span></li>
+      <li><svg viewBox="0 0 30 20"><path d="M2 18 L10 3 L22 18" fill="none" stroke="var(--muted)" stroke-width="1.3" stroke-dasharray="4 2"/><path d="M2 18 L18 13 L26 3" fill="none" stroke="var(--ten)" stroke-width="2"/></svg><span class="t">Gri kesikli üçgen: Önlemsiz bağlantı. Rondela takılıyken mavi doğru kırılır: Rondela düzleşene kadar yumuşak, sonra cıvatanın kendi eğiminde. Kesitteki δ<sub>cıv</sub> yalnız cıvatanın uzamasıdır.</span></li>
+      <li><svg viewBox="0 0 30 20"><rect x="1" y="1" width="16" height="12" fill="var(--sheet)" stroke="var(--muted)"/><rect x="21" y="9" width="7" height="9" fill="none" stroke="var(--muted)"/></svg><span class="t">"Yakından" kutusu: Üçgen çok darsa ince çerçeveli bölgeyi büyütür (kat kutuda yazar).</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="4" y1="10" x2="26" y2="10" stroke="var(--ink)" stroke-width="1.2"/><path d="M4 10 L9 7 L9 13Z M26 10 L21 7 L21 13Z" fill="var(--ink)"/></svg><span class="t">"Aralık": Parçalar ayrılınca aralarındaki açıklık.</span></li>
     </ul>
   </section>
   <div class="right">
     <section class="panel" aria-label="Önlemsiz ve şu anki bağlantının karşılaştırması">
       <h2>F<sub>iş</sub> büyüdükçe kuvvetler</h2>
-      <p class="sub">Mavi: cıvatadaki toplam kuvvet F<sub>top</sub>. Kırmızı: parçalarda kalan ön gerilme F'<sub>ön</sub>. Soluk kesikli mavi ve kırmızı eğriler önlemsiz bağlantınındır. Gri kesikli çapraz çizgi F = F<sub>iş</sub>'tir; ayrılmadan sonra F<sub>top</sub> bu çizgiyi izler. Mor kesikli çizgi şu anki F<sub>iş</sub>; dinamik yükte açık mor bant F<sub>iş</sub>'in gidip geldiği aralıktır. Grafik, üçgendeki bağıntılardan çizildi. <b>Bu grafik üçgenin kendisi değildir:</b> Yatay eksende δ yerine F<sub>iş</sub> vardır. Üçgendeki mor çizginin üst ucu burada mavi nokta (F<sub>top</sub>), alt ucu kırmızı noktadır (F'<sub>ön</sub>). Yatay eksende δ yerine F<sub>iş</sub> olduğu için eğimler de farklıdır: Ayrılmaya kadar mavi eğim k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>), kırmızı eğim −k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>); üçgende ise eğimler k<sub>c</sub> ve k<sub>p</sub>'dir.</p>
+      <p class="sub">Mavi: cıvatadaki toplam kuvvet F<sub>top</sub>. Kırmızı: parçalarda kalan ön gerilme F'<sub>ön</sub>. Soluk kesikli eğriler önlemsiz bağlantınındır. Gri kesikli çizgi: F = F<sub>iş</sub>. Mor kesikli çizgi şu anki F<sub>iş</sub>, açık mor bant dinamik yükte F<sub>iş</sub>'in aralığıdır. Yatay eksende δ değil F<sub>iş</sub> olduğu için eğimler üçgendekinden farklıdır.</p>
       <canvas id="cvF" role="img" aria-label="İşletme kuvvetine göre cıvata kuvveti ve parçalarda kalan ön gerilme, önlemli ve önlemsiz"></canvas>
       <h2>Önlemsiz bağlantı ile şu anki bağlantı</h2>
-      <p class="sub">Aynı F<sub>ön</sub> ve F<sub>iş</sub> ile. Turkuaz istenen yönü, turuncu istenmeyen yönü gösterir; k<sub>c</sub> ve k<sub>p</sub> satırları renklendirilmez.</p>
+      <p class="sub">Aynı F<sub>ön</sub> ve F<sub>iş</sub> ile. Turkuaz istenen, turuncu istenmeyen yönü gösterir.</p>
       <div class="tblwrap"><table class="ctab" id="ctab"></table></div>
       <dl class="vals" id="vals"></dl>
     </section>
@@ -225,7 +224,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 <section class="notes">
   <div>
     <h3>Nasıl okunur?</h3>
-    <p>Bir önlemi uyguladığınızda doğrular eski eğiminden yenisine döner. Gri kesikli üçgen önlemsiz bağlantıdır. Mavi doğru yatıklaşırsa k<sub>c</sub>, kırmızı doğru yatıklaşırsa k<sub>p</sub> düşmüştür. F<sub>iş</sub>'i gösteren mor çizginin mavi ve kırmızı paylarına bakın: mavi pay F<sub>z</sub>, kırmızı pay F<sub>b</sub>'dir.</p>
+    <p>Bir önlem uygulayın: Doğrular eski eğiminden yenisine döner. Mavi doğru yatıklaşırsa k<sub>c</sub>, kırmızı doğru yatıklaşırsa k<sub>p</sub> düşmüştür. Mor çizginin mavi payı F<sub>z</sub>, kırmızı payı F<sub>b</sub>'dir.</p>
   </div>
   <div>
     <h3>Not ne diyor? (s. 74)</h3>
@@ -233,7 +232,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   </div>
   <div>
     <h3>Gerçek parçada</h3>
-    <p>Şekil 3.47'deki uzar cıvata biyel kolu cıvatasıdır; dinamik yükte genliği düşürmek için kullanılır. Konik yaylı rondela yalnız düzleşmediği sürece işe yarar; DIN 6796 tablosundaki düzleşme kuvveti, 8.8 cıvatanın tipik ön gerilmesine yakındır. Conta k<sub>p</sub>'yi düşürür ama F<sub>z</sub>'yi artırır; ayrıca gerçek conta yüksek basınçta ezilir, zamanla oturur ve bağlantı gevşer.</p>
+    <p>Şekil 3.47'deki uzar cıvata biyel kolu cıvatasıdır; dinamik yükte genliği düşürmek için kullanılır. Konik yaylı rondela yalnız düzleşmediği sürece işe yarar; DIN 6796 tablosundaki düzleşme kuvveti, 8.8 cıvatanın tipik ön gerilmesine yakındır. Conta k<sub>p</sub>'yi düşürür ama F<sub>z</sub>'yi artırır. Gerçek conta yüksek basınçta ezilir, zamanla oturur ve bağlantı gevşer.</p>
   </div>
   <div>
     <h3>Bağıntılar</h3>
@@ -242,10 +241,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
     <p class="eq">1/k<sub>cıv</sub> = ℓ<sub>s</sub>/(E<sub>c</sub>·A<sub>s</sub>) + (ℓ<sub>c</sub> − ℓ<sub>s</sub>)/(E<sub>c</sub>·A<sub>c</sub>) &nbsp;(uzar; seri yay, s. 75)</p>
     <p class="eq">1/k<sub>c eş</sub> = 1/k<sub>cıv</sub> + 1/k<sub>r</sub>, &nbsp;k<sub>r</sub> = F<sub>düz</sub>/h<sub>0</sub> &nbsp;(rondela)</p>
     <p class="eq">1/k<sub>p eş</sub> = 1/k<sub>p</sub> + 1/k<sub>conta</sub> &nbsp;(s. 76), &nbsp;k<sub>conta</sub> = E·A<sub>p</sub>/t</p>
-    <p class="refs">D<sub>eş</sub> ℓ<sub>p</sub> ile büyür: Parçalar kalınlaştıkça sıkılan bölge yanlara doğru genişler (s. 75, Şekil 3.49), bu yüzden A<sub>p</sub> de büyür. k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub> yine de azalır, çünkü ℓ<sub>p</sub> daha hızlı büyür.</p>
     <p class="refs">k<sub>cıv</sub>: cıvatanın kendi rijitliği (uzar değilse k<sub>c</sub>). F<sub>düz</sub>: rondelanın düzleşme kuvveti, h<sub>0</sub>: koni yüksekliği. t: conta kalınlığı.</p>
     </div>
-    <p class="refs">Kabuller. Hesaplar ilk sayfadaki gibidir (k<sub>c</sub> = E<sub>c</sub>·A<sub>c</sub>/ℓ<sub>c</sub>, k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub>, 8.8 kalite). Uzar cıvatada ℓ<sub>s</sub> = 0,8·ℓ<sub>c</sub>. Rondelanın düzleşme kuvveti DIN 6796 tablosundan, koni yüksekliği h<sub>0</sub> ortalama serbest yükseklikten alındı; Almen–László bağıntısı eğrinin doğrusala yakın olduğunu gösterir. Conta alanı A<sub>p</sub>. Rondela ve conta kalınlıklarının ℓ<sub>c</sub>'ye etkisi ihmal edildi. Conta kalınlığı çizimde ×q, çökmesi ×N büyütüldü. Geçiş animasyonu 1,2 s sürer, zaman ölçeksizdir; dinamik yük 0,5 Hz.</p>
+    <p class="refs">Kabuller. Hesaplar ilk sayfadaki gibidir (k<sub>c</sub> = E<sub>c</sub>·A<sub>c</sub>/ℓ<sub>c</sub>, k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub>, 8.8 kalite). Uzar cıvatada ℓ<sub>s</sub> = 0,8·ℓ<sub>c</sub>. Rondelanın düzleşme kuvveti DIN 6796 tablosundan, koni yüksekliği h<sub>0</sub> ortalama serbest yükseklikten alındı; Almen–László bağıntısı eğrinin doğrusala yakın olduğunu gösterir. Conta alanı A<sub>p</sub>. Rondela ve conta kalınlıklarının ℓ<sub>c</sub>'ye etkisi ihmal edildi. Conta kalınlığı çizimde ×q, çökmesi ×N büyütüldü. Dinamik yükte F<sub>iş</sub>'in doğurduğu ek şekil değiştirme kesitte ayrıca büyütülür (kat sol üstte yazar); rondela takılıyken bu hareket çok küçüktür, çünkü cıvata tarafı F<sub>iş</sub>'in küçük bir kısmını alır. Animasyonlar zaman ölçeksizdir, dinamik yük 0,5 Hz.</p>
     <p class="refs">Kaynaklar. F. Dikmen, <i>Makine Elemanları 1 Ders Notları</i>, YTÜ, s. 72–76; Tablo-Diy. s. 1, 10, 11. DIN 2510 (d<sub>s</sub> = 0,9·d<sub>k</sub>, TRD 309'daki aktarımıyla). DIN 6796:2009 (konik yaylı rondela). DIN EN 16983 (disk yaylar, Almen–László). ISO 898-1:2013 (8.8). Conta basıncı sınırları: sert PVC için çekmede akma ≈ 50 N/mm² (Perspex Rigid PVC veri sayfası, ASTM D-638); düz metal conta için en küçük oturma basıncı y (ASME BPVC VIII-1, Tablo 2-5.1).</p>
   </div>
 </section>
@@ -413,7 +411,15 @@ function rebuild(){
   // conta kalınlığı çizimde q kat: en büyük kuvvetteki büyütülmüş çökme (N·F/k_conta) kalınlığın %70'ini geçmesin.
   // N·F/k_conta = N·F·t/(E·A_p) olduğundan q t'den bağımsızdır; çizilen kalınlık t ile orantılı kalır.
   const q = J.G ? Math.max(2, Math.ceil(N*J.F02ref/(J.G.E*J.Ap)/0.7)) : 1;
-  SC = { N, q, kcbW: Jw.kcb, tW: J.G ? 3 : 0, XM: 1.04*Math.max(xb, xm), YM: 1.06*J0.F02ref };
+  // Dinamik yükte F_iş'in doğurduğu ek şekil değiştirme ayrıca ×kD çizilir (yalnız "Dinamik yük" açıkken).
+  // kD de kaydırıcılardan bağımsızdır: temas sürerken her şekil değiştirme F_iş ile doğrusal değişir (birim F_iş başına,
+  // çizimde ×N): cıvata ucu F_z/k_cıv, rondela F_z/k_r, parçalar F_b/k_p0, conta F_b/k_conta. En büyüğü, F_iş = 0,5·F_0,2(8.8)'de
+  // çizimde 0,12·ℓ_p'yi geçmesin. Önlemsiz bağlantıda hareket zaten görünür, kD = 1 çıkar.
+  const zW = Jw.kc/(Jw.kc + Jw.kp), bW = 1 - zW;
+  const rate = N*Math.max(zW/Jw.kcb, Jw.W ? zW/Jw.W.kr : 0, bW/Jw.kp0, Jw.G ? bW/Jw.G.kg : 0);   // çizim mm / N
+  const KD = [1,2,3,4,5,8,10,15,20,25,30,40,50]; let kD = 1;
+  for (const v of KD) if (v*rate*0.5*J0.F02_88 <= 0.12*st.lp) kD = v;
+  SC = { N, q, kD, kcbW: Jw.kcb, tW: J.G ? 3 : 0, XM: 1.04*Math.max(xb, xm), YM: 1.06*J0.F02ref };
   $('lgN').textContent = N;
 }
 
@@ -552,7 +558,13 @@ function drawSection(ctx, x0, y0, wS, h, V, phone){
   const hw = Math.max(1.45*B.d, 0.56*J.Des, W ? 0.62*W.d2 : 0), pr = Math.max(2*B.P, 0.35*B.d);
   // şekil değiştirmeler [mm, gerçek]: cıvata uzaması, rondela çökmesi, parça ve conta kısalması
   const FcD = Math.min(V.Fc, SC.YM);                        // çizim sınırı
-  const eB = FcD/J.kcb, w = J.wF(FcD), cP = V.Fp/J.kp0, cG = G ? V.Fp/G.kg : 0;
+  let eB = FcD/J.kcb, w = J.wF(FcD), cP = V.Fp/J.kp0, cG = G ? V.Fp/G.kg : 0;
+  // dinamik yük: F_iş'in yol açtığı değişim (F_iş = 0'daki ön gerilme durumuna göre) ayrıca ×kD.
+  // Ayrılmada sapma çizimde en çok 0,25·ℓ_p ile sınırlanır; ayrılma aralığı (gap) ek büyütülmez.
+  const kD = st.dyn && V.ph === 3 ? SC.kD : 1;
+  if (kD > 1){ const F0 = Math.min(st.Fon, SC.YM), cap = 0.25*lp/N;
+    const amp = (q, q0) => q0 + Math.max(-cap, Math.min(cap, kD*(q - q0)));
+    eB = amp(eB, F0/J.kcb); w = amp(w, J.wF(F0)); cP = amp(cP, st.Fon/J.kp0); if (G) cG = amp(cG, st.Fon/G.kg); }
   const gap = Math.min(V.gap, SC.YM/J.kcb);
   // çizimde kalınlıklar: conta kalınlığı ×q (t ile orantılı), çökmesi ve rondela konisi ×N
   const tgFree = G ? SC.q*G.t : 0, tg = G ? tgFree - N*cG : 0;   // conta: kalınlık ×q, çökme ×N
@@ -563,7 +575,7 @@ function drawSection(ctx, x0, y0, wS, h, V, phone){
   // çizim ölçeği g, kaydırıcılar (d_s/d_3, t) oynarken değişmesin diye en elverişsiz değerlerle hesaplanır
   const topL = lp + SC.q*SC.tW + ws + rise0 + B.m + pr + N*SC.YM/SC.kcbW;
   const dimCol = phone ? 44 : 60, fs = phone ? 11 : 12;
-  const Lfis = phone ? 60 : 90, tTop = (G ? 3 : 2)*fs + 14, lab = fs + 6;
+  const Lfis = phone ? 60 : 90, tTop = (2 + (G ? 1 : 0) + (SC.kD > 1 ? 1 : 0))*fs + 14, lab = fs + 6;   // sol üst yazı satırları
   const g = Math.min((h - 16 - tTop)/(B.k + topL), (h - Lfis - 8 - lab - tTop)/topL, (wS - dimCol - 10)/(2*hw));
   const ax = x0 + 6 + hw*g, yb = y0 + tTop + topL*g;       // eksen ve başın üst yüzü (y = 0)
   const X = xm => ax + xm*g, Y = ym => yb - ym*g;
@@ -662,6 +674,7 @@ function drawSection(ctx, x0, y0, wS, h, V, phone){
   rich(ctx, 'şekil değiştirme ×'+N, x0+6, y0+14, {size:fs-0.5, color:C.muted, bg:true});
   rich(ctx, 'somun Δθ = '+fmt(V.dth,1)+'°', x0+6, y0+14+fs+3, {size:fs-0.5, color:C.muted, bg:true});
   if (G) rich(ctx, 'conta kalınlığı ×'+SC.q, x0+6, y0+14+2*(fs+3), {size:fs-0.5, color:C.muted, bg:true});
+  if (kD > 1) rich(ctx, 'dinamik değişim ayrıca ×'+kD, x0+6, y0+14+(G ? 3 : 2)*(fs+3), {size:fs-0.5, weight:600, color:C.fis, bg:true});
 }
 
 function drawTri(ctx, x0, y0, w, h, V, phone){
@@ -938,11 +951,11 @@ function updateText(V){
     nums = V.Fis >= 1 ? 'Sonunda F<sub>z</sub>/F<sub>iş</sub> = '+fmt(St.Fz/V.Fis,3)+" · F'<sub>ön</sub> = "+kN(St.Fpon)+' kN' : ''; }
   else { head = on.length ? 'Önlemli bağlantı' : 'Önlemsiz bağlantı';
     nums = V.Fis >= 1 ? 'F<sub>z</sub>/F<sub>iş</sub> = '+fmt(S.Fz/V.Fis,3)+(on.length ? ' (önlemsiz '+fmt(S0.Fz/V.Fis,3)+')' : '')+" · F'<sub>ön</sub> = "+kN(S.Fpon)+' kN' : 'F<sub>iş</sub> = 0'; }
-  if (V.tw) txt = 'Doğrular yeni eğimlerine dönüyor.'+(on.length ? ' Gri kesikli üçgen önlemsiz bağlantıdır.' : '');
-  else if (V.Fis < 1) txt = 'F<sub>iş</sub> yok. Cıvata ve parçalar aynı F<sub>ön</sub> = '+kN(st.Fon)+' kN kuvvetini taşıyor. '+(on.length ? 'Uygulanan: '+on.join(', ')+'.' : 'Bir önlem uygulayın.');
+  if (V.tw) txt = 'Doğrular yeni eğimlerine dönüyor.';
+  else if (V.Fis < 1) txt = 'F<sub>iş</sub> yok. Cıvata ve parçalar aynı F<sub>ön</sub> = '+kN(st.Fon)+' kN kuvvetini taşıyor.';
   else if (V.sep) txt = 'F<sub>iş</sub> = '+kN(V.Fis)+' kN, ayrılma kuvvetini ('+kN(S.Fsep)+' kN) aştı. Parçalar ayrıldı, F<sub>iş</sub>\'in tamamını cıvata taşıyor.';
-  else if (!on.length) txt = 'Önlem uygulanmadı. F<sub>iş</sub> = '+kN(V.Fis)+' kN\'un F<sub>z</sub> = '+kN(S.Fz)+' kN\'luk kısmı cıvataya, F<sub>b</sub> = '+kN(S.Fb)+' kN\'luk kısmı parçalara geliyor. Aşağıdan bir önlem uygulayın.';
-  else txt = 'Uygulanan: '+on.join(', ')+'. F<sub>iş</sub> = '+kN(V.Fis)+' kN\'un F<sub>z</sub> = '+kN(S.Fz)+' kN\'luk kısmı cıvataya geliyor (önlemsiz '+kN(S0.Fz)+' kN). Parçalarda F\'<sub>ön</sub> = '+kN(S.Fpon)+' kN kalıyor (önlemsiz '+kN(S0.Fpon)+' kN). Gri kesikli üçgen önlemsiz bağlantıdır.';
+  else if (!on.length) txt = 'F<sub>iş</sub> = '+kN(V.Fis)+' kN\'un F<sub>z</sub> = '+kN(S.Fz)+' kN\'luk kısmı cıvataya, F<sub>b</sub> = '+kN(S.Fb)+' kN\'luk kısmı parçalara geliyor. Aşağıdan bir önlem uygulayın.';
+  else txt = 'F<sub>iş</sub> = '+kN(V.Fis)+' kN\'un F<sub>z</sub> = '+kN(S.Fz)+' kN\'luk kısmı cıvataya geliyor (önlemsiz '+kN(S0.Fz)+' kN). Parçalarda F\'<sub>ön</sub> = '+kN(S.Fpon)+' kN kalıyor (önlemsiz '+kN(S0.Fpon)+' kN).';
   if (st.dyn && st.Fis > 0 && !V.tw){ const D = CIV.dyn(J, st.Fon, st.Fis), D0 = CIV.dyn(J0, st.Fon, st.Fis);
     txt += ' Dinamik yük: F<sub>iş</sub> 0 ile '+kN(st.Fis)+' kN arasında gidip geliyor, cıvatadaki genlik F<sub>g</sub> = '+kN(D.Fg)+' kN'+(on.length ? ' (önlemsiz '+kN(D0.Fg)+' kN)' : '')+'.'; }
   s.className = 'status' + (warn ? ' warn' : '');
@@ -965,9 +978,7 @@ function updateText(V){
     ['k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub>'+(J.G ? ' (önlemsiz)' : ''), fmt(J0.kp/1000,0)+' kN/mm']);
   if (J.G){ rows.push(['Conta: k<sub>conta</sub> = E·A<sub>p</sub>/t ('+J.G.ad+', t = '+fmt(J.G.t,1)+' mm)', fmt(J.G.kg/1000,0)+' kN/mm']);
             rows.push(['1/k<sub>p eş</sub> = 1/k<sub>p</sub> + 1/k<sub>conta</sub>', fmt(J.kp/1000,0)+' kN/mm']); }
-  rows.push(['k<sub>p</sub>/k<sub>c</sub> (F<sub>ön</sub>\'deki eğimlerle)', fmt(J.kp/kc1,2)],
-    ['F<sub>z</sub>/F<sub>iş</sub> = k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>)', fmt(kc1/(kc1+J.kp),3)],
-    ['δ<sub>c</sub>'+(J.W ? ', cıvata + rondela' : ' = F<sub>ön</sub>/k<sub>c</sub>')+', δ<sub>p</sub>', fmt(S1.dc*1000,1)+' µm, '+fmt(S1.dp*1000,1)+' µm'],
+  rows.push(['δ<sub>c</sub>'+(J.W ? ', cıvata + rondela' : ' = F<sub>ön</sub>/k<sub>c</sub>')+', δ<sub>p</sub>', fmt(S1.dc*1000,1)+' µm, '+fmt(S1.dp*1000,1)+' µm'],
     ['Somunun dönmesi Δθ', fmt(S1.dth,1)+'°']);
   $('vals').innerHTML = rows.map(r => r[0]==='grp' ? '<dt class="grp">'+r[1]+'</dt>' : '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('');
   renderCmp();
@@ -991,9 +1002,9 @@ function renderCmp(){
   // conta basıncı, malzemeye göre koşullu not (sınırlar hesap modülünde, kaynaklarıyla)
   const pg = st.Fon/Jc.Ap, GM = CIV.GASKETS[st.cMat]; let cw = false, ct;
   if (GM.sAk){ cw = pg > GM.sAk;
-    ct = 'Contadaki basınç F<sub>ön</sub>/A<sub>p</sub> = '+fmt(pg,0)+' N/mm². '+(cw ? 'Bu, sert PVC\'nin çekmedeki akma dayanımının (≈'+GM.sAk+' N/mm²) üstünde: Gerçek conta kalıcı olarak ezilir ve ön gerilme düşer. Sayfa yalnız rijitliği hesaba katar.' : 'Sert PVC\'nin çekmedeki akma dayanımının (≈'+GM.sAk+' N/mm²) altında.'); }
+    ct = 'Contadaki basınç F<sub>ön</sub>/A<sub>p</sub> = '+fmt(pg,0)+' N/mm². '+(cw ? 'Sert PVC\'nin akma dayanımından (≈'+GM.sAk+' N/mm²) büyük: Gerçek conta ezilir, ön gerilme düşer.' : 'Sert PVC\'nin akma dayanımının (≈'+GM.sAk+' N/mm²) altında.'); }
   else { cw = pg < GM.y;
-    ct = 'Contadaki basınç F<sub>ön</sub>/A<sub>p</sub> = '+fmt(pg,0)+' N/mm². '+(cw ? 'Bu, ASME\'deki en küçük oturma basıncının (yumuşak '+(st.cMat==='al'?'Al':'Cu')+' için y = '+GM.y+' N/mm²) altında: Conta yeterince oturmayabilir.' : 'Basınç, ASME\'deki en küçük oturma basıncının (yumuşak '+(st.cMat==='al'?'Al':'Cu')+' için y = '+GM.y+' N/mm²) üstünde: Conta akarak oturur, bu istenir. Akmadan sonraki davranış doğrusal modelin dışındadır.'); }
+    ct = 'Contadaki basınç F<sub>ön</sub>/A<sub>p</sub> = '+fmt(pg,0)+' N/mm². '+(cw ? 'En küçük oturma basıncının (ASME, y = '+GM.y+' N/mm²) altında: Conta yeterince oturmayabilir.' : 'En küçük oturma basıncının (ASME, y = '+GM.y+' N/mm²) üstünde: Conta akarak oturur.'); }
   $('nC').innerHTML = ct; $('nC').classList.toggle('w', cw);
   $('oUz').textContent = fmt(st.uzR,2); $('oCt').textContent = fmt(st.cT,1)+' mm';
   [['bU','optU',st.uzar],['bR','optR',st.rondela],['bC','optC',st.conta]].forEach(([b,o,on])=>{
@@ -1018,7 +1029,6 @@ function renderCmp(){
     return '<tr><td>'+n+'</td><td>'+f3(a)+'</td><td>'+f3(b)+'</td><td class="'+cls+'">'+(same ? 'aynı' : pct(a,b))+'</td></tr>'; }).join('');
   const any = st.uzar || st.rondela || st.conta;
   $('bUndo').disabled = !Object.keys(MDEF).some(k => st[k] !== MDEF[k]);
-  $('hUndo').innerHTML = any ? 'Uygulanan: '+[st.uzar && 'uzar cıvata', st.rondela && 'yaylı rondela', st.conta && 'conta'].filter(Boolean).join(', ') : '';
 }
 // düğmeler her çizimde güncellenir (değer değişmese de oynatma durumu değişebilir)
 function updateButtons(){
