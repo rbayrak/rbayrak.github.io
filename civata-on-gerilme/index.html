@@ -166,7 +166,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   <div class="right">
     <section class="panel" aria-label="İşletme kuvvetine göre cıvata ve parça kuvveti">
       <h2>F<sub>iş</sub> büyüdükçe kuvvetler</h2>
-      <p class="sub">Mavi çizgi cıvatadaki toplam kuvveti (F<sub>top</sub>), kırmızı çizgi parçalarda kalan ön gerilmeyi (F'<sub>ön</sub>) gösterir. Gri kesikli çizgi F = F<sub>iş</sub> doğrusudur: ön gerilmesiz bir cıvata bu doğruyu izlerdi. Mor kesikli çizgi şu anki F<sub>iş</sub>'tir; dinamik yükte açık mor bant F<sub>iş</sub>'in gidip geldiği aralıktır. Grafik notta yok, aynı bağıntılardan çizildi. <b>Bu grafik üçgenin kendisi değildir:</b> Üçgendeki mor çizginin üst ucu burada mavi nokta (F<sub>top</sub>), alt ucu kırmızı noktadır (F'<sub>ön</sub>). Yatay eksende δ yerine F<sub>iş</sub> olduğu için eğimler de farklıdır: Ayrılmaya kadar mavi eğim k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>), kırmızı eğim −k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>); üçgende ise eğimler k<sub>c</sub> ve k<sub>p</sub>'dir.</p>
+      <p class="sub">Mavi çizgi cıvatadaki toplam kuvveti (F<sub>top</sub>), kırmızı çizgi parçalarda kalan ön gerilmeyi (F'<sub>ön</sub>) gösterir. Gri kesikli çizgi F = F<sub>iş</sub> doğrusudur: ön gerilmesiz bir cıvata bu doğruyu izlerdi. Mor kesikli çizgi şu anki F<sub>iş</sub>'tir; dinamik yükte açık mor bant F<sub>iş</sub>'in gidip geldiği aralıktır. Grafik, üçgendeki bağıntılardan çizildi. <b>Bu grafik üçgenin kendisi değildir:</b> Üçgendeki mor çizginin üst ucu burada mavi nokta (F<sub>top</sub>), alt ucu kırmızı noktadır (F'<sub>ön</sub>). Yatay eksende δ yerine F<sub>iş</sub> olduğu için eğimler de farklıdır: Ayrılmaya kadar mavi eğim k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>), kırmızı eğim −k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>); üçgende ise eğimler k<sub>c</sub> ve k<sub>p</sub>'dir.</p>
       <canvas id="cvF" role="img" aria-label="İşletme kuvvetine göre cıvata kuvveti ve parçalarda kalan ön gerilme, ayrılma noktası ile"></canvas>
       <dl class="vals" id="vals"></dl>
     </section>
@@ -180,7 +180,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   </div>
   <div>
     <h3>Üçgen nasıl kurulur?</h3>
-    <p>Sıkmada cıvata ve parçalar aynı F<sub>ön</sub>'ü taşır ve Hooke kanununa uyar. Cıvata uzar, parçalar kısalır, bu yüzden iki doğru zıt yönlere çıkar. Parçaların doğrusu δ<sub>c</sub> + δ<sub>p</sub> kadar sağa kayınca tepede birleşir (Şekil 3.45). <span class="yorum">Notta yok, yorumum:</span> Taban, somunun cıvata üzerinde ilerlediği yoldur. Somun bunun için Δθ = 360°·(δ<sub>c</sub> + δ<sub>p</sub>)/P kadar döner.</p>
+    <p>Sıkmada cıvata ve parçalar aynı F<sub>ön</sub>'ü taşır ve Hooke kanununa uyar. Cıvata uzar, parçalar kısalır, bu yüzden iki doğru zıt yönlere çıkar. Parçaların doğrusu δ<sub>c</sub> + δ<sub>p</sub> kadar sağa kayınca tepede birleşir (Şekil 3.45). Üçgenin tabanı (δ<sub>c</sub> + δ<sub>p</sub>), somunun cıvata üzerinde ilerlediği yoldur. Somun bunun için Δθ = 360°·(δ<sub>c</sub> + δ<sub>p</sub>)/P kadar döner.</p>
   </div>
   <div>
     <h3>F<sub>iş</sub> nasıl bölüşülür?</h3>
@@ -188,7 +188,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   </div>
   <div>
     <h3>Neden F<sub>ön</sub> ≈ 3·F<sub>iş</sub>?</h3>
-    <p>Not iki sebep verir (s. 74). Birincisi: Pürüzler baştan ezilir, gevşeme olmaz. İkincisi: Dinamik yükte kuvvet genliği küçülür; s. 81'e göre F<sub>g</sub> = F<sub>z</sub>/2. <span class="yorum">Notta yok:</span> Ön gerilme olmasaydı genlik F<sub>iş</sub>/2 olurdu. F'<sub>ön</sub> sıfıra inerse parçalar ayrılır ve F<sub>iş</sub>'in tamamı cıvataya geçer. Denemek için F<sub>ön</sub> = 12 kN yapıp "Dinamik yük"ü açın.</p>
+    <p>Not iki sebep verir (s. 74). Birincisi: Pürüzler baştan ezilir, gevşeme olmaz. İkincisi: Dinamik yükte kuvvet genliği küçülür; s. 81'e göre F<sub>g</sub> = F<sub>z</sub>/2. Ön gerilme olmasaydı genlik F<sub>iş</sub>/2 olurdu. F'<sub>ön</sub> sıfıra inerse parçalar ayrılır ve F<sub>iş</sub>'in tamamı cıvataya geçer. Denemek için F<sub>ön</sub> = 12 kN yapıp "Dinamik yük"ü açın.</p>
   </div>
   <div>
     <h3>Bağıntılar</h3>
@@ -198,11 +198,11 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
     <p class="eq">D<sub>eş</sub> = AA + k<sub>malz</sub>·ℓ<sub>p</sub></p>
     <p class="eq">F<sub>z</sub> = F<sub>iş</sub>·k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>), &nbsp;F<sub>b</sub> = F<sub>iş</sub>·k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>)</p>
     <p class="eq">F<sub>top</sub> = F<sub>ön</sub> + F<sub>z</sub>, &nbsp;F'<sub>ön</sub> = F<sub>ön</sub> − F<sub>b</sub></p>
-    <p class="eq">F<sub>ayr</sub> = F<sub>ön</sub>·(k<sub>c</sub> + k<sub>p</sub>)/k<sub>p</sub> &nbsp;(notta yok)</p>
+    <p class="eq">F<sub>ayr</sub> = F<sub>ön</sub>·(k<sub>c</sub> + k<sub>p</sub>)/k<sub>p</sub> &nbsp;(F'<sub>ön</sub> = 0 koşulundan)</p>
     </div>
     <p class="refs">D<sub>eş</sub> ℓ<sub>p</sub> ile büyür: Parçalar kalınlaştıkça sıkılan bölge yanlara doğru genişler (s. 75, Şekil 3.49), bu yüzden A<sub>p</sub> de büyür. k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub> yine de azalır, çünkü ℓ<sub>p</sub> daha hızlı büyür.</p>
     <p class="refs">Semboller. d<sub>3</sub>: diş dibi çapı, d<sub>h</sub>: delik çapı, AA: anahtar ağzı, D<sub>eş</sub>: eşdeğer silindir çapı, P: vida adımı, F<sub>g</sub>: kuvvet genliği.</p>
-    <p class="refs">Kabuller. Şekil değiştirmeler elastik, ℓ<sub>c</sub> = ℓ<sub>p</sub>, A<sub>c</sub> bütün boyda geçerli (s. 75). İki parça aynı malzemeden ve eşit kalınlıkta. E<sub>c</sub> = 210 000 N/mm², bütün kalitelerde aynı. F<sub>iş</sub> baş ve somun altındaki yüzeylere yakın etki eder (yorumum; içeriden etki ederse bölüşüm değişir, VDI 2230). F<sub>0,2</sub> notla tutarlı olsun diye A<sub>c</sub> ile hesaplandı (ISO 898-1'deki A<sub>s</sub>'den küçük, güvenli tarafta). Sıkmada σ<sub>eş</sub> ≈ 1,3·F<sub>ön</sub>/A<sub>c</sub> (s. 80). Oturma ihmal edildi. Çizimde parçalar bütün genişlikte iner; gerçekte yalnız cıvata çevresi şekil değiştirir (Şekil 3.49). Adımlar zaman ölçeksiz, dinamik yük 0,5 Hz.</p>
+    <p class="refs">Kabuller. Şekil değiştirmeler elastik, ℓ<sub>c</sub> = ℓ<sub>p</sub>, A<sub>c</sub> bütün boyda geçerli (s. 75). İki parça aynı malzemeden ve eşit kalınlıkta. E<sub>c</sub> = 210 000 N/mm², bütün kalitelerde aynı. F<sub>iş</sub> baş ve somun altındaki yüzeylere yakın etki eder (içeriden etki ederse bölüşüm değişir; VDI 2230). F<sub>0,2</sub> notla tutarlı olsun diye A<sub>c</sub> ile hesaplandı (ISO 898-1'deki A<sub>s</sub>'den küçük, güvenli tarafta). Sıkmada σ<sub>eş</sub> ≈ 1,3·F<sub>ön</sub>/A<sub>c</sub> (s. 80). Oturma ihmal edildi. Çizimde parçalar bütün genişlikte iner; gerçekte yalnız cıvata çevresi şekil değiştirir (Şekil 3.49). Adımlar zaman ölçeksiz, dinamik yük 0,5 Hz.</p>
     <p class="refs">Kaynaklar. F. Dikmen, <i>Makine Elemanları 1 Ders Notları</i>, YTÜ, s. 72–76, 79–81; Tablo-Diy. s. 1, 10, 11. ISO 898-1:2013 (cıvata kaliteleri). Budynas &amp; Nisbett, <i>Shigley's Mechanical Engineering Design</i>, Bölüm 8 (ayrılma). VDI 2230 Blatt 1:2015.</p>
   </div>
 </section>
@@ -778,7 +778,7 @@ function updateText(V){
     ['grp','Sıkma (F<sub>ön</sub> = '+kN(st.Fon)+' kN)'],
     ['δ<sub>c</sub> = F<sub>ön</sub>/k<sub>c</sub>', fmt(S1.dc*1000,1)+' µm'],
     ['δ<sub>p</sub> = F<sub>ön</sub>/k<sub>p</sub>', fmt(S1.dp*1000,1)+' µm'],
-    ['Somunun dönmesi Δθ = 360°·(δ<sub>c</sub> + δ<sub>p</sub>)/P (yorum)', fmt(S1.dth,1)+'° (P = '+fmt(B.P,2).replace(/0$/,'')+' mm)'],
+    ['Somunun dönmesi Δθ = 360°·(δ<sub>c</sub> + δ<sub>p</sub>)/P (somunun dönme açısı)', fmt(S1.dth,1)+'° (P = '+fmt(B.P,2).replace(/0$/,'')+' mm)'],
     ['σ<sub>eş</sub> ≈ 1,3·F<sub>ön</sub>/A<sub>c</sub> (s. 80)', fmt(1.3*st.Fon/B.Ac,0)+' N/mm²'],
     ['grp','İşletme (F<sub>iş</sub> = '+kN(st.Fis)+' kN)'],
     ["δ' = F<sub>iş</sub>/(k<sub>c</sub> + k<sub>p</sub>)", S1.sep ? 'geçersiz (ayrılma)' : fmt(S1.dpr*1000,1)+' µm'],
