@@ -174,7 +174,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
         <span class="chg" id="rR"></span><span class="nt" id="nR"></span>
         <button id="bR" aria-pressed="false">Uygula</button></div>
       <div class="opt" id="optC"><span class="ttl">Esnek conta <span class="fr">(k<sub>p</sub> ↓)</span></span>
-        <span class="res hide-sm">Parçalara seri bağlı yay (s. 76). k<sub>conta</sub> = E·A<sub>p</sub>/t (notta yok).</span>
+        <span class="res hide-sm">Parçalara seri bağlı yay (s. 76). k<sub>conta</sub> = E·A<sub>p</sub>/t.</span>
         <div class="ctl"><label for="selCm">Malzeme (Tablo-Diy. s. 1)</label><select id="selCm"><option value="pvc" selected>Sert PVC (E = 2300 N/mm²)</option><option value="al">Alüminyum alaşımı (70 000)</option><option value="cu">Bakır alaşımı (90 000)</option></select></div>
         <div class="ctl"><label for="inCt"><span>Kalınlık t</span> <output id="oCt"></output></label><input id="inCt" type="range" min="0.5" max="3" step="0.5" value="1"></div>
         <span class="chg" id="rC"></span><span class="nt" id="nC"></span>
@@ -212,7 +212,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   <div class="right">
     <section class="panel" aria-label="Önlemsiz ve şu anki bağlantının karşılaştırması">
       <h2>F<sub>iş</sub> büyüdükçe kuvvetler</h2>
-      <p class="sub">Mavi: cıvatadaki toplam kuvvet F<sub>top</sub>. Kırmızı: parçalarda kalan ön gerilme F'<sub>ön</sub>. Soluk kesikli mavi ve kırmızı eğriler önlemsiz bağlantınındır. Gri kesikli çapraz çizgi F = F<sub>iş</sub>'tir; ayrılmadan sonra F<sub>top</sub> bu çizgiyi izler. Mor kesikli çizgi şu anki F<sub>iş</sub>; dinamik yükte açık mor bant F<sub>iş</sub>'in gidip geldiği aralıktır. Grafik notta yok, aynı bağıntılardan çizildi. <b>Bu grafik üçgenin kendisi değildir:</b> Yatay eksende δ yerine F<sub>iş</sub> vardır. Üçgendeki mor çizginin üst ucu burada mavi nokta (F<sub>top</sub>), alt ucu kırmızı noktadır (F'<sub>ön</sub>). Yatay eksende δ yerine F<sub>iş</sub> olduğu için eğimler de farklıdır: Ayrılmaya kadar mavi eğim k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>), kırmızı eğim −k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>); üçgende ise eğimler k<sub>c</sub> ve k<sub>p</sub>'dir.</p>
+      <p class="sub">Mavi: cıvatadaki toplam kuvvet F<sub>top</sub>. Kırmızı: parçalarda kalan ön gerilme F'<sub>ön</sub>. Soluk kesikli mavi ve kırmızı eğriler önlemsiz bağlantınındır. Gri kesikli çapraz çizgi F = F<sub>iş</sub>'tir; ayrılmadan sonra F<sub>top</sub> bu çizgiyi izler. Mor kesikli çizgi şu anki F<sub>iş</sub>; dinamik yükte açık mor bant F<sub>iş</sub>'in gidip geldiği aralıktır. Grafik, üçgendeki bağıntılardan çizildi. <b>Bu grafik üçgenin kendisi değildir:</b> Yatay eksende δ yerine F<sub>iş</sub> vardır. Üçgendeki mor çizginin üst ucu burada mavi nokta (F<sub>top</sub>), alt ucu kırmızı noktadır (F'<sub>ön</sub>). Yatay eksende δ yerine F<sub>iş</sub> olduğu için eğimler de farklıdır: Ayrılmaya kadar mavi eğim k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>), kırmızı eğim −k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>); üçgende ise eğimler k<sub>c</sub> ve k<sub>p</sub>'dir.</p>
       <canvas id="cvF" role="img" aria-label="İşletme kuvvetine göre cıvata kuvveti ve parçalarda kalan ön gerilme, önlemli ve önlemsiz"></canvas>
       <h2>Önlemsiz bağlantı ile şu anki bağlantı</h2>
       <p class="sub">Aynı F<sub>ön</sub> ve F<sub>iş</sub> ile. Turkuaz istenen yönü, turuncu istenmeyen yönü gösterir; k<sub>c</sub> ve k<sub>p</sub> satırları renklendirilmez.</p>
@@ -229,19 +229,19 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   </div>
   <div>
     <h3>Not ne diyor? (s. 74)</h3>
-    <p>Kırılmaya karşı F<sub>top</sub> düşük olmalı, bunun için k<sub>c</sub> düşürülür: cıvata uzar yapılır ya da somun altına yaylı rondela konur. Gevşemeye karşı F'<sub>ön</sub> yüksek olmalı, bunun için k<sub>p</sub> düşürülür: parçalar arasına esnek conta konur. Not ayrıca k<sub>c</sub> ve k<sub>p</sub>'nin eşit oranda düşürülmemesini ister. <span class="yorum">Yorumum:</span> O zaman F<sub>z</sub>/F<sub>iş</sub> = k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>) değişmez.</p>
+    <p>Kırılmaya karşı F<sub>top</sub> düşük olmalı, bunun için k<sub>c</sub> düşürülür: cıvata uzar yapılır ya da somun altına yaylı rondela konur. Gevşemeye karşı F'<sub>ön</sub> yüksek olmalı, bunun için k<sub>p</sub> düşürülür: parçalar arasına esnek conta konur. Not ayrıca k<sub>c</sub> ve k<sub>p</sub>'nin eşit oranda düşürülmemesini ister. Eşit oranda düşerlerse F<sub>z</sub>/F<sub>iş</sub> = k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>) değişmez.</p>
   </div>
   <div>
     <h3>Gerçek parçada</h3>
-    <p><span class="yorum">Notta yok:</span> Şekil 3.47'deki uzar cıvata biyel kolu cıvatasıdır; dinamik yükte genliği düşürmek için kullanılır. Konik yaylı rondela yalnız düzleşmediği sürece işe yarar; DIN 6796 tablosundaki düzleşme kuvveti, 8.8 cıvatanın tipik ön gerilmesine yakındır. Conta k<sub>p</sub>'yi düşürür ama F<sub>z</sub>'yi artırır; ayrıca gerçek conta yüksek basınçta ezilir, zamanla oturur ve bağlantı gevşer.</p>
+    <p>Şekil 3.47'deki uzar cıvata biyel kolu cıvatasıdır; dinamik yükte genliği düşürmek için kullanılır. Konik yaylı rondela yalnız düzleşmediği sürece işe yarar; DIN 6796 tablosundaki düzleşme kuvveti, 8.8 cıvatanın tipik ön gerilmesine yakındır. Conta k<sub>p</sub>'yi düşürür ama F<sub>z</sub>'yi artırır; ayrıca gerçek conta yüksek basınçta ezilir, zamanla oturur ve bağlantı gevşer.</p>
   </div>
   <div>
     <h3>Bağıntılar</h3>
     <div class="eqs">
     <p class="eq">F<sub>z</sub> = F<sub>iş</sub>·k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>), &nbsp;F<sub>b</sub> = F<sub>iş</sub>·k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>)</p>
     <p class="eq">1/k<sub>cıv</sub> = ℓ<sub>s</sub>/(E<sub>c</sub>·A<sub>s</sub>) + (ℓ<sub>c</sub> − ℓ<sub>s</sub>)/(E<sub>c</sub>·A<sub>c</sub>) &nbsp;(uzar; seri yay, s. 75)</p>
-    <p class="eq">1/k<sub>c eş</sub> = 1/k<sub>cıv</sub> + 1/k<sub>r</sub>, &nbsp;k<sub>r</sub> = F<sub>düz</sub>/h<sub>0</sub> &nbsp;(rondela; notta yok)</p>
-    <p class="eq">1/k<sub>p eş</sub> = 1/k<sub>p</sub> + 1/k<sub>conta</sub> &nbsp;(s. 76), &nbsp;k<sub>conta</sub> = E·A<sub>p</sub>/t &nbsp;(notta yok)</p>
+    <p class="eq">1/k<sub>c eş</sub> = 1/k<sub>cıv</sub> + 1/k<sub>r</sub>, &nbsp;k<sub>r</sub> = F<sub>düz</sub>/h<sub>0</sub> &nbsp;(rondela)</p>
+    <p class="eq">1/k<sub>p eş</sub> = 1/k<sub>p</sub> + 1/k<sub>conta</sub> &nbsp;(s. 76), &nbsp;k<sub>conta</sub> = E·A<sub>p</sub>/t</p>
     <p class="refs">D<sub>eş</sub> ℓ<sub>p</sub> ile büyür: Parçalar kalınlaştıkça sıkılan bölge yanlara doğru genişler (s. 75, Şekil 3.49), bu yüzden A<sub>p</sub> de büyür. k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub> yine de azalır, çünkü ℓ<sub>p</sub> daha hızlı büyür.</p>
     <p class="refs">k<sub>cıv</sub>: cıvatanın kendi rijitliği (uzar değilse k<sub>c</sub>). F<sub>düz</sub>: rondelanın düzleşme kuvveti, h<sub>0</sub>: koni yüksekliği. t: conta kalınlığı.</p>
     </div>
@@ -716,10 +716,13 @@ function drawTri(ctx, x0, y0, w, h, V, phone){
   if (V.ph <= 1){ line(ctx, X(0), Y(0), X(-F/kp), Y(F), C.com, 2.6); }
   else { line(ctx, X(tR - dpF), Y(Fon), X(tR), Y(0), C.com, 2.6); }
   ctx.restore();
+  // yakından kutusunun yeri (sol üst ya da sağ üst; mavi doğruyu örtmez). Ad yazısı kutunun karşı tarafına yazılır.
+  const ZB = zoomOn ? zoomLayout({ x0, padL, padT, y0, ph, sx, sy, X, Y, E, Fon, dcF, dpF, S:V.S, phone, fs, xPlotR }) : null;
+  ZLAST = ZB ? ZB.side : 'none';
   // doğru adları
   { const yN = Y(SC.YM*0.74), xN = X(E(SC.YM*0.74));
-    if (zoomOn && phone) {}                                 // telefonda kutuyla çakışmasın (mavi doğru lejantta)
-    else if (zoomOn) rich(ctx, 'cıvata', xN+8, yN, {size:fs, weight:600, color:C.ten, bg:true});   // solda yakından kutusu var
+    if (ZB && phone) {}                                     // telefonda kutuyla çakışmasın (mavi doğru lejantta)
+    else if (ZB && ZB.side === 'L') rich(ctx, 'cıvata', xN+8, yN, {size:fs, weight:600, color:C.ten, bg:true});   // solda yakından kutusu var
     else rich(ctx, 'cıvata', xN-8, yN, {size:fs, weight:600, color:C.ten, align:'right', bg:true}); }
   if (V.ph <= 1 && F > 0) rich(ctx, 'parçalar', X(-F/kp)-7, Y(F)+4, {size:fs, weight:600, color:C.com, align:'right', bg:true});
   else if (V.ph >= 2){
@@ -767,7 +770,7 @@ function drawTri(ctx, x0, y0, w, h, V, phone){
     dimH(ctx, X(0), X(dcF), yD, C.ten); rich(ctx, 'δ_{c}', xc, yD+fs+2, {size:fs, weight:600, color:C.ten, align:'center'});
     dimH(ctx, X(dcF), X(dcF+dpF), yD, C.com); rich(ctx, 'δ_{p}', xp, yD+fs+2, {size:fs, weight:600, color:C.com, align:'center'}); }
   const colX = i => xPlotR + 8 + colW*i + colW/2;
-  if (zoomOn) drawZoom(ctx, { x0, padL, padT, y0, ph, sx, sy, X, Y, E, Fon, dcF, dpF, S, phone, fs });
+  if (ZB) drawZoom(ctx, ZB);
   if (V.Fis <= 1) return;
   // işletme kuvveti: mor düşey
   const yTop = Y(Math.min(V.Fc, SC.YM)), yPon = Y(V.Fp);
@@ -795,18 +798,35 @@ function drawTri(ctx, x0, y0, w, h, V, phone){
 
 }
 
-// ---- yakından kutusu: kuvvet ölçeği ana diyagramla aynı (sığmazsa küçültülür), yalnız δ ekseni büyütülür
-function drawZoom(ctx, o){
-  const { X, Y, E, Fon, dcF, dpF, S, fs } = o, V = { Fc: S.Ftop, Fp: S.Fpon };
+// ---- yakından kutusu: kuvvet ölçeği ana diyagramla aynı (sığmazsa küçültülür), yalnız δ ekseni büyütülür.
+// Yer: önce sol üst, sonra sağ üst köşe denenir; kutu mavi doğruyu örtmemeli. Daha geniş kutu veren köşe seçilir
+// (eşitse sol). Uzar cıvata, rondela ya da conta δ eksenini genişletince üçgen sola sıkışır ve sol üstte yer kalmaz.
+let ZFORCE = null, ZLAST = 'none';                   // yakından kutusunun zorunlu tarafı (geçişte) ve son çizimdeki tarafı
+function zoomLayout(o){
+  const { X, Y, E, Fon, dcF, dpF, S, fs } = o;
   const xop = S.sep ? E(Math.max(S.Ftop, Fon)) : dcF + S.dpr;
   const xa = dcF - 0.6*dpF, xb = Math.max(dcF + dpF, xop) + 0.3*dpF;
-  const Fmax = Math.max(V.Fc, Fon)*1.12;
-  let iw = o.phone ? 104 : 170; const ix = o.x0 + o.padL + 8, iy = o.y0 + o.padT + 4;
-  let fy = o.sy, ih = Fmax*fy; if (ih > o.ph*0.6){ ih = o.ph*0.6; fy = ih/Fmax; }
+  const Fmax = Math.max(S.Ftop, Fon)*1.12;
+  const iw0 = o.phone ? 104 : 170, iwMin = o.phone ? 56 : 80, iy = o.y0 + o.padT + 4;
+  // çizim yüksekliği: kuvvet ölçeği ana diyagramla aynı; en çok ph'nin %60'ı ve kutu akma çizgisinin (F_0,2) üstünde kalsın
+  const hMax = Math.min(o.ph*0.6, Y(J.F02) - 6 - iy - (fs + 6));
+  let fy = o.sy, ih = Fmax*fy; if (ih > hMax){ ih = hMax; fy = ih/Fmax; }
+  if (ih < 40) return null;
   ih += fs + 6;                                           // başlık satırı
-  // kutu mavi doğruyu örtmesin: kutunun alt kenarı hizasında doğru nerede, kutu oraya kadar
-  const Fat = Math.max(0, (Y(0) - (iy + ih))/o.sy);
-  iw = Math.min(iw, X(E(Fat)) - ix - 12); if (iw < (o.phone ? 56 : 80)) return false;
+  const xLine = F => X(E(Math.max(0, Math.min(F, SC.YM))));  // mavi doğrunun F yüksekliğindeki yeri (çizim üstte SC.YM'de biter)
+  // sol: doğru, kutunun alt kenarı hizasında kutunun sağında kalmalı
+  const ixL = o.x0 + o.padL + 8, wL = Math.min(iw0, xLine((Y(0) - (iy + ih))/o.sy) - ixL - 12);
+  // sağ: doğru, kutunun üst kenarı hizasında kutunun solunda kalmalı
+  const wR = Math.min(iw0, o.xPlotR - 6 - (xLine((Y(0) - iy)/o.sy) + 12));
+  // geçiş animasyonunda taraf, geçişin varacağı son duruma göre baştan seçilir (ZFORCE): kutu geçiş sırasında yer değiştirmez
+  if (ZFORCE === 'none') return null;
+  const side = ZFORCE || (wL >= wR ? 'L' : 'R'), iw = side === 'L' ? wL : wR;
+  if (iw < iwMin) return null;
+  const ix = side === 'L' ? ixL : o.xPlotR - 6 - iw;
+  return Object.assign({}, o, { side, ix, iy, iw, ih, fy, xa, xb, xop, Fmax });
+}
+function drawZoom(ctx, o){
+  const { X, Y, E, Fon, dcF, dpF, S, fs, ix, iy, iw, ih, fy, xa, xb, xop, Fmax } = o, V = { Fc: S.Ftop, Fp: S.Fpon };
   const zx = iw/(xb - xa), Z = zx/o.sx;
   const LX = d => ix + (d - xa)*zx, LY = F => iy + ih - F*fy;
   // ana diyagramda büyütülen bölge
@@ -948,7 +968,7 @@ function updateText(V){
   rows.push(['k<sub>p</sub>/k<sub>c</sub> (F<sub>ön</sub>\'deki eğimlerle)', fmt(J.kp/kc1,2)],
     ['F<sub>z</sub>/F<sub>iş</sub> = k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>)', fmt(kc1/(kc1+J.kp),3)],
     ['δ<sub>c</sub>'+(J.W ? ', cıvata + rondela' : ' = F<sub>ön</sub>/k<sub>c</sub>')+', δ<sub>p</sub>', fmt(S1.dc*1000,1)+' µm, '+fmt(S1.dp*1000,1)+' µm'],
-    ['Somunun dönmesi Δθ (yorum)', fmt(S1.dth,1)+'°']);
+    ['Somunun dönmesi Δθ', fmt(S1.dth,1)+'°']);
   $('vals').innerHTML = rows.map(r => r[0]==='grp' ? '<dt class="grp">'+r[1]+'</dt>' : '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('');
   renderCmp();
 }
@@ -1013,6 +1033,11 @@ function draw(){
   const V = view(), { Jd, SCd } = shown(), Jt = J, SCt = SC;
   // kesit hedef bağlantıyla (önlemin geometrisi), üçgen ve grafik karışımla (dönen doğrular) çizilir
   const {ctx,w,h} = fitMain(); const phone = w < 560, wS = Math.round(w*(phone?0.40:0.38));
+  if (st.tw && st.tw.zside === undefined){                // geçişin son durumunda kutu hangi tarafta? (görünmeyen tuvalde bir kez)
+    const tw = st.tw; st.tw = null; ZFORCE = null;
+    try { const oc = document.createElement('canvas'); oc.width = 2; oc.height = 2; drawTri(oc.getContext('2d'), wS+6, 0, w-wS-6, h, view(), phone); tw.zside = ZLAST; }
+    finally { st.tw = tw; } }
+  ZFORCE = st.tw ? st.tw.zside : null;
   drawSection(ctx, 0, 0, wS, h, V, phone);
   line(ctx, wS+2, 10, wS+2, h-10, C.line, 1);
   J = Jd; SC = SCd; try { drawTri(ctx, wS+6, 0, w-wS-6, h, V, phone); drawF(V); } finally { J = Jt; SC = SCt; }
