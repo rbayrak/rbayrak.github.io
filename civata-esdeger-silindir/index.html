@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cıvatada eşdeğer silindir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E6ECEE; --sheet:#F4F7F8; --ink:#1C2A35; --muted:#55666F; --line:#B9C5CB;
+  --steel1:#DCE3E7; --steel2:#8996A0; --steel3:#5E6B75; --part:#C9D3D9; --gap:#2A3640;
+  --mb:#0B6E6E; --ten:#24589B; --com:#B5372B; --fis:#7B3FA0; --warn:#A8650C;
+  --hatch:#3A4A55; --tenbg:rgba(36,88,155,0.12); --combg:rgba(181,55,43,0.12); --fisbg:rgba(123,63,160,0.10);
+  --okbg:rgba(11,110,110,0.10); --warnbg:rgba(168,101,12,0.13);
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141C22; --sheet:#1B252C; --ink:#DCE5EA; --muted:#93A4AE; --line:#34444E;
+    --steel1:#4A5660; --steel2:#5C6872; --steel3:#3B464F; --part:#56636D; --gap:#0B1014;
+    --mb:#3FB6B0; --ten:#6EA0E0; --com:#E26A5C; --fis:#B98AE0; --warn:#E0A84A; --hatch:#9FB0BB;
+    --tenbg:rgba(110,160,224,0.16); --combg:rgba(226,106,92,0.16); --fisbg:rgba(185,138,224,0.14);
+    --okbg:rgba(63,182,176,0.14); --warnbg:rgba(224,168,74,0.16); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141C22; --sheet:#1B252C; --ink:#DCE5EA; --muted:#93A4AE; --line:#34444E;
+  --steel1:#4A5660; --steel2:#5C6872; --steel3:#3B464F; --part:#56636D; --gap:#0B1014;
+  --mb:#3FB6B0; --ten:#6EA0E0; --com:#E26A5C; --fis:#B98AE0; --warn:#E0A84A; --hatch:#9FB0BB;
+  --tenbg:rgba(110,160,224,0.16); --combg:rgba(226,106,92,0.16); --fisbg:rgba(185,138,224,0.14);
+  --okbg:rgba(63,182,176,0.14); --warnbg:rgba(224,168,74,0.16); color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;font-variant-numeric:tabular-nums}
+.wrap{max-width:1320px;margin:0 auto;padding:16px 16px 36px}
+header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 24px;align-items:start;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:12px}
+h1{font-size:clamp(1.4rem,2.6vw,2.15rem);font-weight:600;line-height:1.15;margin:0;letter-spacing:-0.01em}
+.figref{display:block;margin-top:4px;font-family:"IBM Plex Serif",Georgia,serif;font-style:italic;color:var(--muted)}
+.author{text-align:right;font-size:.85rem;line-height:1.35;color:var(--muted)}
+.author b{display:block;font-weight:600;color:var(--ink)}
+.author a{color:var(--muted);text-decoration:none}
+.author a:hover{text-decoration:underline}
+.lead{grid-column:1/-1;margin:4px 0 0;max-width:84ch;color:var(--muted)}
+.series{grid-column:1/-1;margin:0;font-size:.86rem;color:var(--muted)}
+.series a{color:var(--ink)}
+.stage{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,1fr);gap:12px;align-items:start}
+.panel{background:var(--sheet);border:1px solid var(--line);border-radius:3px;position:relative}
+.panel h2{font-size:.95rem;font-weight:600;margin:0;padding:8px 12px 0}
+.panel .sub{font-size:.84rem;color:var(--muted);margin:2px 0 0;padding:0 12px}
+canvas{display:block;width:100%}
+#cvP,#cvD{height:230px}
+.right{display:grid;gap:12px;align-content:start}
+.caption{margin:2px 12px 0;font-size:.88rem;min-height:2.7em;color:var(--ink)}
+.status{margin:6px 12px 0;padding:6px 12px;border-radius:3px;border-left:5px solid var(--mb);background:var(--okbg);display:flex;flex-wrap:wrap;gap:2px 16px;align-items:baseline}
+.status .big{font-size:1.02rem;font-weight:600}
+.status .nums{font-size:.88rem;color:var(--muted)}
+.vals{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:6px 12px 10px;font-size:.88rem;margin:0}
+.vals dt{color:var(--muted)} .vals dd{margin:0;text-align:right;font-weight:500}
+.vals .grp{grid-column:1/-1;font-weight:600;color:var(--ink);margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin:8px 12px 0;align-items:center}
+.steps .lab{font-size:.84rem;color:var(--muted);margin-right:2px}
+.controls{border-top:1px solid var(--line);margin:8px 12px 0;padding:10px 0 10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;align-items:end}
+.ctl label{display:flex;justify-content:space-between;align-items:baseline;font-size:.86rem;color:var(--muted);gap:8px}
+.ctl output{color:var(--ink);font-weight:500;white-space:nowrap}
+input[type=range]{width:100%;accent-color:var(--mb);margin:4px 0 0}
+.hint{font-size:.84rem;color:var(--muted)}
+.sm{display:none}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;grid-column:1/-1}
+button{font:inherit;font-size:.9rem;border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:6px 12px;border-radius:2px;cursor:pointer;min-height:36px}
+button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible{outline:3px solid var(--mb);outline-offset:2px}
+.steps button{padding:4px 10px;min-height:32px;font-size:.86rem}
+.legend{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0 12px;padding:8px 0 10px;border-top:1px solid var(--line);font-size:.84rem;list-style:none}
+.legend li{display:flex;align-items:center;gap:8px;line-height:1.3;flex:1 1 300px}
+.legend svg{flex:none;width:30px;height:20px;overflow:visible}
+.legend .t{color:var(--muted)}
+.legend a{color:var(--ink)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px 28px;margin-top:20px}
+.notes > div.wide{grid-column:1/-1;border-top:1px solid var(--line);padding-top:10px}
+.notes h3{font-size:1.05rem;font-weight:600;margin:0 0 6px}
+.notes p{margin:0 0 8px;max-width:72ch}
+.eqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 32px}
+.eq{font-family:"IBM Plex Serif",Georgia,serif;font-size:1rem;margin:0 0 4px}
+.refs{font-size:.85rem;color:var(--muted);max-width:115ch}
+.yorum{color:var(--muted);font-style:italic}
+.tblwrap{overflow-x:auto;max-width:100%}
+table.kp{border-collapse:collapse;font-size:.88rem;margin:4px 0 8px;min-width:520px}
+table.kp th,table.kp td{border-bottom:1px solid var(--line);padding:4px 10px;text-align:right;vertical-align:top}
+table.kp th:first-child,table.kp td:first-child{text-align:left}
+table.kp thead th{font-weight:600;border-bottom:1.5px solid var(--ink)}
+table.kp tr.me td{font-weight:600}
+@media (max-width:900px){.stage{grid-template-columns:1fr}}
+.stage > .panel:first-child{display:flex;flex-direction:column}
+.stage > .panel:first-child > .caption{order:5;margin-top:8px}
+.stage > .panel:first-child > .legend{order:6}
+@media (min-width:901px) and (min-height:760px){.stage > .panel{position:sticky;top:8px}}
+@media (max-width:600px){
+  .wrap{padding:12px 10px 32px}
+  .controls{gap:6px 14px}
+  .ctl label{font-size:.8rem}
+  .lg{display:none} .sm{display:inline}
+  .author{font-size:.75rem}
+  input[type=range]{height:28px}
+  .status .big{font-size:.95rem}
+  .hide-sm{display:none}
+  .legend{font-size:.8rem}
+  .caption{font-size:.84rem}
+  .steps{gap:4px} .steps .lab{display:none}
+  .steps button{padding:3px 8px;font-size:.8rem}
+  .stage > .panel:first-child{display:flex;flex-direction:column}
+  .stage > .panel:first-child > .caption{order:5;margin-top:8px}
+  .stage > .panel:first-child > .legend{order:6}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>Cıvatayı sıkınca parçaların hangi kısmı sıkışır?</h1>
+    <span class="figref">Şekil 3.49: Sıkılan parçalarda deformasyon bölgesi (s. 75)</span>
+  </div>
+  <div class="author"><b>Ramazan Bayrak</b><a href="mailto:rbayrak@yildiz.edu.tr"><i>rbayrak@yildiz.edu.tr</i></a></div>
+  <p class="lead">Somunu sıktığınızda parçaların tamamı sıkışmaz. Yalnız cıvata çevresindeki bir bölge sıkışır; bu bölge kesitte fıçıya benzer (notta "paraboloid"). Hesapta bu bölgenin yerine D<sub>eş</sub> çaplı, ortası delik bir silindir konur. Parçaları sünger gibi düşünün: Somunun bastığı yer çöker, uzaktaki kısım neredeyse hiç sıkışmaz. <span class="hide-sm">"Baştan oynat" ile üç adımı izleyin.</span></p>
+  <p class="series">Serinin diğer sayfaları: <a href="../civata-on-gerilme/">Ön gerilme üçgeni</a> · <a href="../civata-onlemler/">k<sub>c</sub>/k<sub>p</sub> önlemleri</a></p>
+</header>
+
+<div class="stage">
+  <section class="panel" aria-label="Çeyrek kesik görünüş, durum ve ayarlar">
+    <h2><span class="lg">Çeyrek kesik görünüş: iki parça, cıvata ve somun (M16, çelik)</span><span class="sm">Çeyrek kesik görünüş (M16, çelik)</span></h2>
+    <canvas id="cv3" role="img" aria-label="Sıkılan iki dairesel plaka hafif yukarıdan eğik bakışla çizilmiş. Önden çeyrek parça kesilip çıkarılınca kesitte basma gerilmesi renkle, basma bölgesinin sınırı kalın çizgiyle görülür."></canvas>
+    <p id="caption" class="caption" aria-live="polite"></p>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <div class="steps" aria-label="Adımlar">
+      <span class="lab">Adım:</span>
+      <button data-ph="0">1 Sıkma</button>
+      <button data-ph="1">2 Basma bölgesi</button>
+      <button data-ph="2">3 Eşdeğer silindir</button>
+    </div>
+    <div class="controls" aria-label="Ayarlar">
+      <div class="ctl btnrow">
+        <button id="btnAll">Baştan oynat</button>
+        <button id="btnPlay">Durdur</button>
+        <span class="hint hide-sm">Adımlar zaman ölçeksizdir.</span>
+      </div>
+      <div class="ctl"><label for="inFon"><span><span class="lg">Ön gerilme kuvveti F<sub>ön</sub></span><span class="sm">F<sub>ön</sub></span></span> <output id="oFon"></output></label><input id="inFon" type="range" min="10" max="90" step="1" value="60"></div>
+      <div class="ctl"><label for="inLp"><span><span class="lg">Parçaların toplam boyu ℓ<sub>p</sub></span><span class="sm">Boy ℓ<sub>p</sub></span></span> <output id="oLp"></output></label><input id="inLp" type="range" min="20" max="80" step="2" value="40"></div>
+    </div>
+    <ul class="legend" aria-label="Şekildeki işaretler">
+      <li><svg viewBox="0 0 30 20"><defs><linearGradient id="gC" x1="0" x2="1"><stop offset="0" stop-color="var(--sheet)"/><stop offset="1" stop-color="var(--com)"/></linearGradient></defs><rect x="1" y="4" width="28" height="12" fill="url(#gC)" stroke="var(--ink)" stroke-width="0.6"/></svg><span class="t">Kırmızı: Parçalardaki basma gerilmesi. Renk koyulaştıkça basma artar. Tam kırmızı, eşdeğer silindirdeki basınca (F<sub>ön</sub>/A<sub>p</sub>) eşit ya da ondan büyüktür. A<sub>p</sub>, eşdeğer silindirin kesit alanıdır.</span></li>
+      <li><svg viewBox="0 0 30 20"><defs><linearGradient id="gT" x1="0" x2="1"><stop offset="0" stop-color="var(--sheet)"/><stop offset="1" stop-color="var(--ten)"/></linearGradient></defs><rect x="9" y="1" width="12" height="18" fill="url(#gT)" stroke="var(--ink)" stroke-width="0.6"/></svg><span class="t">Mavi: Cıvatadaki çekme gerilmesi σ = F/A<sub>c</sub> (A<sub>c</sub>: diş dibi kesiti). Sıkma başında gri, sonunda tam mavidir. Parçalarda görülen soluk mavi lekeler küçük çekme bölgeleridir.</span></li>
+      <li><svg viewBox="0 0 30 20"><path d="M2 4 Q15 8 28 4 M2 10 Q15 13 28 10 M2 16 L28 16 M8 2 L9 18 M16 2 L16 18 M24 2 L23 18" stroke="var(--ink)" stroke-opacity="0.45" stroke-width="0.8" fill="none"/></svg><span class="t">İnce ızgara: Parçaya çizilmiş düşünülen çizgiler. Parça sıkıştıkça birbirine yaklaşırlar. Üst yüzdeki halkalar da bu çizgilerdir. Parçaların şekil değiştirmesi <span id="lgN"></span> kat büyütüldü.</span></li>
+      <li><svg viewBox="0 0 30 20"><path d="M6 2 C22 6 22 14 8 18" stroke="var(--ink)" stroke-width="2.2" fill="none"/><path d="M6 2 C22 6 22 14 8 18 L2 18 L2 2Z" fill="var(--com)" fill-opacity="0.25" stroke="none"/></svg><span class="t">Kalın çizgi (2. adım): Basma bölgesinin sınırı. Sınırda basma gerilmesi, somun altındaki ortalama basınç q'nun %3'üne iner. Sınır eksen çevresinde döndürülünce soluk kırmızı cisim çıkar; notta buna "paraboloid" denir.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="15" y1="1" x2="15" y2="19" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/></svg><span class="t">Kalın kesikli çizgi (3. adım): Eşdeğer silindir, D<sub>eş</sub> = AA + k<sub>malz</sub>·ℓ<sub>p</sub> (s. 75).</span></li>
+      <li><svg viewBox="0 0 30 20"><path d="M8 4 L15 1 L22 4 L22 17 L15 20 L8 17Z" fill="var(--steel1)" stroke="var(--ink)" stroke-width="0.9"/><line x1="15" y1="1" x2="15" y2="20" stroke="var(--ink)" stroke-width="0.9"/></svg><span class="t">Gri: Cıvata, somun ve baş. Somun sıkılırken (üstten bakınca) saat yönünde döner; dönme açısı Δθ sol üstte yazar ve büyütülmedi. Somunun kesiği somunla birlikte döner, sıkma bitince parçaların kesiğiyle çakışır. Cıvata uzadıkça ucu somundan dışarı çıkar. Cıvatanın uzaması <span id="lgNC"></span> kat büyütüldü, parçalarınkinden az. Bu yüzden iki uzamayı çizimde karşılaştırmayın; gerçek değerler durum kutusunda.</span></li>
+      <li><svg viewBox="0 0 30 20"><rect x="1" y="3" width="28" height="6" fill="var(--part)" stroke="var(--ink)" stroke-width="0.6"/><path d="M8 11 L29 9.5 L29 12.5 L8 11Z" fill="var(--gap)"/><rect x="1" y="12" width="28" height="6" fill="var(--part)" stroke="var(--ink)" stroke-width="0.6"/></svg><span class="t">Koyu: İki yüzey arasındaki açıklık. Dış kenardaki koyu kama, iki parçanın birbirinden ayrıldığı yerdir. Parçalar yalnız D<sub>t</sub> çapı içinde birbirine değer. Cıvata ile delik duvarı arasındaki ince şerit de açıklıktır (d<sub>h</sub> − d = 1,5 mm).</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="15" y1="1" x2="15" y2="19" stroke="var(--muted)" stroke-width="0.9" stroke-dasharray="6 2 1.5 2"/></svg><span class="t">Noktalı kesikli çizgi: Cıvata ekseni. d<sub>a</sub>/2 ve D<sub>eş</sub>/2 eksenden ölçülen yarıçaplardır; d<sub>a</sub> somun ve başın oturma çapıdır (Şekil 3.49). ℓ<sub>p</sub>, parçaların sıkılmadan önceki toplam boyudur.</span></li>
+    </ul>
+  </section>
+  <div class="right">
+    <section class="panel" aria-label="Ara yüzdeki basınç dağılımı">
+      <h2>İki parça birbirine ne kadar bastırıyor?</h2>
+      <p class="sub">Kırmızı eğri: Sonlu eleman (SE) çözümünde iki parçanın birbirine bastığı basınç p, eksenden uzaklık r'ye göre. Kesikli çizgi: Notun eşdeğer silindirinde varsayılan düzgün basınç F<sub>ön</sub>/A<sub>p</sub>. Kuvvet, eğrinin altındaki düz alan değildir: Her r'deki basınç o halkanın alanıyla (2πr·dr) çarpılıp toplanır. Böyle toplanınca iki dağılım da F<sub>ön</sub>'ü verir. SE basıncı deliğin yanında yüksek, dışa doğru azalır ve parçaların ayrıldığı yerde sıfıra iner.</p>
+      <canvas id="cvP" role="img" aria-label="Ara yüzde yarıçapa göre basınç: SE çözümü ve eşdeğer silindir"></canvas>
+    </section>
+    <section class="panel" aria-label="Çapların parça boyuna göre değişimi">
+      <h2>Çaplar ℓ<sub>p</sub> ile nasıl değişir?</h2>
+      <p class="sub">Dört çap da ortası delik (d<sub>h</sub>) bir silindirin dış çapıdır; farkları neye eşit tutulduklarıdır. Kalın kesikli D<sub>eş</sub>: Notun bağıntısı, AA + 0,1·ℓ<sub>p</sub>. Yeşil D<sub>k</sub>: Rijitliği SE ile aynı olan silindir; E·A/ℓ<sub>p</sub> = k<sub>p,SE</sub>. İnce gri kesikli D<sub>V</sub>: Hacmi, 2. adımdaki basma bölgesinin hacmine eşit olan silindir (notun "hacimce eşdeğer" tanımı). Kırmızı D<sub>t</sub>: Parçaların birbirine değdiği çap. Mor kesikli düşey çizgi: Şu anki ℓ<sub>p</sub>.</p>
+      <canvas id="cvD" role="img" aria-label="Parça boyuna göre eşdeğer çaplar"></canvas>
+    </section>
+    <section class="panel" aria-label="Sayılar">
+      <h2>Sayılar</h2>
+      <dl class="vals" id="vals"></dl>
+    </section>
+  </div>
+</div>
+
+<section class="notes">
+  <div>
+    <h3>Nasıl okunur?</h3>
+    <p>İki eşit çelik plaka M16 cıvatayla sıkılmış. Görünüş hafif yukarıdan; önden çeyrek parça kesilip çıkarılmış, Şekil 3.49 bu kesitin düz çizimidir. Baş altta, somun üstte. 1. adımda somun sıkılır, 2. adımda basma bölgesinin sınırı, 3. adımda eşdeğer silindir çizilir. Ayarlarla ön gerilme kuvvetini (F<sub>ön</sub>) ve parçaların toplam boyunu (ℓ<sub>p</sub>) değiştirebilirsiniz.</p>
+  </div>
+  <div>
+    <h3>Gerçek parçada ne olur?</h3>
+    <p>Somun parçaya yalnız d<sub>a</sub> çaplı halkada basar. Kuvvet parçanın içinde yanlara yayılarak iki parçanın ara yüzüne iner. Bu yüzden basma bölgesi somunun altında dar başlar, aşağı indikçe genişler. Not bu bölgenin biçimi için denklem vermez, deneylere dayanır (s. 75). Buradaki sınır sonlu eleman (SE) çözümünden çıktı. Uzaktaki kısım neredeyse hiç kuvvet taşımaz. Plakalar hafifçe eğilir ve dış kenarda birbirinden ayrılır. Bu ayrılma mikrometre düzeyindedir, çizimde büyütüldü. Plaka inceldikçe ayrılma artar (ℓ<sub>p</sub> = 20 mm'yi deneyin).</p>
+  </div>
+  <div>
+    <h3>Eşdeğer silindir neye eşdeğer?</h3>
+    <p>Notta silindirin paraboloide hacimce eşdeğer olduğu yazar (s. 75). Hesaba giren büyüklük ise k<sub>p</sub>'dir. SE çözümünde aynı k<sub>p</sub>'yi veren silindirin çapı D<sub>k</sub>, D<sub>eş</sub>'ten 2–7 mm büyük çıkar (ℓ<sub>p</sub> = 20…80 mm). Bu fark k<sub>p</sub>'de %34–72'lik bir farka karşılık gelir. Yani not, parçaları SE çözümüne göre daha esnek hesaplar. Basma bölgesiyle aynı hacimdeki silindirin çapı D<sub>V</sub> ise D<sub>k</sub>'den de büyüktür, çünkü bölgenin dış kısmı az sıkışır. Bu yüzden "eşdeğer" sözünü "aynı yaylanmayı veren" diye okumak daha doğru olur.</p>
+  </div>
+  <div class="wide">
+    <h3>Başka modeller aynı k<sub>p</sub>'yi veriyor mu?</h3>
+    <p>Hayır. Tablo şu anki ℓ<sub>p</sub> için hesaplandı. Son sütun, işletme kuvvetinin cıvataya gelen payıdır: F<sub>z</sub>/F<sub>iş</sub> = k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>) (s. 73). Burada k<sub>c</sub> = E<sub>c</sub>·A<sub>c</sub>/ℓ<sub>c</sub> (s. 75); <span id="kcTxt"></span>.</p>
+    <div class="tblwrap"><table class="kp" id="kpTab"></table></div>
+    <p class="refs">Not en küçük k<sub>p</sub>'yi verir ve cıvataya gelen payı büyük hesaplatır: ℓ<sub>p</sub> = 80 mm'de F<sub>z</sub>/F<sub>iş</sub>, not ile 0,203, SE ile 0,130 çıkar. Shigley ve Wileman bağıntıları delik çapı yerine cıvata çapını kullanır ve oturma çapını 1,5·d alır; bu, buradaki d<sub>a</sub> = 24 mm ile aynıdır.</p>
+  </div>
+  <div class="wide">
+    <h3>Bağıntılar</h3>
+    <div class="eqs">
+    <p class="eq">k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub>, &nbsp;A<sub>p</sub> = (π/4)·(D<sub>eş</sub>² − d<sub>h</sub>²) &nbsp;(s. 75)</p>
+    <p class="eq">D<sub>eş</sub> = AA + k<sub>malz</sub>·ℓ<sub>p</sub>, &nbsp;çelikte k<sub>malz</sub> = 0,1 &nbsp;(s. 75)</p>
+    <p class="eq">q = F<sub>ön</sub>/[(π/4)·(d<sub>a</sub>² − d<sub>h</sub>²)]</p>
+    <p class="eq">k<sub>p,SE</sub> = F<sub>ön</sub>/δ<sub>p</sub>, &nbsp;D<sub>k</sub> = √(4·k<sub>p,SE</sub>·ℓ<sub>p</sub>/(π·E) + d<sub>h</sub>²)</p>
+    <p class="eq">D<sub>V</sub>: (π/4)·(D<sub>V</sub>² − d<sub>h</sub>²)·ℓ<sub>p</sub> = basma bölgesinin hacmi</p>
+    <p class="eq">Δθ = 360°·(δ<sub>c</sub> + δ<sub>p</sub>)/P, &nbsp;δ<sub>c</sub> = F/k<sub>c</sub>, δ<sub>p</sub> = F/k<sub>p,SE</sub></p>
+    <p class="eq">VDI 2230: D<sub>A,Gr</sub> = d<sub>w</sub> + ℓ<sub>K</sub>·tan φ, &nbsp;tan φ = 0,362 + 0,032·ln(β<sub>L</sub>/2) + 0,153·ln y</p>
+    </div>
+    <p class="refs">Semboller. d<sub>h</sub>: delik çapı (17,5 mm). d<sub>a</sub>: somun ve başın oturma çapı (Şekil 3.49). AA: anahtar ağzı açıklığı (24 mm). D<sub>A</sub>: parçaların dış çapı. D<sub>t</sub>: parçaların birbirine değdiği çap. q: oturma halkasındaki ortalama basınç. σ<sub>z</sub>: eksen doğrultusundaki normal gerilme (basmada eksi). δ<sub>p</sub>: iki parçanın toplam kısalması, δ<sub>c</sub>: cıvatanın uzaması. P: vida adımı (2 mm). VDI'daki d<sub>w</sub> ve ℓ<sub>K</sub>, buradaki d<sub>a</sub> ve ℓ<sub>p</sub>'dir; β<sub>L</sub> = ℓ<sub>K</sub>/d<sub>w</sub>, y = D<sub>A</sub>/d<sub>w</sub>.</p>
+    <h3>Kabuller</h3>
+    <p class="refs">İki plaka aynı kalınlıkta (ℓ<sub>p</sub>/2) ve çelik: E = 210 000 N/mm², ν = 0,3 (Tablo-Diy. s. 1). Parça dış çapı D<sub>A</sub> = 100 mm alındı; 120 mm'de k<sub>p</sub> %1'den az değişir. Oturma çapı d<sub>a</sub> ≈ AA = 24 mm (Tablo-Diy. s. 11'deki şekilde "≈ Ø s"). Somun ve baş rijit kabul edildi, oturma halkasında parça yüzü düz iner. Halkada sürtünme katsayısı μ = 0,12'dir; bu, VDI 2230 sürtünme sınıfı B'nin (0,08…0,16) ortasıdır (Bossard, <i>TF.049</i>). İki parçanın ara yüzü sürtünmesizdir ve yalnız basma taşır. Malzeme doğrusal elastiktir. Bu kabullerle bölgenin biçimi F<sub>ön</sub>'e bağlı değildir; F<sub>ön</sub> yalnız çökmeyi ve rengin koyuluğunu artırır.</p>
+    <p class="refs">Basma bölgesinin sınırı σ<sub>z</sub> = −0,03·q alındı. Sınır σ<sub>z</sub> = 0 alınamaz, çünkü serbest yüzeyde σ<sub>z</sub> zaten sıfırdır. Eşik değişince bölge genişler ya da daralır: ℓ<sub>p</sub> = 40 mm'de eşik %1, %3 ve %5 iken D<sub>V</sub> = 47,3; 42,7 ve 39,9 mm olur. Somunun dönme açısı Δθ, somunun cıvata üzerindeki ilerlemesinden (δ<sub>c</sub> + δ<sub>p</sub>) hesaplandı; diş ve somun şekil değiştirmesi ihmal edildi. Animasyon zaman ölçeksizdir.</p>
+    <p class="refs">Çözüm. Parçalar her ℓ<sub>p</sub> için tarayıcıda, dört düğümlü eksenel simetrik (aksisimetrik) sonlu elemanlarla çözülür. Temas aktif küme yöntemiyle, somun altındaki sürtünme yineli olarak hesaplanır. Sonuçlar iki bağımsız çözümle karşılaştırıldı: scikit-fem (ikinci dereceden üçgen eleman) ve CalculiX. Somun kenarında gerilme tekil olduğundan sayfanın ağı, yakınsanmış çözümden %2–3 rijit sonuç verir.</p>
+    <p class="refs">Kaynaklar. F. Dikmen, <i>Makine Elemanları 1 Ders Notları</i>, YTÜ, s. 72–75, Şekil 3.49; Tablo-Diy. s. 1, 10, 11. VDI 2230 Blatt 1:2015, deformasyon konisi; bağıntılar ikincil kaynaktan alındı (S. Voigt, <i>Schraubenverbindungen: Tragfähigkeitsnachweis nach VDI 2230</i>, Hochschule Anhalt, ders sunumu). R. G. Budynas, J. K. Nisbett, <i>Shigley's Mechanical Engineering Design</i>, 10. baskı, Bölüm 8.5 (Denk. 8-22, 8-23, Tablo 8-8). J. Wileman, M. Choudury, I. Green, "Computation of member stiffness in bolted connections", <i>J. Mech. Des.</i> 113 (1991) 432–437.</p>
+  </div>
+</section>
+</div>
+
+<script>
+// Sıkılan parçalarda deformasyon bölgesi: eksenel simetrik sonlu eleman çözümü ve eşdeğer silindir
+// Birimler: N, mm, N/mm². Kaynak: F. Dikmen, ME1 Ders Notları, s. 75, Şekil 3.49; Tablo-Diy. s. 1, 10, 11.
+//   Not: k_p = E_p·A_p/ℓ_p, A_p = (π/4)·(D_eş² − d_h²), D_eş = AA + k_malz·ℓ_p (çelik 0,1)
+// Model (notta yok, bu sayfanın kabulü):
+//   İki özdeş çelik plaka, her biri ℓ_p/2 kalın, dış çap D_A. Ara yüzde simetri: üst plakanın alt yüzü
+//   ara yüzden aşağı geçemez (u_z ≥ 0), yalnız basma taşır, sürtünmesiz (simetri gereği kayma gerilmesi yok).
+//   Baş ve somun altı d_h/2 ≤ r ≤ d_w/2 halkası: sayfada rijit halka, altında Coulomb sürtünmesi (load: 'rigid', mu: 0,12;
+//   u_z öngörülür, düğüm tutunur ya da μ·N ile kayar). 'rigid' tek başına sürtünmesiz, bond: true tam yapışık;
+//   karşılaştırma için düzgün basınç (varsayılan). d_w ≈ AA (Tablo-Diy. s. 11 şekli: "≈ Ø s").
+//   Delik yüzeyi ve dış yüzey serbest. Doğrusal elastik, küçük şekil değiştirme.
+//   Eleman: 4 düğümlü dörtgen, eksenel simetrik (ε_r, ε_z, ε_θ, γ_rz), 2×2 Gauss. Temas: aktif küme.
+// Literatür modelleri (karşılaştırma için):
+//   VDI 2230 Blatt 1:2015, çift koni (DSV): tan φ = 0,362 + 0,032·ln(β_L/2) + 0,153·ln y, β_L = ℓ_K/d_w, y = D_A/d_w,
+//     D_A,Gr = d_w + w·ℓ_K·tan φ (w = 1). D_A ≥ D_A,Gr ise
+//     δ_P = 2·ln[(d_w + d_h)(D_A,Gr − d_h) / ((d_w − d_h)(D_A,Gr + d_h))] / (w·E·π·d_h·tan φ)
+//   Budynas–Nisbett (Shigley) Denk. 8-22, α = 30°, D = 1,5·d: k_m = 0,5774·π·E·d / (2·ln[5(0,5774ℓ + 0,5d)/(0,5774ℓ + 2,5d)])
+//   Wileman, Choudury, Green (1991), Shigley Denk. 8-23, Tablo 8-8 (çelik): k_m = E·d·A·exp(B·d/ℓ), A = 0,78715, B = 0,62873
+var ESD = (function () {
+  const BOLT = { ad: 'M16', d: 16, AA: 24, dh: 17.5, k: 10, m: 14.8, e: 26.75, d3: 13.55, P: 2 };   // Tablo-Diy. s. 10–11
+  const MAT = { ad: 'Çelik', E: 210000, nu: 0.3, kmalz: 0.1 };                                         // Tablo-Diy. s. 1; not s. 75
+  const DA = 100;                                                                                      // plaka dış çapı [mm], varsayım
+
+  // ---- ağ: r yönünde derecelendirilmiş, z yönünde düzgün
+  function radialNodes(rh, rw, R, h, nIn, nOut) {
+    const rs = [];
+    for (let i = 0; i <= nIn; i++) rs.push(rh + (rw - rh) * i / nIn);          // baş altı halka
+    const dr0 = (rw - rh) / nIn;                                                 // dışa doğru geometrik büyüme
+    let q = 1.0; const L = R - rw;
+    // dr0·(q^n − 1)/(q − 1) = L koşulunu sağlayan q (ikiye bölme)
+    let lo = 1.0000001, hi = 1.5;
+    for (let it = 0; it < 80; it++) { const m = (lo + hi) / 2, s = dr0 * (Math.pow(m, nOut) - 1) / (m - 1); if (s < L) lo = m; else hi = m; }
+    q = (lo + hi) / 2;
+    let r = rw, dr = dr0;
+    for (let i = 1; i <= nOut; i++) { r += dr; dr *= q; rs.push(i === nOut ? R : r); }
+    return rs;
+  }
+
+  // ---- bant matrisli simetrik çözücü (alt bant, LDLᵀ yerine Cholesky)
+  function bandChol(A, n, b) {              // A[i*(b+1) + (j−i+b)] : j ≤ i, i − j ≤ b
+    const w = b + 1;
+    for (let j = 0; j < n; j++) {
+      let s = A[j * w + b];
+      for (let k = Math.max(0, j - b); k < j; k++) { const v = A[j * w + (k - j + b)]; s -= v * v; }
+      if (!(s > 0)) throw new Error('Cholesky: pozitif tanımlı değil, satır ' + j);
+      const d = Math.sqrt(s); A[j * w + b] = d;
+      for (let i = j + 1; i <= Math.min(n - 1, j + b); i++) {
+        let t = A[i * w + (j - i + b)];
+        for (let k = Math.max(0, i - b); k < j; k++) t -= A[i * w + (k - i + b)] * A[j * w + (k - j + b)];
+        A[i * w + (j - i + b)] = t / d;
+      }
+    }
+  }
+  function bandSolve(A, n, b, x) {
+    const w = b + 1;
+    for (let i = 0; i < n; i++) { let s = x[i]; for (let k = Math.max(0, i - b); k < i; k++) s -= A[i * w + (k - i + b)] * x[k]; x[i] = s / A[i * w + b]; }
+    for (let i = n - 1; i >= 0; i--) { let s = x[i]; for (let k = i + 1; k <= Math.min(n - 1, i + b); k++) s -= A[k * w + (i - k + b)] * x[k]; x[i] = s / A[i * w + b]; }
+  }
+
+  const GP = [-1 / Math.sqrt(3), 1 / Math.sqrt(3)];
+  function Dmat(E, nu) {                    // [σr, σz, σθ, τrz]
+    const c = E / ((1 + nu) * (1 - 2 * nu));
+    return [[c * (1 - nu), c * nu, c * nu, 0], [c * nu, c * (1 - nu), c * nu, 0], [c * nu, c * nu, c * (1 - nu), 0], [0, 0, 0, c * (1 - 2 * nu) / 2]];
+  }
+  // eleman: düğümler (r,z) sırası: (i,j), (i+1,j), (i+1,j+1), (i,j+1)
+  function Bmat(rN, zN, xi, eta) {
+    const N = [(1 - xi) * (1 - eta) / 4, (1 + xi) * (1 - eta) / 4, (1 + xi) * (1 + eta) / 4, (1 - xi) * (1 + eta) / 4];
+    const dNx = [-(1 - eta) / 4, (1 - eta) / 4, (1 + eta) / 4, -(1 + eta) / 4];
+    const dNe = [-(1 - xi) / 4, -(1 + xi) / 4, (1 + xi) / 4, (1 - xi) / 4];
+    let J11 = 0, J12 = 0, J21 = 0, J22 = 0, r = 0;
+    for (let a = 0; a < 4; a++) { J11 += dNx[a] * rN[a]; J12 += dNx[a] * zN[a]; J21 += dNe[a] * rN[a]; J22 += dNe[a] * zN[a]; r += N[a] * rN[a]; }
+    const det = J11 * J22 - J12 * J21;
+    const B = [new Float64Array(8), new Float64Array(8), new Float64Array(8), new Float64Array(8)];
+    for (let a = 0; a < 4; a++) {
+      const dr = (J22 * dNx[a] - J12 * dNe[a]) / det, dz = (-J21 * dNx[a] + J11 * dNe[a]) / det;
+      B[0][2 * a] = dr; B[1][2 * a + 1] = dz; B[2][2 * a] = N[a] / r; B[3][2 * a] = dz; B[3][2 * a + 1] = dr;
+    }
+    return { B, det, r, N };
+  }
+
+  // p: {lp, DA?, F?, nIn?, nOut?, nz?, E?, nu?, load?: 'ring'|'full'}
+  function solve(p) {
+    const E = p.E || MAT.E, nu = p.nu == null ? MAT.nu : p.nu, F = p.F || 1;
+    const rh = BOLT.dh / 2, rw = BOLT.AA / 2, R = (p.DA || DA) / 2, h = p.lp / 2;
+    // varsayılan ağ (sayfa): baş altında 6 eleman, dışa 30 eleman; z'de ~0,8 mm (yakınsama testi: dogrulama/esd_test.js)
+    const rs = p.rs || radialNodes(rh, rw, R, h, p.nIn || 6, p.nOut || 30);
+    const nz = p.nz || Math.max(8, Math.min(40, Math.round(h / 0.8)));
+    const zs = []; for (let j = 0; j <= nz; j++) zs.push(h * j / nz);
+    const NR = rs.length, NZ = nz + 1, nn = NR * NZ, n = 2 * nn;
+    const id = (i, j) => i * NZ + j;          // düğüm numarası: önce z (bant dar)
+    const b = 2 * (NZ + 1) + 1;
+    const D = Dmat(E, nu);
+    const loadEnd = p.load === 'full' ? R : rw;
+    // eleman rijitliklerini sakla (tepki kuvveti için)
+    const elems = [];
+    for (let i = 0; i < NR - 1; i++) for (let j = 0; j < NZ - 1; j++) {
+      const nd = [id(i, j), id(i + 1, j), id(i + 1, j + 1), id(i, j + 1)];
+      const rN = [rs[i], rs[i + 1], rs[i + 1], rs[i]], zN = [zs[j], zs[j], zs[j + 1], zs[j + 1]];
+      const Ke = new Float64Array(64);
+      for (const xi of GP) for (const eta of GP) {
+        const { B, det, r } = Bmat(rN, zN, xi, eta), wgt = 2 * Math.PI * r * det;
+        const DB = [0, 1, 2, 3].map(a => { const row = new Float64Array(8); for (let c = 0; c < 8; c++) { let s = 0; for (let k = 0; k < 4; k++) s += D[a][k] * B[k][c]; row[c] = s; } return row; });
+        for (let a = 0; a < 8; a++) for (let c = 0; c < 8; c++) { let s = 0; for (let k = 0; k < 4; k++) s += B[k][a] * DB[k][c]; Ke[a * 8 + c] += s * wgt; }
+      }
+      elems.push({ i, j, nd, rN, zN, Ke });
+    }
+    // yük: üst yüzde (z = h) basınç, −z yönünde; tutarlı düğüm kuvvetleri ∫N·q·2πr dr
+    const f = new Float64Array(n);
+    const rigid = p.load === 'rigid', topDofs = [], topI = [];
+    if (rigid) for (let i = 0; i < NR; i++) if (rs[i] <= rw + 1e-9) { topDofs.push(2 * id(i, NZ - 1) + 1); topI.push(i); }
+    // somun altında sürtünme (Coulomb, μ): her düğüm tutunur (u_r = 0) ya da kayar (radyal kuvvet μ·N, kaymaya karşı).
+    // bond: tam yapışma (μ → ∞). Ara yüz (iki parça arası) simetri gereği sürtünmesizdir.
+    const mu = rigid ? (p.bond ? Infinity : (p.mu || 0)) : 0;
+    const stick = new Uint8Array(topI.length).fill(mu > 0 ? 1 : 0), fr = new Float64Array(topI.length);
+    let fricIter = 0;
+    const q = rigid ? 0 : F / (Math.PI * (loadEnd * loadEnd - rh * rh));
+    for (let i = 0; i < NR - 1 && !rigid; i++) {
+      if (rs[i] >= loadEnd - 1e-9) break;
+      const r1 = rs[i], r2 = rs[i + 1], L = r2 - r1;
+      // ∫ N1·r dr = L(2r1 + r2)/6, ∫ N2·r dr = L(r1 + 2r2)/6
+      f[2 * id(i, NZ - 1) + 1] -= q * 2 * Math.PI * L * (2 * r1 + r2) / 6;
+      f[2 * id(i + 1, NZ - 1) + 1] -= q * 2 * Math.PI * L * (r1 + 2 * r2) / 6;
+    }
+    // aktif küme: z = 0 düğümlerinde u_z = 0 kısıtı
+    const act = new Uint8Array(NR).fill(1);
+    let u = null, react = new Float64Array(NR), iter = 0;
+    for (iter = 0; iter < 300; iter++) {
+      const A = new Float64Array(n * (b + 1));
+      for (const el of elems) {
+        const dofs = []; for (const a of el.nd) dofs.push(2 * a, 2 * a + 1);
+        for (let a = 0; a < 8; a++) for (let c = 0; c < 8; c++) { const I = dofs[a], Jc = dofs[c]; if (Jc <= I) A[I * (b + 1) + (Jc - I + b)] += el.Ke[a * 8 + c]; }
+      }
+      const x = Float64Array.from(f);
+      for (let q2 = 0; q2 < topI.length; q2++) if (!stick[q2]) x[2 * id(topI[q2], NZ - 1)] += fr[q2];   // kayan düğümlerde sürtünme kuvveti
+      if (rigid) for (const I of topDofs) {                 // öngörülen u_z = −1: sütunu sağ tarafa taşı, satırı sıfırla
+        for (let c = Math.max(0, I - b); c < I; c++) { x[c] += A[I * (b + 1) + (c - I + b)]; A[I * (b + 1) + (c - I + b)] = 0; }
+        for (let r2 = I + 1; r2 <= Math.min(n - 1, I + b); r2++) { x[r2] += A[r2 * (b + 1) + (I - r2 + b)]; A[r2 * (b + 1) + (I - r2 + b)] = 0; }
+        A[I * (b + 1) + b] = 1;
+      }
+      if (rigid) for (const I of topDofs) x[I] = -1;
+      for (let q2 = 0; q2 < topI.length; q2++) { if (!stick[q2]) continue; const I = 2 * id(topI[q2], NZ - 1);   // tutunan düğüm: u_r = 0
+        for (let cc = Math.max(0, I - b); cc < I; cc++) A[I * (b + 1) + (cc - I + b)] = 0;
+        for (let r2 = I + 1; r2 <= Math.min(n - 1, I + b); r2++) A[r2 * (b + 1) + (I - r2 + b)] = 0;
+        A[I * (b + 1) + b] = 1; x[I] = 0;
+      }
+      for (let i = 0; i < NR; i++) if (act[i]) {           // u_z = 0: satır ve sütunu sıfırla
+        const I = 2 * id(i, 0) + 1;
+        for (let c = Math.max(0, I - b); c < I; c++) A[I * (b + 1) + (c - I + b)] = 0;
+        for (let r2 = I + 1; r2 <= Math.min(n - 1, I + b); r2++) A[r2 * (b + 1) + (I - r2 + b)] = 0;
+        A[I * (b + 1) + b] = 1; x[I] = 0;
+      }
+      bandChol(A, n, b); bandSolve(A, n, b, x); u = x;
+      // tepkiler: R = K·u − f (yalnız z = 0 düğümlerinin u_z serbestliği)
+      const Ku = new Float64Array(n);
+      for (const el of elems) {
+        if (el.j !== 0) continue;
+        const dofs = []; for (const a of el.nd) dofs.push(2 * a, 2 * a + 1);
+        for (let a = 0; a < 8; a++) { let s = 0; for (let c = 0; c < 8; c++) s += el.Ke[a * 8 + c] * u[dofs[c]]; Ku[dofs[a]] += s; }
+      }
+      let changed = false;
+      for (let i = 0; i < NR; i++) {
+        // K·u = f + R_destek → R_destek = K·u − f. Basma taşıyan ara yüz plakayı +z yönünde iter: R_destek > 0.
+        const I = 2 * id(i, 0) + 1; react[i] = Ku[I] - f[I];
+        if (act[i] && react[i] < -1e-12 * F) { act[i] = 0; changed = true; }
+        else if (!act[i] && u[I] < -1e-14 * F) { act[i] = 1; changed = true; }
+      }
+      if (mu > 0 && mu < Infinity) {                       // sürtünme durumlarını güncelle
+        const Kt = new Float64Array(n);
+        for (const el of elems) { if (el.j !== NZ - 2) continue; const dofs = []; for (const a of el.nd) dofs.push(2 * a, 2 * a + 1);
+          for (let a = 0; a < 8; a++) { let s2 = 0; for (let cc = 0; cc < 8; cc++) s2 += el.Ke[a * 8 + cc] * u[dofs[cc]]; Kt[dofs[a]] += s2; } }
+        let fmax = 0; for (const I of topDofs) fmax = Math.max(fmax, Math.abs(Kt[I]));
+        for (let q2 = 0; q2 < topI.length; q2++) {
+          const Iz = 2 * id(topI[q2], NZ - 1) + 1, Ir = Iz - 1, N = Math.max(0, -Kt[Iz]);   // N: somunun bastırdığı düğüm kuvveti
+          if (stick[q2]) { const T = Kt[Ir];                // tutunmak için gereken radyal kuvvet
+            if (Math.abs(T) > mu * N * (1 + 1e-9) + 1e-12 * fmax) { stick[q2] = 0; fr[q2] = mu * N * Math.sign(T); changed = true; } }
+          else { const fn = mu * N * Math.sign(fr[q2]);
+            if (u[Ir] * fr[q2] > 1e-14 * fmax) { stick[q2] = 1; fr[q2] = 0; changed = true; }          // kuvvet yönünde kayıyor: tutun
+            else if (Math.abs(fn - fr[q2]) > 1e-7 * fmax) { fr[q2] = fn; changed = true; } }
+        }
+        fricIter++;
+      }
+      if (!changed) break;
+    }
+    let topNT = null;
+    if (rigid) {                                            // somun altı düğüm kuvvetleri: N (basma) ve T (radyal), test için
+      const Kt = new Float64Array(n);
+      for (const el of elems) { if (el.j !== NZ - 2) continue; const dofs = []; for (const a of el.nd) dofs.push(2 * a, 2 * a + 1);
+        for (let a = 0; a < 8; a++) { let s2 = 0; for (let cc = 0; cc < 8; cc++) s2 += el.Ke[a * 8 + cc] * u[dofs[cc]]; Kt[dofs[a]] += s2; } }
+      topNT = topI.map(i => ({ r: rs[i], N: -Kt[2 * id(i, NZ - 1) + 1], T: Kt[2 * id(i, NZ - 1)], ur: u[2 * id(i, NZ - 1)] }));
+    }
+    if (rigid) {                                            // baş altındaki toplam kuvvet; F'e ölçekle
+      const Ku = new Float64Array(n);
+      for (const el of elems) { if (el.j !== NZ - 2) continue; const dofs = []; for (const a of el.nd) dofs.push(2 * a, 2 * a + 1);
+        for (let a = 0; a < 8; a++) { let s2 = 0; for (let c = 0; c < 8; c++) s2 += el.Ke[a * 8 + c] * u[dofs[c]]; Ku[dofs[a]] += s2; } }
+      let Ft = 0; for (const I of topDofs) Ft += -Ku[I];
+      const sc = F / Ft; for (let k = 0; k < n; k++) u[k] *= sc;
+      for (const I of topDofs) f[I] = Ku[I] * sc;          // baş altındaki düğüm kuvvetleri (−z)
+      for (let i = 0; i < NR; i++) react[i] *= sc;
+    }
+    // gerilmeler (Gauss noktaları) ve düğümlere ortalama
+    const sN = [new Float64Array(nn), new Float64Array(nn), new Float64Array(nn), new Float64Array(nn)], cnt = new Float64Array(nn);
+    let Vc = 0, Vtot = 0;                                  // basma bölgesinin (σ_z < 0) ve tüm plakanın hacmi (yarım)
+    const gauss = [];
+    for (const el of elems) {
+      const ue = []; for (const a of el.nd) ue.push(u[2 * a], u[2 * a + 1]);
+      const sg = [];
+      for (const [xi, eta] of [[GP[0], GP[0]], [GP[1], GP[0]], [GP[1], GP[1]], [GP[0], GP[1]]]) {
+        const { B, det, r } = Bmat(el.rN, el.zN, xi, eta);
+        const eps = [0, 1, 2, 3].map(k => { let s = 0; for (let c = 0; c < 8; c++) s += B[k][c] * ue[c]; return s; });
+        const s = [0, 1, 2, 3].map(a => { let t = 0; for (let k = 0; k < 4; k++) t += D[a][k] * eps[k]; return t; });
+        sg.push(s);
+        const dV = 2 * Math.PI * r * det; Vtot += dV; if (s[1] < 0) Vc += dV;
+      }
+      gauss.push(sg);
+      // Gauss değerlerini düğümlere doğrusal dış değerleme (Q4 için standart)
+      const a = 1 + Math.sqrt(3) / 2, bb = -0.5, c = 1 - Math.sqrt(3) / 2;
+      const Ex = [[a, bb, c, bb], [bb, a, bb, c], [c, bb, a, bb], [bb, c, bb, a]];
+      for (let k = 0; k < 4; k++) { for (let comp = 0; comp < 4; comp++) { let v = 0; for (let g = 0; g < 4; g++) v += Ex[k][g] * sg[g][comp]; sN[comp][el.nd[k]] += v; } cnt[el.nd[k]]++; }
+    }
+    for (let comp = 0; comp < 4; comp++) for (let k = 0; k < nn; k++) sN[comp][k] /= cnt[k];
+    // üst plakanın baş altındaki ortalama çökmesi (yük ağırlıklı): δ_yarım = −Σ f·u / F
+    let work = 0; for (let k = 0; k < n; k++) work += f[k] * u[k];
+    const dHalf = work / F;                                 // > 0 (f ve u aynı yönde)
+    const dp = 2 * dHalf;                                   // iki plaka
+    const kFE = F / dp;
+    const Dk = Math.sqrt(4 * kFE * p.lp / (Math.PI * E) + BOLT.dh * BOLT.dh);
+    // temas yarıçapı: düğüm tepkisinden basınç p_i = R_i/(2π·r_i·Δr_i); son iki temas düğümünden p² ile dış değerlemeyle
+    // p = 0 olduğu yer, [r_ic, r_ic+1] aralığında sınırlı
+    let ic = 0; for (let i = 0; i < NR; i++) if (act[i]) ic = i;
+    const pNode = i => { const a = i > 0 ? (rs[i] - rs[i - 1]) / 2 : 0, c = i < NR - 1 ? (rs[i + 1] - rs[i]) / 2 : 0; return react[i] / (2 * Math.PI * rs[i] * (a + c)); };
+    let rc = rs[ic];
+    if (ic > 0 && ic < NR - 1) { const p1 = pNode(ic - 1), p2 = pNode(ic);
+      // temas kenarında p ≈ c·√(r_c − r) (kenarda basınç kök biçiminde sıfıra iner): p² doğrusal dış değerlenir
+      rc = p1 > p2 ? rs[ic] + p2 * p2 * (rs[ic] - rs[ic - 1]) / (p1 * p1 - p2 * p2) : rs[ic];
+      rc = Math.min(rs[ic + 1], Math.max(rs[ic], rc)); }
+    // ara yüz basıncı p(r) = −σ_z(r, 0)
+    const pInt = rs.map((r, i) => Math.max(0, -sN[1][id(i, 0)]));
+    // basma bölgesinin sınırı r_b(z): basma gerilmesinin somun altı basıncının %3'üne düştüğü yer (σ_z = −0,03·q).
+    // Bu sayfanın tanımı: σ_z = 0 sınırı serbest yüzeyin hemen altında belirsizleşir ve ağa duyarlıdır (yüzeyde zaten σ_z = 0).
+    const qh = F / (Math.PI * (rw * rw - rh * rh)), thr = (p.thr == null ? 0.03 : p.thr) * qh;
+    const rb = zs.map((z, j) => {
+      for (let i = 1; i < NR; i++) {
+        const s0 = sN[1][id(i - 1, j)] + thr, s1 = sN[1][id(i, j)] + thr;
+        if (rs[i] > rw - 1e-9 && s0 < 0 && s1 >= 0) return rs[i - 1] + (rs[i] - rs[i - 1]) * s0 / (s0 - s1);
+      }
+      return j === NZ - 1 ? rw : R;
+    });
+    // hacimce eşdeğer silindir: r_b(z) sınırının içindeki hacim = (π/4)(D_V² − d_h²)·(ℓ_p/2) (yamuk kuralı)
+    let Venv = 0; for (let j = 1; j < NZ; j++) Venv += Math.PI * ((rb[j - 1] ** 2 - rh * rh) + (rb[j] ** 2 - rh * rh)) / 2 * (zs[j] - zs[j - 1]);
+    const DV = Math.sqrt(4 * Venv / (Math.PI * h) + BOLT.dh * BOLT.dh);
+    const rbMax = Math.max(...rb), zbMax = zs[rb.indexOf(rbMax)];
+    return { rs, zs, NR, NZ, id, u, sN, act, react, iter, mu, stick: Array.from(stick), topI, topNT, F, E, nu, h, lp: p.lp, rh, rw, R, qh, thr, dHalf, dp, kFE, Dk, rc, DV, Venv, rbMax, zbMax, Vc, Vtot, pInt, rb, gauss, elems, q };
+  }
+
+  // ---- not ve literatür modelleri (ℓ_p [mm])
+  function note(lp) { const Des = BOLT.AA + MAT.kmalz * lp, Ap = Math.PI / 4 * (Des * Des - BOLT.dh * BOLT.dh); return { Des, Ap, k: MAT.E * Ap / lp }; }
+  function vdi(lp, DAx) {
+    const dw = BOLT.AA, dh = BOLT.dh, E = MAT.E, w = 1, DAv = DAx || DA;
+    const bL = lp / dw, y = DAv / dw;
+    const tphi = 0.362 + 0.032 * Math.log(bL / 2) + 0.153 * Math.log(y);
+    const DAGr = dw + w * lp * tphi;
+    if (DAv < DAGr) return { tphi, DAGr, k: NaN, note: 'D_A < D_A,Gr: koni + kovan gerekir' };
+    const dP = 2 * Math.log((dw + dh) * (DAGr - dh) / ((dw - dh) * (DAGr + dh))) / (w * E * Math.PI * dh * tphi);
+    return { tphi, DAGr, k: 1 / dP, dP };
+  }
+  // VDI konisinin sayısal integrali: δ = ∫ dz / (E·A(z)), A(z) = (π/4)(D(z)² − d_h²), D(z) = d_w + 2 z tan φ (her yarıda)
+  function vdiNum(lp, DAx) {
+    const V = vdi(lp, DAx), dw = BOLT.AA, dh = BOLT.dh, E = MAT.E, h = lp / 2, N = 20000;
+    let s = 0; for (let i = 0; i < N; i++) { const z = (i + 0.5) * h / N, Dz = dw + 2 * z * V.tphi; s += (h / N) / (E * Math.PI / 4 * (Dz * Dz - dh * dh)); }
+    return { k: 1 / (2 * s) };
+  }
+  function shigley(lp) { const d = BOLT.d, E = MAT.E; return { k: 0.5774 * Math.PI * E * d / (2 * Math.log(5 * (0.5774 * lp + 0.5 * d) / (0.5774 * lp + 2.5 * d))) }; }
+  function wileman(lp) { const d = BOLT.d, E = MAT.E; return { k: E * d * 0.78715 * Math.exp(0.62873 * d / lp) }; }
+  // sayfanın kullandığı çözüm: rijit somun ve baş, altında Coulomb sürtünmesi μ = 0,12 (oturma halkasında u_z öngörülür), kenara doğru sık ağ.
+  // Somun kenarında tekillik var; bu ağ yakınsanmış çözümden %2–3 rijittir (dogrulama/esd_test.js).
+  const PAGE_MESH = { nIn: 10, nOut: 34, dz: 0.6 };
+  const MU = 0.12;   // somun ve baş altı sürtünme: VDI 2230:2015 sürtünme sınıfı B (μ_K = 0,08…0,16), ortası (Bossard TF.049)
+  // z yönünde eleman boyu en az 0,6 mm, en çok 40 eleman (ℓ_p = 80'de k_p farkı < %1, çözüm 1 s yerine 0,2 s)
+  function pageSolve(lp, extra) { const h = lp / 2; return solve(Object.assign({ lp, load: 'rigid', mu: MU, nIn: PAGE_MESH.nIn, nOut: PAGE_MESH.nOut,
+    nz: Math.max(8, Math.min(40, Math.round(h / Math.max(PAGE_MESH.dz, h / 40)))) }, extra || {})); }
+  return { BOLT, MAT, DA, PAGE_MESH, MU, solve, pageSolve, radialNodes, note, vdi, vdiNum, shigley, wileman };
+})();
+if (typeof module !== 'undefined') module.exports = ESD;
+
+</script>
+<script>
+// Üreten: dogrulama/esd_gen_table.js (esd_calc.js, sayfa ağı). Sütunlar: ℓ_p [mm], k_SE rijit somun (sayfa) [kN/mm], k_SE düzgün basınç [kN/mm], D_k, D_V, D_t [mm] (rijit somun)
+const ESD_TAB = [[20,4095.7,3411.6,28.34,34.07,35.52],[22,3885.8,3240.7,28.72,34.95,36.85],[24,3711.5,3103.7,29.09,35.82,38.27],[26,3567.2,2991.5,29.47,36.72,39.81],[28,3448.1,2897.3,29.86,37.62,40.65],[30,3344.7,2818.4,30.24,38.5,42.1],[32,3255.9,2750.8,30.63,39.36,43.67],[34,3180.4,2692.4,31.01,40.23,45.38],[36,3112.8,2640.7,31.4,41.08,47.27],[38,3053.3,2595.6,31.78,41.94,48.22],[40,3001.3,2555.6,32.16,42.74,49.93],[42,2953.8,2519.8,32.53,43.55,51.89],[44,2911.2,2487.1,32.91,44.34,54.18],[46,2873.4,2457.9,33.28,45.09,54.84],[48,2838.1,2431.4,33.65,45.83,56.98],[50,2807.7,2407.1,34.02,46.57,58.1],[52,2779.7,2384.4,34.39,47.24,60.07],[54,2754.1,2363.8,34.76,47.93,62.62],[56,2730.4,2344.8,35.12,48.57,63.34],[58,2708.4,2327.1,35.48,49.19,65.87],[60,2688.1,2310.3,35.83,49.79,66.73],[62,2669,2294.9,36.19,50.37,69.3],[64,2651.2,2280.3,36.54,50.92,70.22],[66,2634.5,2266.9,36.88,51.44,72.92],[68,2618.8,2254.2,37.23,51.93,73.85],[70,2603.9,2242.2,37.57,52.4,76.76],[72,2589.9,2230.9,37.91,52.83,77.7],[74,2576.6,2220.1,38.24,53.23,80.86],[76,2564,2209.8,38.57,53.6,81.89],[78,2552.1,2200,38.9,53.93,85.31],[80,2540.8,2190.7,39.23,54.22,86.59]];
+if (typeof module !== 'undefined') module.exports = ESD_TAB;
+
+</script>
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+const DEG = Math.PI/180;
+const B = ESD.BOLT, M = ESD.MAT;
+const rh = B.dh/2, ra = B.AA/2, R = ESD.DA/2;
+const DUR = [3.0, 1.6, 1.8];                 // adım süreleri [s] (zaman ölçeksiz)
+const LAST = DUR.length - 1;
+const HOLD = 0.8;
+const st = { lp:40, Fon:60e3, phase:1, p:1, auto:false, playing:false, hold:0, last:null, needs:true };
+let S = null, N = 100, NC = 50;                   // SE çözümü (F = 1 N), parçaların ve cıvatanın büyütmesi
+const cache = new Map();
+const NICE = [50,75,100,150,200,250,300,400,500,750,1000];
+const NICE_C = [10,15,20,25,30,40,50,75,100,150,200];
+
+function solveLp(lp){
+  if (cache.has(lp)) return cache.get(lp);
+  const s = ESD.pageSolve(lp);                  // rijit somun ve baş, altında sürtünme μ = 0,12
+  // eleman başına ortalama σ_z (F = 1)
+  s.eSz = s.gauss.map(g => (g[0][1]+g[1][1]+g[2][1]+g[3][1])/4);
+  let umax = 0; for (let k=0; k<s.u.length; k++) umax = Math.max(umax, Math.abs(s.u[k]));
+  s.umax = umax;
+  cache.set(lp, s); return s;
+}
+function rebuild(){
+  S = solveLp(st.lp);
+  // büyütme (yalnız ℓ_p'ye bağlı, aşağı yuvarlanır): 90 kN'daki en büyük yer değiştirme çizimde ≈ 0,08·ℓ_p + 2 mm olsun;
+  // ama delik duvarı cıvataya doğru çizimde en çok 0,6 mm yaklaşsın (gerçek boşluk (d_h − d)/2 = 0,75 mm büyütülmez)
+  const want = Math.min(0.08*st.lp + 2, 0.12*st.lp)/(S.umax*90e3);   // ince parçada çöküntü kalınlığın %12'sini aşmasın
+  let urIn = 0; for (let j=0;j<S.NZ;j++) urIn = Math.max(urIn, -S.u[2*S.id(0,j)]);
+  const wantGap = urIn > 0 ? 0.6/(urIn*90e3) : Infinity;
+  N = NICE[0]; for (const v of NICE) if (v <= Math.min(want, wantGap)) N = v;
+  // cıvata büyütmesi: 90 kN'da somunun cıvata üzerindeki ilerlemesi (δ_c + δ_p) çizimde ≈ 10 mm olsun; parçalarınkini aşmasın
+  const kc = ESD.MAT.E*144/st.lp, wantC = 10/(90e3/kc + 90e3/S.kFE);
+  NC = NICE_C[0]; for (const v of NICE_C) if (v <= Math.min(wantC, N)) NC = v;
+  $('lgN').textContent = N; $('lgNC').textContent = NC;
+}
+
+// ---- yer değiştirme ve gerilme ara değerlemesi (F = 1 N)
+function cell(r, zz){                          // zz: üst parçada 0…h
+  const rs = S.rs; let lo = 0, hi = rs.length-1;
+  r = Math.max(rs[0], Math.min(rs[hi], r));
+  while (hi-lo > 1){ const m = (lo+hi)>>1; if (rs[m] <= r) lo = m; else hi = m; }
+  const nz = S.NZ-1, t = Math.max(0, Math.min(1, zz/S.h))*nz; let j = Math.min(nz-1, Math.floor(t));
+  return { i:lo, j, a:(r-rs[lo])/(rs[lo+1]-rs[lo]), b:t-j };
+}
+function nodal(arrFn, c){
+  const { i, j, a, b } = c, id = S.id;
+  return (1-a)*(1-b)*arrFn(id(i,j)) + a*(1-b)*arrFn(id(i+1,j)) + a*b*arrFn(id(i+1,j+1)) + (1-a)*b*arrFn(id(i,j+1));
+}
+// şekil değiştirmiş konum: z dünyada −h…h; alt parça üst parçanın aynası
+function def(r, z, s){
+  const up = z >= 0, c = cell(r, up ? z : -z);
+  const ur = nodal(k => S.u[2*k], c), uz = nodal(k => S.u[2*k+1], c);
+  return [r + s*ur, z + s*(up ? uz : -uz)];
+}
+
+// ---- izdüşüm: hafif yukarıdan eğik bakış
+const PHI = -55*DEG, BETA = 22*DEG;           // bakış yönü (yatay açı) ve yükseklik açısı
+const RX = -Math.sin(PHI), RY = Math.cos(PHI), VX = Math.cos(PHI), VY = Math.sin(PHI);
+const cb = Math.cos(BETA), sb = Math.sin(BETA);
+let G = { g:4, ox:0, oy:0 };
+function P(r, th, z){ const x = r*Math.cos(th), y = r*Math.sin(th), X = x*RX + y*RY, d = x*VX + y*VY;
+  return [G.ox + G.g*X, G.oy - G.g*(z*cb - d*sb), d*cb + z*sb]; }
+// kesilen çeyrek: −90° < θ < 0°; kalan: 0°…270°
+const CUT0 = -90*DEG, CUT1 = 0;
+
+// ---- renkler
+const cv = $('cv3'), cvP = $('cvP'), cvD = $('cvD');
+function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+let C = {}, RGB = {};
+function hex2rgb(h){ h = h.replace('#',''); if (h.length===3) h = h.split('').map(x=>x+x).join(''); const n = parseInt(h,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+function readColors(){ ['paper','sheet','ink','muted','line','steel1','steel2','steel3','part','gap','ten','com','fis','warn','mb','combg','tenbg','fisbg'].forEach(k=>C[k]=css('--'+k));
+  ['sheet','com','ten','part','ink','steel1','steel3'].forEach(k=>RGB[k]=hex2rgb(C[k])); }
+readColors();
+if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ()=>{ readColors(); st.needs=true; });
+const mix = (a, b, t) => 'rgb('+[0,1,2].map(i=>Math.round(a[i]+(b[i]-a[i])*t)).join(',')+')';
+function stressCol(sig, qref){                 // sig < 0 basma
+  const t = -sig/qref;
+  if (t >= 0) return mix(RGB.sheet, RGB.com, Math.pow(Math.min(1,t), 0.6));
+  return mix(RGB.sheet, RGB.ten, Math.pow(Math.min(1,-t), 0.6));
+}
+function shade(base, k){ const dark = [0,0,0], lite = [255,255,255]; return k >= 0 ? mix(base, lite, k) : mix(base, dark, -k); }
+
+// ---- çizim yardımcıları (önceki sayfalarla aynı)
+function fit(c, vh){
+  const cssW = Math.max(10, c.getBoundingClientRect().width), dpr = window.devicePixelRatio||1;
+  if (vh){ const want = Math.round(vh(cssW)); if (Math.abs(c.getBoundingClientRect().height-want)>0.5) c.style.height = want+'px'; }
+  const cssH = c.getBoundingClientRect().height;
+  const W = Math.round(cssW*dpr), H = Math.round(cssH*dpr);
+  if (c.width!==W || c.height!==H){ c.width=W; c.height=H; }
+  const ctx = c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w:cssW, h:cssH, dpr};
+}
+function font(px, w){ return (w||400)+' '+px+'px "IBM Plex Sans", system-ui, sans-serif'; }
+const fmt = (v,n)=>v.toFixed(n).replace('.',',');
+const kN = v => fmt(v/1000, 0);
+function richW(ctx, str, size, wgt){
+  const re=/_\{([^}]*)\}/g; let last=0, m, W=0;
+  while ((m=re.exec(str))){ ctx.font=font(size,wgt); W+=ctx.measureText(str.slice(last,m.index)).width; ctx.font=font(size*0.72,wgt); W+=ctx.measureText(m[1]).width; last=re.lastIndex; }
+  ctx.font=font(size,wgt); W+=ctx.measureText(str.slice(last)).width; return W;
+}
+function rich(ctx, str, x, y, o){
+  o = o || {};
+  const size=o.size||12.5, wgt=o.weight||400, al=o.align||'left';
+  const parts=[]; const re=/_\{([^}]*)\}/g; let last=0, m;
+  while ((m=re.exec(str))){ if (m.index>last) parts.push([str.slice(last,m.index),0]); parts.push([m[1],1]); last=re.lastIndex; }
+  if (last<str.length) parts.push([str.slice(last),0]);
+  const fN=font(size,wgt), fS=font(size*0.72,wgt);
+  const W = richW(ctx, str, size, wgt);
+  let cx = al==='center' ? x-W/2 : al==='right' ? x-W : x;
+  if (o.bg){ ctx.save(); ctx.globalAlpha=0.88; ctx.fillStyle=C.sheet; ctx.fillRect(cx-2, y-size*0.88, W+4, size*1.22); ctx.restore(); }
+  ctx.fillStyle=o.color||C.ink; ctx.textAlign='left';
+  for (const [t,sbs] of parts){ ctx.font=sbs?fS:fN; ctx.fillText(t, cx, sbs ? y+size*0.28 : y); cx+=ctx.measureText(t).width; }
+  return W;
+}
+function arrow(ctx, x1,y1,x2,y2, col, lw, head){
+  const len = Math.hypot(x2-x1,y2-y1); if (len<0.5) return;
+  head = Math.min(head||9, len*0.7); const a=Math.atan2(y2-y1,x2-x1);
+  ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=lw||2;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2-Math.cos(a)*head*0.7,y2-Math.sin(a)*head*0.7); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-head*Math.cos(a-0.38), y2-head*Math.sin(a-0.38));
+  ctx.lineTo(x2-head*Math.cos(a+0.38), y2-head*Math.sin(a+0.38)); ctx.closePath(); ctx.fill();
+}
+function line(ctx, x1,y1,x2,y2, col, lw, dash){ ctx.save(); if (dash) ctx.setLineDash(dash); ctx.strokeStyle=col; ctx.lineWidth=lw||1; ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore(); }
+function poly(ctx, pts, fill, stroke, lw){ ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (let k=1;k<pts.length;k++) ctx.lineTo(pts[k][0], pts[k][1]); ctx.closePath();
+  if (fill){ ctx.fillStyle = fill; ctx.fill(); } if (stroke){ ctx.strokeStyle = stroke; ctx.lineWidth = lw||1; ctx.stroke(); } }
+function pline(ctx, pts, col, lw, dash){ if (pts.length<2) return; ctx.save(); if (dash) ctx.setLineDash(dash); ctx.strokeStyle=col; ctx.lineWidth=lw; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]); for (let k=1;k<pts.length;k++) ctx.lineTo(pts[k][0],pts[k][1]); ctx.stroke(); ctx.restore(); }
+
+// ---- anlık durum
+const ease = t => t<0?0 : t>1?1 : t*t*(3-2*t);
+function view(){
+  const ph = st.phase, p = st.p;
+  const V = { ph, p, f:1, cut:1, zone:0, cyl:0 };   // kesik her adımda açık
+  if (ph === 0){ V.f = ease(p); }
+  if (ph === 1){ V.zone = ease(p); }
+  if (ph === 2){ V.zone = 1; V.cyl = ease(p); }
+  V.F = V.f*st.Fon; V.s = N*V.F;              // çizimdeki yer değiştirme çarpanı [mm/(mm/N)·N]
+  return V;
+}
+
+// ---- 3B çizim (painter sırası: kenar, üst yüz, baş, kesit yüzleri, basma cismi, cıvata gövdesi, yüz çizgileri, somun, uç, cıvata hattı, ölçüler); çeyrek kesik her adımda açık
+function sceneH(w, phone){ return Math.round(Math.min(phone ? 560 : 540, Math.max(phone ? 330 : 420, w*(phone ? 0.96 : 0.8)))); }
+const ringsR = (() => { const a = []; for (let r = rh; r < R - 0.5; r += 4) a.push(r); a.push(R); return a; })();
+const zFrac = [0.25, 0.5, 0.75];
+function rimSegs(a, b){
+  // dilim sınırları: [a, b] ve silüet açıları (φ ± 90°); her alt aralık ~3°'lik dilimlere bölünür
+  const cuts = [a, b]; for (const t of [PHI + Math.PI/2, PHI + 1.5*Math.PI]){ for (const k of [-1, 0, 1]){ const tt = t + 2*Math.PI*k; if (tt > a && tt < b) cuts.push(tt); } }
+  cuts.sort((x,y)=>x-y);
+  const out = [];
+  for (let c=0;c<cuts.length-1;c++){ const A = cuts[c], Bq = cuts[c+1], n = Math.max(1, Math.ceil((Bq-A)/(3*DEG)));
+    for (let k=0;k<n;k++){ const t0 = A+(Bq-A)*k/n, t1 = A+(Bq-A)*(k+1)/n, tm = (t0+t1)/2;
+      if (Math.cos(tm)*VX + Math.sin(tm)*VY > 0) out.push([t0,t1]); } }
+  return out;
+}
+// dış kenar silindiri ve ara yüz açıklığı
+function drawRim(ctx, a, b, s){
+  const h2 = S.h, segs = rimSegs(a, b), lev = [0, 0.25, 0.5, 0.75, 1];
+  const up = lev.map(t => def(R, t*h2, s)), lo = lev.map(t => def(R, -Math.max(1e-9, t*h2), s));
+  for (const [t0, t1] of segs){
+    poly(ctx, [P(up[0][0], t0, up[0][1]), P(up[0][0], t1, up[0][1]), P(lo[0][0], t1, lo[0][1]), P(lo[0][0], t0, lo[0][1])], C.gap, C.gap, 0.6);
+    const lit = 0.22*Math.cos((t0+t1)/2 - 150*DEG);
+    for (const side of [up, lo]) for (let j=0;j<lev.length-1;j++){
+      const A = side[j], Bq = side[j+1], col = shade(RGB.part, lit);
+      poly(ctx, [P(A[0], t0, A[1]), P(A[0], t1, A[1]), P(Bq[0], t1, Bq[1]), P(Bq[0], t0, Bq[1])], col, col, 0.6);
+    }
+  }
+  for (const pt of [up[4], up[0], lo[0], lo[4]]) for (const [t0, t1] of segs) pline(ctx, [P(pt[0], t0, pt[1]), P(pt[0], t1, pt[1])], C.ink, pt === up[4] || pt === lo[4] ? 1.1 : 0.7);
+  // silüet çizgileri: bakış doğrultusuna dik iki düşey kenar (θ = φ ± 90°), kalan aralıkta olanlar
+  for (const t of [PHI + Math.PI/2, PHI + 1.5*Math.PI]){ const tt = ((t % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
+    if (tt < a - 1e-9 || tt > b + 1e-9) continue;
+    for (const side of [up, lo]) pline(ctx, side.map(q => P(q[0], tt, q[1])), C.ink, 1.1); }
+  // kenarın düşey sınır çizgileri (kesik düzlemlerinde) çizilmez; yüz çizimi kendi sınırını çizer
+}
+// üst parçanın üst yüzü: yükseklik alanı, eğime göre gölge, malzeme halkaları
+function drawTop(ctx, a, b, s){
+  const rs = S.rs, h2 = S.h, nT = Math.max(2, Math.ceil((b-a)/(4.5*DEG))), quads = [];
+  const zt = rs.map(r => def(r, h2, s));
+  for (let k=0;k<nT;k++){ const t0 = a+(b-a)*k/nT, t1 = a+(b-a)*(k+1)/nT, tm = (t0+t1)/2;
+    for (let i=0;i<rs.length-1;i++){
+      const p0 = P(zt[i][0], t0, zt[i][1]), p1 = P(zt[i+1][0], t0, zt[i+1][1]), p2 = P(zt[i+1][0], t1, zt[i+1][1]), p3 = P(zt[i][0], t1, zt[i][1]);
+      const slope = (zt[i+1][1]-zt[i][1])/(zt[i+1][0]-zt[i][0]);
+      const lit = Math.max(-0.22, Math.min(0.45, 0.26 - slope*1.1*Math.cos(tm - 120*DEG)));
+      quads.push([(p0[2]+p1[2]+p2[2]+p3[2])/4, [p0,p1,p2,p3], lit]);
+    } }
+  quads.sort((x,y)=>x[0]-y[0]);
+  for (const [, pts, lit] of quads){ const col = shade(RGB.part, lit); poly(ctx, pts, col, col, 0.5); }
+  for (const r of ringsR){ const [rr, zz] = def(r, h2, s), pts = [], n = Math.max(2, Math.ceil((b-a)/(3*DEG)));
+    for (let k=0;k<=n;k++) pts.push(P(rr, a+(b-a)*k/n, zz));
+    pline(ctx, pts, C.ink, r === ringsR[0] || r === R ? 1.1 : 0.5); }
+}
+// düğümlerin şekil değiştirmiş (r, z) konumu: üst parça
+function nodeDef(s){
+  const out = new Array(S.NR*S.NZ);
+  for (let i=0;i<S.NR;i++) for (let j=0;j<S.NZ;j++){ const k = S.id(i,j); out[k] = [S.rs[i] + s*S.u[2*k], S.zs[j] + s*S.u[2*k+1]]; }
+  return out;
+}
+// kesit yüzü (θ düzlemi): eleman renkleri, ızgara, sınırlar, ara yüz açıklığı
+function drawFace(ctx, th, V, s, nd){
+  const qref = st.Fon/ESD.note(st.lp).Ap, F = V.F;     // renk ölçeği: eşdeğer silindirdeki basınç F_ön/A_p
+  for (const sg of [1, -1]){
+    for (let e=0;e<S.elems.length;e++){
+      const el = S.elems[e], col = stressCol(S.eSz[e]*F, qref);
+      const pts = el.nd.map(k => P(nd[k][0], th, sg*nd[k][1]));
+      poly(ctx, pts, col, col, 0.6);
+    }
+  }
+  // ara yüz açıklığı (temas dışında): üst parçanın alt kenarı ile alt parçanın üst kenarı arası
+  { const top = [], bot = [];
+    for (let i=0;i<S.NR;i++){ const k = S.id(i,0); if (nd[k][1] > 1e-6 || i === S.NR-1){ top.push(P(nd[k][0], th, nd[k][1])); bot.push(P(nd[k][0], th, -nd[k][1])); } }
+    if (top.length > 1) poly(ctx, top.concat(bot.reverse()), C.gap, C.gap, 0.5); }
+  // ızgara: r = sabit ve z = sabit malzeme çizgileri
+  ctx.save(); ctx.globalAlpha *= 0.5;
+  for (const sg of [1, -1]){
+    for (const r of ringsR.slice(1, -1)){ const pts = []; for (let k=0;k<=12;k++){ const z = sg*Math.max(1e-9, S.h*k/12); const d = def(r, z, s); pts.push(P(d[0], th, d[1])); } pline(ctx, pts, C.ink, 0.6); }
+    for (const f of zFrac){ const pts = []; for (const r of S.rs){ const d = def(r, sg*f*S.h, s); pts.push(P(d[0], th, d[1])); } pline(ctx, pts, C.ink, 0.6); }
+  }
+  ctx.restore();
+}
+// kesit yüzünün dış sınırı (sg = +1 üst parça, −1 alt parça), çizimdeki konum
+function faceOutline(th, sg, nd){
+  const pts = [];
+  for (let i=0;i<S.NR;i++){ const k = S.id(i,0); pts.push(P(nd[k][0], th, sg*nd[k][1])); }
+  for (let j=1;j<S.NZ;j++){ const k = S.id(S.NR-1,j); pts.push(P(nd[k][0], th, sg*nd[k][1])); }
+  for (let i=S.NR-2;i>=0;i--){ const k = S.id(i,S.NZ-1); pts.push(P(nd[k][0], th, sg*nd[k][1])); }
+  for (let j=S.NZ-2;j>=0;j--){ const k = S.id(0,j); pts.push(P(nd[k][0], th, sg*nd[k][1])); }
+  return pts;
+}
+// parça sınırları: basma cisminden sonra çizilir, saydam kırmızı siyah çizgiyi boyamasın
+function faceBorders(ctx, nd){
+  for (const th of [CUT0, CUT1]) for (const sg of [1, -1]){ const pts = faceOutline(th, sg, nd); pts.push(pts[0]); pline(ctx, pts, C.ink, 1.1); }
+}
+// kesilen çeyrek açılırken ayrı tuvale çizilip saydamlaştırılır
+let offC = null;
+function getOff(w, h){ const dpr = window.devicePixelRatio||1; if (!offC) offC = document.createElement('canvas');
+  const W = Math.round(w*dpr), H = Math.round(h*dpr); if (offC.width !== W || offC.height !== H){ offC.width = W; offC.height = H; }
+  const c2 = offC.getContext('2d'); c2.setTransform(1,0,0,1,0,0); c2.clearRect(0,0,W,H); c2.setTransform(dpr,0,0,dpr,0,0); return c2; }
+function composite(ctx, alpha){ ctx.save(); ctx.globalAlpha = alpha; ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(offC, 0, 0); ctx.restore(); }
+// basma bölgesinin sınır yarıçapı (4. adımda D_eş/2'ye doğru dönüşür)
+const Des = lp => B.AA + M.kmalz*lp;
+function envR(j, cyl){ return S.rb[j] + (Des(st.lp)/2 - S.rb[j])*cyl; }
+// basma bölgesi cismi: kesilen çeyrekte dönel yüzey, saydam
+function drawBody(ctx, V, s, w, h, nd){
+  const c2 = getOff(w, h), nT = 24, rows = [];
+  for (let j=0;j<S.NZ;j++) rows.push(def(envR(j, V.cyl), Math.max(1e-9, S.zs[j]), s));
+  const lower = rows.map((d, j) => def(envR(j, V.cyl), -Math.max(1e-9, S.zs[j]), s));
+  const prof = lower.slice().reverse().concat(rows);   // z: −h … h
+  const quads = [];
+  for (let k=0;k<nT;k++){ const t0 = CUT0 + (CUT1-CUT0)*k/nT, t1 = CUT0 + (CUT1-CUT0)*(k+1)/nT;
+    for (let j=0;j<prof.length-1;j++){ const a = prof[j], b = prof[j+1];
+      const pts = [P(a[0], t0, a[1]), P(a[0], t1, a[1]), P(b[0], t1, b[1]), P(b[0], t0, b[1])];
+      quads.push([(pts[0][2]+pts[2][2])/2, pts]); } }
+  // üst kapak (somun altı halka)
+  const top = rows[S.NZ-1], dIn = def(rh, S.h, s), cap = [];
+  for (let k=0;k<=nT;k++) cap.push(P(top[0], CUT0 + (CUT1-CUT0)*k/nT, top[1]));
+  for (let k=nT;k>=0;k--) cap.push(P(dIn[0], CUT0 + (CUT1-CUT0)*k/nT, dIn[1]));
+  quads.sort((x,y)=>x[0]-y[0]);
+  for (const [, pts] of quads) poly(c2, pts, C.com, C.com, 0.6);
+  poly(c2, cap, C.com, C.com, 0.6);
+  // cisim yalnız parçaların kesit yüzleri üzerinde gösterilir: alt parçanın altındaki kısmı başın üstünde leke gibi durmasın
+  ctx.save(); ctx.beginPath();
+  for (const th of [CUT0, CUT1]) for (const sg of [1, -1]){ const pts = faceOutline(th, sg, nd); ctx.moveTo(pts[0][0], pts[0][1]); for (const q of pts.slice(1)) ctx.lineTo(q[0], q[1]); ctx.closePath(); }
+  ctx.clip('nonzero'); composite(ctx, 0.30*V.zone); ctx.restore();
+}
+// kesit yüzlerindeki çizgiler: basma bölgesinin sınırı, eşdeğer silindir, q okları
+function faceLines(ctx, V, s, fs){
+  const f = V.F/st.Fon;
+  for (const th of [CUT0, CUT1]){
+    if (V.zone > 0){
+      const prof = [];
+      for (let j=S.NZ-1;j>=0;j--){ const d = def(S.rb[j], -Math.max(1e-9, S.zs[j]), s); prof.push(P(d[0], th, d[1])); }
+      for (let j=0;j<S.NZ;j++){ const d = def(S.rb[j], Math.max(1e-9, S.zs[j]), s); prof.push(P(d[0], th, d[1])); }
+      ctx.save(); ctx.globalAlpha = V.zone; pline(ctx, prof, C.ink, V.cyl > 0 ? 1.3 : 2.3); ctx.restore();
+    }
+    if (V.cyl > 0){
+      const prof = [];
+      for (let j=S.NZ-1;j>=0;j--){ if (S.zs[j] > S.h - 2) continue; const d = def(envR(j, V.cyl), -Math.max(1e-9, S.zs[j]), s); prof.push(P(d[0], th, d[1])); }
+      for (let j=0;j<S.NZ;j++){ if (S.zs[j] > S.h - 2) continue; const d = def(envR(j, V.cyl), Math.max(1e-9, S.zs[j]), s); prof.push(P(d[0], th, d[1])); }
+      pline(ctx, prof, C.ink, 2.2, [7,4]);                 // uçlarda 2 mm kısa: parça hattıyla ve somun kenarındaki çöküntüyle karışmasın
+    }
+  }
+}
+// ---- cıvata, somun ve baş: dolu cisimler (kesik çeyrek dışında, 0° ≤ θ ≤ 270°)
+// Altıgen: düz yüz normalleri nOff + k·60°. Baş: nOff = 0 (köşeler 30° + k·60°). Somun: nOff = 45° + ROT
+// (köşeler 15° + k·60°; ROT = 0'da iki kesit yüzü eşit genişlikte).
+// Somunun kesiği somunla döner ve sıkma bitince (F = F_ön) parçaların ve cıvatanın kesiğiyle çakışır:
+// ROT = Δθ(F_ön) − Δθ(F) ≥ 0; sıkma başında somun Δθ(F_ön) kadar saat yönünün tersinde durur, sıkılırken saat yönünde döner.
+let ROT = 0;                                    // somunun son konumundan açısı [rad] (üstten bakınca saat yönünün tersi artı)
+const TH0 = 0, TH1 = 270*DEG, LIGHT = 160*DEG;
+function hexR(t, nOff){ const n = Math.round((t - nOff)/(60*DEG))*60*DEG + nOff; return ra/Math.cos(t - n); }
+function hexPts(nOff, t0, t1){ t0 = t0 == null ? TH0 : t0; t1 = t1 == null ? TH1 : t1;
+  const ts = [t0]; for (let k=-8;k<=8;k++){ const c = nOff + 30*DEG + 60*k*DEG; if (c > t0 + 1e-6 && c < t1 - 1e-6) ts.push(c); } ts.push(t1); return ts.sort((a,b)=>a-b); }
+const faceUp = n => Math.cos(n)*VX + Math.sin(n)*VY > 1e-9;            // yüz normali bakana dönük mü
+const litN = n => 0.12 + 0.28*Math.cos(n - LIGHT);
+// Parça yüzeyinin çizimdeki noktası: r (şekil değiştirmemiş) → [r + s·u_r, z + s·u_z]; sg = +1 üst yüz, −1 alt yüz.
+// Somun ve başın oturma yüzleri bu noktalardan kurulur (çizimde parçanın büyütülmüş çöküntüsüne uyar).
+// Delik kenarı çizimde içe kayabilir (u_r < 0); kesit çokgenlerinde r en az d/2 alınır.
+function surf(r, sg, s){ const d = def(Math.max(rh, Math.min(R, r)), sg*S.h, s); return [Math.max(B.d/2, d[0]), d[1]]; }
+function zTopAt(r, s){ return surf(r, 1, s)[1]; }
+// altıgen prizmanın yan yüzleri: alt/üst kenar noktası fonksiyonları pt0(r, t), pt1(r, t) → [r, z]
+function hexSides(ctx, nOff, pt0, pt1, t0, t1){
+  const ts = hexPts(nOff, t0, t1), faces = [];
+  for (let k=0;k<ts.length-1;k++){ const a = ts[k], b = ts[k+1], tm = (a+b)/2, n = Math.round((tm - nOff)/(60*DEG))*60*DEG + nOff;
+    if (!faceUp(n)) continue;
+    const lo = [], hi = [];
+    for (let i=0;i<=6;i++){ const t = a + (b-a)*i/6, r = hexR(t, nOff), p0 = pt0(r), p1 = pt1(r); lo.push(P(p0[0], t, p0[1])); hi.push(P(p1[0], t, p1[1])); }
+    faces.push([Math.cos(tm)*VX + Math.sin(tm)*VY, lo.concat(hi.reverse()), n]); }
+  faces.sort((x,y)=>x[0]-y[0]);
+  for (const [, pts, n] of faces) poly(ctx, pts, shade(RGB.steel1, litN(n)), C.ink, 0.9);
+}
+// kesit düzleminde (θ) bir (r, z) çokgeni
+const secPts = (th, rz) => rz.map(([r, z]) => P(r, th, z));
+// kesit yüzü bakana dönük mü: side = +1 malzeme θ'dan büyük tarafta, −1 küçük tarafta
+const secFront = (th, side) => side*(Math.sin(th)*VX - Math.cos(th)*VY) > 1e-9;
+// Somun ve baş rijittir. Oturma halkasında (r ≤ d_a/2) parça yüzü düz iner ve somun oraya oturur.
+// Halkanın dışında parça yüzü (büyütülmüş çizimde) yükselir; somunun ve başın alt yüzü çizimde bu yüze uyar.
+// Gerçekte bu kısımda somunla parça arasında mikrometre düzeyinde aralık vardır; büyütmede görünmez kalır.
+// Parça yüzünün çizilen profili: drawn r → z (her karede bir kez kurulur)
+let SEAT = null;
+function seatProfile(s){
+  const iT = S.NZ-1, rr = [], zz = [];
+  for (let i=0;i<S.NR;i++){ const k = S.id(i,iT); rr.push(S.rs[i] + s*S.u[2*k]); zz.push(S.h + s*S.u[2*k+1]); }
+  SEAT = { s, rr, zz, z0: zz[0] };
+}
+function seatZ(r, sg, s){
+  if (!SEAT || SEAT.s !== s) seatProfile(s);
+  const { rr, zz, z0 } = SEAT; let z = z0;
+  if (r > rr[0]){ let i = 1; while (i < rr.length-1 && rr[i] < r) i++;
+    const t = Math.max(0, Math.min(1, (r - rr[i-1])/(rr[i] - rr[i-1]))); z = zz[i-1] + (zz[i] - zz[i-1])*t; }
+  z = Math.max(z, z0);                                        // halkada düz (z0), dışında parça yüzü
+  return sg > 0 ? z : -z;
+}
+// oturma yüzünün kesitteki eğrisi: d/2'den r_E'ye (somun/baş kesit yüzünün dış ucu)
+function seatCurve(rE, sg, s){
+  if (!SEAT || SEAT.s !== s) seatProfile(s);
+  const out = [[B.d/2, seatZ(B.d/2, sg, s)]];
+  for (const r of SEAT.rr) if (r > B.d/2 + 1e-6 && r < rE - 1e-6) out.push([r, seatZ(r, sg, s)]);
+  out.push([rE, seatZ(rE, sg, s)]); return out;
+}
+// delik ağzı: üst yüzde cıvata ile delik kenarı arasındaki dar halka (boşluk); kesik çeyrek dışında
+function holeMouth(ctx, s){
+  const rd = B.d/2, n = 180, ring = [];                   // ince adım: cıvata yüzeyinin alt kenarıyla aynı eğri
+  for (let k=0;k<=n;k++){ const t = TH0 + (TH1-TH0)*k/n, d0 = def(rh, S.h, s); ring.push(P(Math.max(rd + 0.1, d0[0]), t, d0[1])); }
+  const inner = []; for (let k=n;k>=0;k--){ const t = TH0 + (TH1-TH0)*k/n; inner.push(P(rd, t, def(rh, S.h, s)[1])); }
+  poly(ctx, ring.concat(inner), C.gap, C.gap, 0.5);
+}
+// baş: yan yüzler ve kesit yüzü (cıvatayla tek parça); üst yüzü parçanın altında kalır, çizilmez
+function drawHead(ctx, s, zHB){
+  hexSides(ctx, 0, r => [r, zHB], r => [r, seatZ(r, -1, s)]);
+  for (const th of [CUT0, CUT1]){ const rE = hexR(th, 0), seat = seatCurve(rE, -1, s).reverse();
+    const rz = [[0, zHB], [rE, zHB]].concat(seat, [[0, seat[seat.length-1][1]]]);
+    poly(ctx, secPts(th, rz), C.steel1, C.steel1, 0.6); }
+}
+// cıvata gövdesi kesiti: bağlama boyu çekme rengiyle (F = 0'da gri), somun içi ve uç tek gri çokgen; delik ile gövde arası boşluk
+function drawShank(ctx, s, zt, zTip, f){
+  const rd = B.d/2, zH = surf(rh, -1, s)[1], zN = surf(rh, 1, s)[1], col = mix(RGB.steel1, RGB.ten, Math.pow(Math.max(0, Math.min(1, f)), 0.6));
+  // delik duvarı (çizimdeki konum), alttan üste; en az d/2 + 0,1 mm
+  const wall = [];
+  for (let j=S.NZ-1;j>=0;j--){ const d = def(rh, -Math.max(1e-9, S.zs[j]), s); wall.push([Math.max(rd + 0.1, d[0]), d[1]]); }
+  for (let j=1;j<S.NZ;j++){ const d = def(rh, S.zs[j], s); wall.push([Math.max(rd + 0.1, d[0]), d[1]]); }
+  for (const th of [CUT0, CUT1]){
+    poly(ctx, secPts(th, [[rd, zH]].concat(wall, [[rd, zN]])), C.gap, C.gap, 0.6);
+    poly(ctx, secPts(th, [[0, zH], [rd, zH], [rd, zN], [0, zN]]), col, col, 0.6);
+    poly(ctx, secPts(th, [[0, zN], [rd, zN], [rd, zTip], [0, zTip]]), C.steel1, C.steel1, 0.6);
+  }
+}
+// cıvata gövdesinin dış yüzeyi: sıkma sürerken somunun kesiği 0…ROT aralığını açıkta bırakır (cıvata var, somun yok)
+function boltInGap(ctx, s, zt){
+  if (ROT <= 1e-6) return;
+  const rd = B.d/2, z0 = surf(rh, 1, s)[1];
+  cylStrip(ctx, rd, TH0, TH0 + ROT, z0, zt);
+  if (ROT > 35*DEG){ const p0 = P(rd, 35*DEG, z0), p1 = P(rd, 35*DEG, zt); line(ctx, p0[0], p0[1], p1[0], p1[1], C.ink, 0.9); }   // gövdenin silüeti
+}
+// silindir yüzeyinin [t0, t1] aralığında bakana dönük kısmı (r, zA…zB). Aralık silüet açılarında (φ ± 90°) bölünür;
+// gölgeli dilimler şeridin kendi çokgenine kırpılır: dilim kenar boyası şeridin dışına taşmasın. Dilim 1,5°.
+const SIL = [PHI + Math.PI/2, PHI + 1.5*Math.PI];
+function cylStrip(ctx, r, t0, t1, zA, zB){
+  const cuts = [t0, t1]; for (const t of SIL) for (const k of [-2, -1, 0, 1]){ const tt = t + 2*Math.PI*k; if (tt > t0 + 1e-9 && tt < t1 - 1e-9) cuts.push(tt); }
+  cuts.sort((x,y)=>x-y);
+  for (let c=0;c<cuts.length-1;c++){ const A = cuts[c], Bq = cuts[c+1]; if (!faceUp((A+Bq)/2)) continue;
+    const n = Math.max(1, Math.ceil((Bq-A)/(1.5*DEG))), lo = [], hi = [];
+    for (let k=0;k<=n;k++){ const t = A + (Bq-A)*k/n; lo.push(P(r, t, zA)); hi.push(P(r, t, zB)); }
+    ctx.save(); ctx.beginPath(); const outline = lo.concat(hi.slice().reverse()); ctx.moveTo(outline[0][0], outline[0][1]);
+    for (const q of outline.slice(1)) ctx.lineTo(q[0], q[1]); ctx.closePath(); ctx.clip();
+    for (let k=0;k<n;k++){ const col = shade(RGB.steel1, litN(A + (Bq-A)*(k+0.5)/n)); poly(ctx, [lo[k], lo[k+1], hi[k+1], hi[k]], col, col, 0.8); }
+    ctx.restore(); }
+}
+// somun: kesiği somunla birlikte döner, sıkma sonunda parçaların kesiğiyle çakışır; yan yüzler, üst yüz, kesit yüzleri
+function drawNut(ctx, s, zt){
+  const nOff = 45*DEG + ROT, rd = B.d/2, t0 = TH0 + ROT, t1 = TH1 + ROT, c0 = CUT0 + ROT, c1 = CUT1 + ROT;
+  hexSides(ctx, nOff, r => [r, seatZ(r, 1, s)], r => [r, zt], t0, t1);
+  const ts = hexPts(nOff, t0, t1), outer = ts.map(t => P(hexR(t, nOff), t, zt)), inner = [];
+  for (let k=36;k>=0;k--) inner.push(P(rd, t0 + (t1-t0)*k/36, zt));
+  poly(ctx, outer.concat(inner), shade(RGB.steel1, 0.35), C.ink, 0.9);
+  for (const [th, side] of [[c0, -1], [c1, 1]]){ if (!secFront(th, side)) continue;   // arkaya dönük kesit yüzü çizilmez
+    const rE = hexR(th, nOff), rz = seatCurve(rE, 1, s).concat([[rE, zt], [rd, zt]]);
+    poly(ctx, secPts(th, rz), C.steel1, C.ink, 0.9); }
+}
+// cıvata ucu: somunun üstündeki kısım (yan yüz, üst kapak)
+function drawTip(ctx, zt, zTip){
+  const rd = B.d/2, n = 180;
+  cylStrip(ctx, rd, TH0, TH1, zt, zTip);
+  for (const th of [CUT0, CUT1]) poly(ctx, secPts(th, [[0, zt], [rd, zt], [rd, zTip], [0, zTip]]), C.steel1, C.steel1, 0.6);
+  const cap = []; for (let k=0;k<=n;k++) cap.push(P(rd, TH0 + (TH1-TH0)*k/n, zTip)); cap.push(P(0, 0, zTip));
+  poly(ctx, cap, shade(RGB.steel1, 0.35), C.ink, 0.9);
+  // uç tabanının görünen yayları; somunun açıkta bıraktığı 0…ROT aralığında uç ile gövde birleşiktir, kenar yok
+  for (const run of [[TH0 + Math.max(0, ROT), 35*DEG], [215*DEG, TH1]]){ if (run[1] <= run[0]) continue; const pts = []; for (let k=0;k<=12;k++) pts.push(P(rd, run[0] + (run[1]-run[0])*k/12, zt)); pline(ctx, pts, C.ink, 0.9); }
+  const e = P(rd, 35*DEG, zt), e2 = P(rd, 35*DEG, zTip), f1 = P(rd, 215*DEG, zt), f2 = P(rd, 215*DEG, zTip);
+  line(ctx, e[0], e[1], e2[0], e2[1], C.ink, 0.9); line(ctx, f1[0], f1[1], f2[0], f2[1], C.ink, 0.9);
+}
+// cıvatanın kesit dış hattı, her iki düzlemde; eksen kenarı (r = 0) dahil.
+// Alt kısım (baş + gövde, somunun üst yüzüne kadar) somundan önce çizilir: somunun önünde kalmasın.
+// Üst kısım (somunun üstündeki uç) uçtan sonra çizilir.
+function boltOutlineLow(ctx, s, zHB, zt){
+  const rd = B.d/2;
+  for (const th of [CUT0, CUT1]){ const rE = hexR(th, 0), seat = seatCurve(rE, -1, s).reverse();
+    const rz = [[0, zt], [0, zHB], [rE, zHB]].concat(seat, [[rd, zt]]);
+    pline(ctx, secPts(th, rz), C.ink, 1.0); }
+}
+function boltOutlineTip(ctx, zt, zTip){
+  const rd = B.d/2;
+  // eksen kenarı z_t'nin 0,4 mm altına uzar: uç kesitinin kenar boyası alt kısımdaki eksen çizgisinde boşluk bırakmasın
+  for (const th of [CUT0, CUT1]) pline(ctx, secPts(th, [[rd, zt], [rd, zTip], [0, zTip], [0, zt - 0.4]]), C.ink, 1.0);
+}
+// ölçü: kesit düzleminde (θ), eksenden r'ye yarıçap ölçüsü; ext: uzatma çizgisinin başladığı z.
+// Yazı dışarıda: ölçü çizgisi ok ucunun ötesine aynı doğrultuda uzar, yazı xL'de başlar (iki ölçünün yazısı aynı sütunda).
+function dimR(ctx, r, z, lab, col, fs, ext, xL, th){
+  th = th == null ? CUT1 : th;
+  const a = P(0, th, z), b = P(r, th, z), m = [(a[0]+b[0])/2, (a[1]+b[1])/2];
+  arrow(ctx, m[0], m[1], a[0], a[1], col, 1.1, 6); arrow(ctx, m[0], m[1], b[0], b[1], col, 1.1, 6);
+  if (ext != null){ const e = P(r, th, ext); line(ctx, e[0], e[1], b[0], b[1] + 4, col, 0.7); }   // uzatma çizgisi: aynı yarıçapta, eksene paralel
+  const sl = (b[1] - a[1])/(b[0] - a[0]), xe = xL - 3, ye = b[1] + sl*(xe - b[0]);
+  if (xe > b[0] + 0.5) line(ctx, b[0], b[1], xe, ye, col, 1.1);
+  rich(ctx, lab, xL, ye + fs*0.35, { size:fs, weight:600, color:col, align:'left', bg:true });
+}
+// ölçü çizgilerinin yükseklikleri (başın alt yüzüne göre): d_a/2 yakında, D_eş/2 dışta (küçük ölçü cisme yakın)
+const dimZ = (zHB, phone) => [zHB - (phone ? 6.5 : 5.5), zHB - (phone ? 12.5 : 10.5)];
+function sceneBox(phone){
+  const h2 = S.h, pts = [];
+  G.g = 1; G.ox = 0; G.oy = 0;
+  for (let k=0;k<72;k++){ const t = k*5*DEG; pts.push(P(R, t, h2), P(R, t, -h2)); }
+  const tipMax = h2 + B.m + 2*B.P + 6 + NC*90e3/kcNow();      // en büyük F_ön'de cıvata ucu
+  for (let k=0;k<6;k++){ const t = (30+60*k)*DEG; pts.push(P(ra/Math.cos(30*DEG), t, h2 + B.m + 2*B.P + 5)); }
+  pts.push(P(0, 0, tipMax), P(B.d/2, 90*DEG, tipMax));
+  const zd = dimZ(-h2 - B.k, phone)[1];                     // dıştaki ölçü çizgisi (draw3 ile aynı)
+  pts.push(P(0, 0, zd - 3), P(Des(st.lp)/2 + 12, CUT1, zd - 1), P(ra/Math.cos(30*DEG), -60*DEG, -h2 - B.k), P(R + 14, CUT1, 0), P(R + 8, 35*DEG, h2), P(R + 8, 35*DEG, -h2));
+  let x0=1e9, x1=-1e9, y0=1e9, y1=-1e9; for (const p of pts){ x0=Math.min(x0,p[0]); x1=Math.max(x1,p[0]); y0=Math.min(y0,p[1]); y1=Math.max(y1,p[1]); }
+  return { x0, x1, y0, y1 };
+}
+function fitScene(w, h, padT, padB, phone){
+  const bx = sceneBox(phone), padX = phone ? 6 : 12, padR = padX + (phone ? 20 : 24);   // sağda ℓ_p yazısının payı [px]
+  const g = Math.min((w - padX - padR)/(bx.x1 - bx.x0), (h - padT - padB)/(bx.y1 - bx.y0));
+  G.g = g; G.ox = padX + (w - padX - padR - g*(bx.x1 - bx.x0))/2 - g*bx.x0; G.oy = padT + (h - padT - padB - g*(bx.y1 - bx.y0))/2 - g*bx.y0;
+}
+// somunun dönme açısı [°]: Δθ = 360°·(δ_c + δ_p)/P (sayfanın bağıntısı); k_c notun bağıntısı, k_p SE
+const kcNow = () => ESD.MAT.E*144/st.lp;              // A_c = 144 mm² (M16, Tablo-Diy. s. 10), ℓ_c = ℓ_p
+function dTheta(F){ return 360*(F/kcNow() + F/S.kFE)/B.P; }
+function draw3(V){
+  const phone = cv.getBoundingClientRect().width < 560;
+  const {ctx, w, h} = fit(cv, vw => sceneH(vw, phone));
+  ctx.clearRect(0,0,w,h);
+  const fs = phone ? 11 : 12.5, padT = 3*(fs + 3) + 10, padB = 4;   // üstte üç yazı satırı
+  // ölçek: şu anki ℓ_p sahnesinin izdüşüm sınır kutusu tuvale sığsın, ortalansın.
+  // Ölçek yalnız ℓ_p değişince değişir (F_ön ve adımlar değiştirmez).
+  fitScene(w, h, padT, padB, phone);
+  const s = V.s, h2 = S.h;
+  SEAT = null;                                            // oturma profili bu karenin çözümü ve büyütmesiyle kurulur
+  const nd = nodeDef(s);
+  drawRim(ctx, 0, 270*DEG, s);
+  drawTop(ctx, 0, 270*DEG, s);
+  // cıvata: baş parçalarla birlikte (×N) yükselir; cıvata kendi büyütmesiyle (×NC) uzar. Uç = baş üstü + ilk boy + NC·δ_c
+  const dc = V.F/kcNow();
+  const zHB = -zTopAt(ra, s) - B.k, zt = zTopAt(ra, s) + B.m, zTip = -zTopAt(ra, s) + 2*h2 + B.m + 2*B.P + NC*dc;
+  holeMouth(ctx, s);
+  drawHead(ctx, s, zHB);                                  // alt parçanın altında ve arkasında: kesit yüzlerinden önce
+  for (const th of [CUT0, CUT1]) drawFace(ctx, th, V, s, nd);
+  if (V.zone > 0) drawBody(ctx, V, s, w, h, nd);
+  faceBorders(ctx, nd);
+  // cıvata gövdesi basma cisminin üstüne çizilir: saydam kırmızıyla karışıp mora dönmesin (mor seride F_iş rengi)
+  drawShank(ctx, s, zt, zTip, V.f);
+  faceLines(ctx, V, s, fs);
+  ROT = (dTheta(st.Fon) - dTheta(V.F))*DEG;               // sıkılırken saat yönünde döner; F = F_ön'de 0 (kesikler çakışır)
+  boltInGap(ctx, s, zt);
+  boltOutlineLow(ctx, s, zHB, zt);
+  drawNut(ctx, s, zt);
+  drawTip(ctx, zt, zTip);
+  boltOutlineTip(ctx, zt, zTip);
+  // eksen: cıvatanın dışında kalan uzantıları (içeride kesitlerin birleştiği kenar eksendir)
+  const [zd1, zd2] = dimZ(zHB, phone);                    // ölçü çizgilerinin yükseklikleri (başın altında)
+  { const a = P(0, 0, zTip + 1.5), b = P(0, 0, zTip + 7); line(ctx, a[0], a[1], b[0], b[1], C.muted, 0.9, [6,2,1.5,2]);
+    const c = P(0, 0, zHB - 1.5), e = P(0, 0, (V.cyl > 0 ? zd2 : zd1) - 1.5); line(ctx, c[0], c[1], e[0], e[1], C.muted, 0.9, [6,2,1.5,2]); }   // alttaki uzantı ölçülerin başlangıcıdır
+  // ölçüler aynı kesit yüzünde (θ = 0): iki yarıçap aynı kısalmayla çizilir, boyları doğrudan karşılaştırılabilir.
+  // Uzatma çizgileri başın altından başlar: başın yan yüzünün üstünden geçmesin.
+  if (V.cut > 0){
+    ctx.save(); ctx.globalAlpha = V.cut;
+    const xL = P(Des(st.lp)/2, CUT1, zd1)[0] + 9;           // yazı sütunu: D_eş/2 uzatma çizgisinin ötesi (adımla değişmez)
+    dimR(ctx, ra, zd1, 'd_{a}/2', C.ink, fs, zHB - 1, xL);
+    if (V.cyl > 0){ ctx.globalAlpha = V.cut*V.cyl; dimR(ctx, Des(st.lp)/2, zd2, 'D_{eş}/2', C.ink, fs, zHB - 1, xL); }
+    ctx.restore();
+  }
+  // ℓ_p ölçüsü: θ = 0 düzleminde dış kenarın yanında
+  { const TL = 35*DEG, cT = def(R, h2, s), cB = def(R, -h2, s);            // dış kenarın o anki köşeleri
+    const a = P(R + 6, TL, cB[1]), b = P(R + 6, TL, cT[1]), a0 = P(cB[0] + 1.5, TL, cB[1]), b0 = P(cT[0] + 1.5, TL, cT[1]), a1 = P(R + 8, TL, cB[1]), b1 = P(R + 8, TL, cT[1]);
+    line(ctx, a0[0], a0[1], a1[0], a1[1], C.muted, 0.7); line(ctx, b0[0], b0[1], b1[0], b1[1], C.muted, 0.7);
+    const m = [(a[0]+b[0])/2, (a[1]+b[1])/2]; arrow(ctx, m[0], m[1], a[0], a[1], C.ink, 1.1, 6); arrow(ctx, m[0], m[1], b[0], b[1], C.ink, 1.1, 6);
+    rich(ctx, 'ℓ_{p}', a[0] + 5, m[1] + 4, { size:fs, weight:600, bg:true }); }
+  rich(ctx, 'şekil değiştirme: parçalar ×'+N+', cıvata ×'+NC, 8, 16, { size:fs-0.5, color:C.muted });
+  rich(ctx, 'F = '+kN(V.F)+' kN', 8, 16 + fs + 3, { size:fs-0.5, color:C.muted });
+  rich(ctx, 'somun Δθ = '+fmt(dTheta(V.F),1)+'° (gerçek açı)', 8, 16 + 2*(fs + 3), { size:fs-0.5, color:C.muted });
+}
+
+// ---- sağ grafik 1: ara yüzdeki basınç
+function axes(ctx, pl, pt, pw, ph, xs, ys, xl, yl, X, Y){
+  ctx.strokeStyle = C.line; ctx.lineWidth = 1;
+  for (const x of xs){ ctx.beginPath(); ctx.moveTo(X(x), pt); ctx.lineTo(X(x), pt+ph); ctx.stroke(); rich(ctx, String(x), X(x), pt+ph+15, {size:11, color:C.muted, align:'center'}); }
+  for (const y of ys){ ctx.beginPath(); ctx.moveTo(pl, Y(y)); ctx.lineTo(pl+pw, Y(y)); ctx.stroke(); rich(ctx, String(y), pl-6, Y(y)+4, {size:11, color:C.muted, align:'right'}); }
+  rich(ctx, xl, pl+pw, pt+ph+30, {size:11.5, color:C.muted, align:'right'});
+  rich(ctx, yl, pl-36, pt-9, {size:11.5, color:C.muted});
+}
+function niceStep(m){ const c = [1,2,5,10,20,25,50,100,200,500]; for (const v of c) if (m/v <= 6) return v; return 1000; }
+function drawP(){
+  const {ctx, w, h} = fit(cvP);
+  ctx.clearRect(0,0,w,h);
+  const pl=44, pr=12, pt=22, pb=38, pw=w-pl-pr, ph=h-pt-pb;
+  const nt = ESD.note(st.lp), pEs = st.Fon/nt.Ap, pFE = S.pInt.map(v => v*st.Fon), pmax = Math.max(pEs, ...pFE);
+  const ys = niceStep(pmax*1.15), YM = Math.ceil(pmax*1.15/ys)*ys, XM = R;
+  const X = r => pl + r/XM*pw, Y = p => pt + ph*(1 - p/YM);
+  const yt = []; for (let y=0;y<=YM+1e-9;y+=ys) yt.push(y);
+  axes(ctx, pl, pt, pw, ph, [0,10,20,30,40,50], yt, 'r [mm]', 'p [N/mm²]', X, Y);
+  // delik bölgesi
+  ctx.fillStyle = C.line; ctx.globalAlpha = 0.5; ctx.fillRect(X(0), pt, X(rh)-X(0), ph); ctx.globalAlpha = 1;
+  rich(ctx, 'delik', (X(0)+X(rh))/2, pt+ph-6, {size:10.5, color:C.muted, align:'center'});
+  // eşdeğer silindir
+  pline(ctx, [[X(rh), Y(0)], [X(rh), Y(pEs)], [X(nt.Des/2), Y(pEs)], [X(nt.Des/2), Y(0)]], C.ink, 2, [6,4]);
+  // SE
+  const pts = S.rs.map((r, i) => [X(r), Y(pFE[i])]);
+  pline(ctx, [[X(rh), Y(0)]].concat(pts), C.com, 2.4);
+  rich(ctx, 'eşdeğer silindir', X(nt.Des/2) + 5, Y(pEs) + 4, {size:11.5, weight:600, bg:true});
+  { const rt = Math.min(S.rc - 1, Math.max((rh + S.rc)/2, nt.Des/2 + 2));   // kesikli çizginin sağında, temas içinde
+    const i = Math.max(1, S.rs.findIndex(r => r > rt)); rich(ctx, 'SE', X(S.rs[i]) + 6, Y(pFE[i]) - 6, {size:11.5, weight:600, color:C.com, bg:true}); }
+}
+// D_t için ikinci derece en küçük kareler eğrisi (tablodaki SE noktalarına)
+const DtFit = (() => { const T = ESD_TAB; let S0=0,S1=0,S2=0,S3=0,S4=0,Y0=0,Y1=0,Y2=0;
+  for (const r of T){ const x = r[0], y = r[5]; S0++; S1+=x; S2+=x*x; S3+=x*x*x; S4+=x*x*x*x; Y0+=y; Y1+=x*y; Y2+=x*x*y; }
+  const A = [[S0,S1,S2,Y0],[S1,S2,S3,Y1],[S2,S3,S4,Y2]];
+  for (let i=0;i<3;i++) for (let k=i+1;k<3;k++){ const m = A[k][i]/A[i][i]; for (let j=i;j<4;j++) A[k][j] -= m*A[i][j]; }
+  const c = [0,0,0]; for (let i=2;i>=0;i--){ let t = A[i][3]; for (let j=i+1;j<3;j++) t -= A[i][j]*c[j]; c[i] = t/A[i][i]; }
+  return x => c[0] + c[1]*x + c[2]*x*x; })();
+// ---- sağ grafik 2: çaplar ve ℓ_p
+function drawD(){
+  const {ctx, w, h} = fit(cvD);
+  ctx.clearRect(0,0,w,h);
+  const pl=44, pr=56, pt=22, pb=38, pw=w-pl-pr, ph=h-pt-pb;
+  const X = l => pl + (l-20)/60*pw, YM = 90, Ym = 20, Y = d => pt + ph*(1 - (d-Ym)/(YM-Ym));
+  axes(ctx, pl, pt, pw, ph, [20,30,40,50,60,70,80], [20,30,40,50,60,70,80,90], 'ℓ_{p} [mm]', 'çap [mm]', X, Y);
+  const T = ESD_TAB;
+  const ser = [
+    { k:'Des', col:C.ink, lw:2, dash:[6,4], v:T.map(r => [r[0], Des(r[0])]), lab:'D_{eş}' },
+    { k:'Dk', col:C.mb, lw:2.2, v:T.map(r => [r[0], r[3]]), lab:'D_{k}' },
+    { k:'Dt', col:C.com, lw:2.2, v:T.map(r => [r[0], DtFit(r[0])]), lab:'D_{t}' },
+    { k:'DV', col:C.muted, lw:1.4, dash:[3,3], v:T.map(r => [r[0], r[4]]), lab:'D_{V}' },
+  ];
+  for (const sr of ser) pline(ctx, sr.v.map(([l, d]) => [X(l), Y(d)]), sr.col, sr.lw, sr.dash);
+  // uç etiketleri: çakışmasın diye en az 13 px aralık
+  const ends = ser.map(sr => ({ sr, y: Y(sr.v[sr.v.length-1][1]) })).sort((a,b)=>a.y-b.y);
+  for (let i=1;i<ends.length;i++) if (ends[i].y - ends[i-1].y < 13) ends[i].y = ends[i-1].y + 13;
+  for (const e of ends) rich(ctx, e.sr.lab, pl+pw+6, e.y+4, {size:11.5, weight:600, color:e.sr.col});
+  // şu anki ℓ_p
+  line(ctx, X(st.lp), pt, X(st.lp), pt+ph, C.fis, 1.4, [3,3]);
+}
+
+// ---- metinler
+let lastSig = '';
+function updateText(V){
+  const sig = [st.lp, st.Fon, st.phase, V.p >= 1, Math.round(V.F/500)].join('|');
+  if (sig === lastSig) return; lastSig = sig;
+  const nt = ESD.note(st.lp), q = st.Fon/(Math.PI*(ra*ra - rh*rh)), row = ESD_TAB.find(r => r[0] === st.lp);
+  const kSE = S.kFE, Dk = S.Dk, Dt = 2*S.rc, DV = S.DV;
+  let head = '', nums = '', txt = '';
+  const kc = kcNow();
+  const gapPx = 2*N*st.Fon*S.u[2*S.id(S.NR-1, 0)+1]*G.g;   // F_ön'de dış kenarda çizilen ara yüz açıklığı [px]
+  if (V.ph === 0 && V.F < 0.02*st.Fon){ head = '1 | Sıkma'; nums = 'F = 0 kN → F<sub>ön</sub> = '+kN(st.Fon)+' kN';
+    txt = 'Somun elle oturtuldu; henüz kuvvet yok.'; }
+  else if (V.ph === 0){ head = '1 | Sıkma'; nums = 'F = '+kN(V.F)+' kN → F<sub>ön</sub> = '+kN(st.Fon)+' kN · δ<sub>c</sub> = '+fmt(V.F/kc*1000,0)+' µm, δ<sub>p</sub> = '+fmt(V.F/kSE*1000,1)+' µm (δ<sub>c</sub>/δ<sub>p</sub> = '+fmt(kSE/kc,1)+') · Δθ = '+fmt(dTheta(V.F),1)+'°';
+    txt = (V.p < 1 ? 'Somun dönüyor, F artıyor.' : 'Somun sıkıldı.')+' Somunun altındaki halka parçalara bastırır. Somun çevresi çöker, kesitte parçalar kırmızılaşır (basma), cıvata mavileşir (çekme) ve uzar: Ucu somundan dışarı çıkar. Basma somunun altında en büyüktür (F<sub>ön</sub>\'de ortalama q = '+fmt(q,0)+' N/mm², en çok somun kenarında); aşağı indikçe yanlara yayılıp azalır. Parçalar yalnız D<sub>t</sub> = '+fmt(Dt,1)+' mm çapı içinde birbirine değer'+(gapPx >= 1.5 ? '; dış kenarda aralarında açıklık oluşur.' : '.'); }
+  else if (V.ph === 1){ head = '2 | Basma bölgesi ("paraboloid")'; nums = 'Üstte '+fmt(2*ra,0)+' mm, en geniş yerinde '+fmt(2*S.rbMax,1)+' mm, ara yüzde '+fmt(2*S.rb[0],1)+' mm';
+    txt = 'Kalın çizgi basma bölgesinin sınırıdır: İçeride parçalar belirgin biçimde sıkışır, dışarıda neredeyse hiç sıkışmaz. Sınır eksen çevresinde döndürülünce fıçıya benzer bir cisim çıkar (soluk kırmızı). Not bu cisme paraboloid der (s. 75).'; }
+  else { head = '3 | Eşdeğer silindir'; nums = 'D<sub>eş</sub> = '+B.AA+' + 0,1·'+st.lp+' = '+fmt(nt.Des,1)+' mm · k<sub>p</sub> = '+fmt(nt.k/1000,0)+' kN/mm (SE: '+fmt(kSE/1000,0)+')';
+    txt = 'Hesapta basma bölgesinin yerine D<sub>eş</sub> çaplı, ortası delik bir silindir konur. Silindirin her yeri aynı basıncı taşır (sağdaki grafik). SE ile aynı k<sub>p</sub>\'yi veren silindirin çapı D<sub>k</sub> = '+fmt(Dk,1)+' mm olurdu.'; }
+  $('status').innerHTML = '<span class="big">'+head+'</span><span class="nums">'+nums+'</span>';
+  $('caption').innerHTML = txt;
+  document.querySelectorAll('.steps button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.ph === st.phase)));
+  const rows = [
+    ['grp','Sabit (M16, çelik)'],
+    ['d<sub>h</sub> (delik), d<sub>a</sub> ≈ AA (oturma)', fmt(B.dh,1)+' mm, '+B.AA+' mm'],
+    ['D<sub>A</sub> (parça dış çapı, varsayım)', ESD.DA+' mm'],
+    ['E, ν', '210 000 N/mm², 0,3'],
+    ['grp','Şu an (ℓ<sub>p</sub> = '+st.lp+' mm, F<sub>ön</sub> = '+kN(st.Fon)+' kN)'],
+    ['q = F<sub>ön</sub>/[(π/4)(d<sub>a</sub>² − d<sub>h</sub>²)] (ortalama)', fmt(q,0)+' N/mm²'],
+    ['D<sub>eş</sub> = AA + 0,1·ℓ<sub>p</sub> (not)', fmt(nt.Des,1)+' mm'],
+    ['A<sub>p</sub> = (π/4)(D<sub>eş</sub>² − d<sub>h</sub>²)', fmt(nt.Ap,0)+' mm²'],
+    ['k<sub>p</sub> = E·A<sub>p</sub>/ℓ<sub>p</sub> (not)', fmt(nt.k/1000,0)+' kN/mm'],
+    ['δ<sub>p</sub> = F<sub>ön</sub>/k<sub>p</sub> (not)', fmt(st.Fon/nt.k*1000,1)+' µm'],
+    ['k<sub>c</sub> = E<sub>c</sub>·A<sub>c</sub>/ℓ<sub>c</sub> (not, A<sub>c</sub> = 144 mm²)', fmt(kc/1000,0)+' kN/mm'],
+    ['δ<sub>c</sub> = F<sub>ön</sub>/k<sub>c</sub> (cıvatanın uzaması)', fmt(st.Fon/kc*1000,1)+' µm'],
+    ['σ = F<sub>ön</sub>/A<sub>c</sub> (cıvatada çekme)', fmt(st.Fon/144,0)+' N/mm²'],
+    ['k<sub>p</sub> (SE, rijit somun, μ = 0,12)', fmt(kSE/1000,0)+' kN/mm'],
+    ['δ<sub>p</sub> (SE)', fmt(st.Fon/kSE*1000,1)+' µm'],
+    ['D<sub>k</sub>: SE ile aynı k<sub>p</sub>', fmt(Dk,1)+' mm'],
+    ['D<sub>t</sub>: temas çapı (SE)', fmt(Dt,1)+' mm'],
+    ['D<sub>V</sub>: basma bölgesiyle aynı hacim (SE)', fmt(DV,1)+' mm'],
+    ['Δθ = 360°·(δ<sub>c</sub> + δ<sub>p,SE</sub>)/P (somunun dönme açısı)', fmt(dTheta(st.Fon),1)+'° (P = 2 mm)'],
+    ['Çizimde büyütme', 'parçalar ×'+N+', cıvata ×'+NC],
+  ];
+  $('vals').innerHTML = rows.map(r => r[0]==='grp' ? '<dt class="grp">'+r[1]+'</dt>' : '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('');
+  // k_p tablosu
+  const V2 = ESD.vdi(st.lp), sh = ESD.shigley(st.lp), wl = ESD.wileman(st.lp);
+  const T = [
+    ['Not: D<sub>eş</sub> = AA + 0,1·ℓ<sub>p</sub> (s. 75)', nt.k, 'me'],
+    ['SE, rijit somun ve baş, μ = 0,12 (bu sayfa)', kSE, ''],
+    ['SE, somun ve baş yerine düzgün basınç q', row ? row[2]*1000 : NaN, ''],
+    ['VDI 2230 Blatt 1:2015, çift koni (tan φ = '+fmt(V2.tphi,3)+')', V2.k, ''],
+    ['Shigley, kesik koni 30° (Denk. 8-22)', sh.k, ''],
+    ['Wileman ve ark. (1991), çelik (Denk. 8-23)', wl.k, ''],
+  ];
+  $('kpTab').innerHTML = '<thead><tr><th>Model</th><th>k<sub>p</sub> [kN/mm]</th><th>k<sub>p</sub>/k<sub>p,not</sub></th><th>F<sub>z</sub>/F<sub>iş</sub></th></tr></thead><tbody>' +
+    T.map(([n, k, c]) => '<tr class="'+c+'"><td>'+n+'</td><td>'+fmt(k/1000,0)+'</td><td>'+fmt(k/nt.k,2)+'</td><td>'+fmt(kc/(kc+k),3)+'</td></tr>').join('') + '</tbody>';
+  $('kcTxt').innerHTML = 'şu an k<sub>c</sub> = '+fmt(kc/1000,0)+' kN/mm, A<sub>c</sub> = 144 mm², ℓ<sub>c</sub> = ℓ<sub>p</sub>';
+}
+function updateButtons(){
+  const anim = st.p < 1 || (st.auto && st.phase < LAST);
+  const bp = $('btnPlay'), t = st.playing ? 'Durdur' : 'Devam', dis = !st.playing && !anim;
+  if (bp.textContent !== t) bp.textContent = t;
+  if (bp.disabled !== dis) bp.disabled = dis;
+}
+function draw(){ const V = view(); draw3(V); drawP(); drawD(); updateText(V); updateButtons(); }
+
+function tick(ts){
+  if (st.last == null) st.last = ts;
+  const dt = Math.min(0.1, (ts - st.last)/1000); st.last = ts;
+  if (st.playing){
+    if (st.p < 1) st.p = Math.min(1, st.p + dt/DUR[st.phase]);
+    else if (st.auto && st.phase < LAST){ st.hold += dt; if (st.hold >= HOLD){ st.hold = 0; st.phase++; st.p = 0; } }
+    else { st.playing = false; st.auto = false; }
+    st.needs = true;
+  }
+  if (st.needs){ st.needs = false; draw(); }
+  requestAnimationFrame(tick);
+}
+
+// ---- ayarlar
+const binds = {};
+let pendLp = null;
+$('inFon').addEventListener('input', e => { st.Fon = +e.target.value*1000; $('oFon').textContent = kN(st.Fon)+' kN'; lastSig=''; st.needs = true; });
+$('inLp').addEventListener('input', e => { pendLp = +e.target.value; $('oLp').textContent = pendLp+' mm';
+  requestAnimationFrame(() => { if (pendLp == null) return; st.lp = pendLp; pendLp = null; rebuild(); lastSig=''; st.needs = true; }); });
+binds.Fon = v => { $('inFon').value = v; st.Fon = v*1000; $('oFon').textContent = kN(st.Fon)+' kN'; lastSig=''; draw(); };
+binds.lp = v => { $('inLp').value = v; st.lp = v; $('oLp').textContent = v+' mm'; rebuild(); lastSig=''; draw(); };
+binds.phase = (ph, p) => { st.phase = ph; st.p = p; st.auto = false; st.playing = false; lastSig=''; draw(); };
+document.querySelectorAll('.steps button').forEach(b => b.addEventListener('click', () => {
+  st.phase = +b.dataset.ph; st.p = 0; st.auto = false; st.hold = 0; st.playing = true; lastSig=''; st.needs = true; }));
+$('btnAll').addEventListener('click', () => { st.phase = 0; st.p = 0; st.hold = 0; st.auto = true; st.playing = true; lastSig=''; st.needs = true; });
+$('btnPlay').addEventListener('click', () => { st.playing = !st.playing; lastSig=''; st.needs = true; });
+window.addEventListener('resize', () => { st.needs = true; });
+
+$('oLp').textContent = st.lp+' mm'; $('oFon').textContent = kN(st.Fon)+' kN';
+rebuild();
+requestAnimationFrame(tick);
+window.__proj = (r, t, z) => P(r, t, z); window.__st = st; window.__S = () => S; window.__binds = binds; window.__view = view; window.__N = () => N;   // test erişimi
+
+})();
+</script>
+</body>
+</html>
