@@ -1228,6 +1228,8 @@ $('btnAll').addEventListener('click', () => { st.phase = 0; st.p = 0; st.hold = 
 $('btnPlay').addEventListener('click', () => { st.playing = !st.playing; lastSig=''; st.needs = true; });
 window.addEventListener('resize', () => { lastSig = ''; st.needs = true; });
 more.addEventListener('toggle', () => { st.needs = true; });
+// Tuvalin boyutu çizimden sonra değişirse (yandaki panelin yüksekliği değişince) şekil yeniden çizilir; yoksa bit eşlem esneyerek görünür.
+if (window.ResizeObserver) new ResizeObserver(() => { st.needs = true; }).observe(cv);
 
 $('oLp').textContent = st.lp+' mm'; $('oFon').textContent = kN(st.Fon)+' kN';
 rebuild();
