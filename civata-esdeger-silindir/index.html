@@ -45,18 +45,21 @@ h1{font-size:clamp(1.4rem,2.6vw,2.15rem);font-weight:600;line-height:1.15;margin
 .lead{grid-column:1/-1;margin:4px 0 0;max-width:84ch;color:var(--muted)}
 .series{grid-column:1/-1;margin:0;font-size:.86rem;color:var(--muted)}
 .series a{color:var(--ink)}
-.stage{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,1fr);gap:12px;align-items:start}
+.stage{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(320px,1fr);gap:12px;align-items:stretch}
+.stage > .panel:first-child{display:flex;flex-direction:column}
+.stage > .panel:first-child canvas{flex:1 1 auto}
+sub{line-height:0}
 .panel{background:var(--sheet);border:1px solid var(--line);border-radius:3px;position:relative}
 .panel h2{font-size:.95rem;font-weight:600;margin:0;padding:8px 12px 0}
 .panel .sub{font-size:.84rem;color:var(--muted);margin:2px 0 0;padding:0 12px}
 canvas{display:block;width:100%}
 #cvP,#cvD{height:230px}
 .right{display:grid;gap:12px;align-content:start}
-.caption{margin:2px 12px 0;font-size:.88rem;min-height:2.7em;color:var(--ink)}
-.status{margin:6px 12px 0;padding:6px 12px;border-radius:3px;border-left:5px solid var(--mb);background:var(--okbg);display:flex;flex-wrap:wrap;gap:2px 16px;align-items:baseline}
+.caption{margin:8px 12px 0;font-size:.9rem;color:var(--ink)}
+.status{margin:12px 12px 0;padding:6px 12px;border-radius:3px;border-left:5px solid var(--mb);background:var(--okbg);display:flex;flex-direction:column;gap:1px}
 .status .big{font-size:1.02rem;font-weight:600}
 .status .nums{font-size:.88rem;color:var(--muted)}
-.vals{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:6px 12px 10px;font-size:.88rem;margin:0}
+.vals{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;padding:6px 12px 6px;font-size:.88rem;margin:0}
 .vals dt{color:var(--muted)} .vals dd{margin:0;text-align:right;font-weight:500}
 .vals .grp{grid-column:1/-1;font-weight:600;color:var(--ink);margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
 .steps{display:flex;flex-wrap:wrap;gap:6px;margin:8px 12px 0;align-items:center}
@@ -74,7 +77,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
 button:focus-visible,input:focus-visible{outline:3px solid var(--mb);outline-offset:2px}
 .steps button{padding:4px 10px;min-height:32px;font-size:.86rem}
 .legend{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0 12px;padding:8px 0 10px;border-top:1px solid var(--line);font-size:.84rem;list-style:none}
-.legend li{display:flex;align-items:center;gap:8px;line-height:1.3;flex:1 1 300px}
+.legend li{display:flex;align-items:center;gap:8px;line-height:1.3;flex:1 1 100%}
 .legend svg{flex:none;width:30px;height:20px;overflow:visible}
 .legend .t{color:var(--muted)}
 .legend a{color:var(--ink)}
@@ -93,10 +96,21 @@ table.kp th:first-child,table.kp td:first-child{text-align:left}
 table.kp thead th{font-weight:600;border-bottom:1.5px solid var(--ink)}
 table.kp tr.me td{font-weight:600}
 @media (max-width:900px){.stage{grid-template-columns:1fr}}
-.stage > .panel:first-child{display:flex;flex-direction:column}
-.stage > .panel:first-child > .caption{order:5;margin-top:8px}
-.stage > .panel:first-child > .legend{order:6}
-@media (min-width:901px) and (min-height:760px){.stage > .panel{position:sticky;top:8px}}
+.side{display:flex;flex-direction:column}
+.side .sec{font-size:.9rem;font-weight:600;margin:4px 12px 0;padding:8px 0 0;border-top:1px solid var(--line)}
+.side .sec span{font-weight:400;color:var(--muted)}
+.given{font-size:.82rem;color:var(--muted);margin:0 12px 10px}
+.side .legend{margin-top:auto}
+@media (max-width:1080px){.stage{grid-template-columns:1fr}}
+@media (max-width:1080px){.side > .caption{order:5} .side > .sec{order:6} .side > .vals{order:7} .side > .given{order:8} .side > .legend{order:9}}
+details.more{margin-top:22px;border-top:2px solid var(--ink);padding-top:10px}
+details.more > summary{cursor:pointer;font-size:1.02rem;font-weight:600;padding:2px 0}
+details.more > summary span{font-weight:400;color:var(--muted);font-size:.9rem}
+details.more > .refs{margin:8px 0 0}
+.moregrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px;align-items:start}
+.moregrid .span2{grid-column:1/-1}
+.moregrid .span2 .vals{max-width:720px}
+@media (max-width:900px){.moregrid{grid-template-columns:1fr}}
 @media (max-width:600px){
   .wrap{padding:12px 10px 32px}
   .controls{gap:6px 14px}
@@ -110,9 +124,11 @@ table.kp tr.me td{font-weight:600}
   .caption{font-size:.84rem}
   .steps{gap:4px} .steps .lab{display:none}
   .steps button{padding:3px 8px;font-size:.8rem}
-  .stage > .panel:first-child{display:flex;flex-direction:column}
-  .stage > .panel:first-child > .caption{order:5;margin-top:8px}
-  .stage > .panel:first-child > .legend{order:6}
+  .status{margin-top:10px}
+}
+@media (max-width:380px){
+  .steps{flex-wrap:nowrap}
+  .steps button{padding:3px 6px;font-size:.76rem;white-space:nowrap}
 }
 </style>
 </head>
@@ -124,18 +140,19 @@ table.kp tr.me td{font-weight:600}
     <span class="figref">Şekil 3.49: Sıkılan parçalarda deformasyon bölgesi (s. 75)</span>
   </div>
   <div class="author"><b>Ramazan Bayrak</b><a href="mailto:rbayrak@yildiz.edu.tr"><i>rbayrak@yildiz.edu.tr</i></a></div>
-  <p class="lead">Somunu sıktığınızda parçaların tamamı sıkışmaz. Yalnız cıvata çevresindeki bir bölge sıkışır; bu bölge kesitte fıçıya benzer (notta "paraboloid"). Hesapta bu bölgenin yerine D<sub>eş</sub> çaplı, ortası delik bir silindir konur. Parçaları sünger gibi düşünün: Somunun bastığı yer çöker, uzaktaki kısım neredeyse hiç sıkışmaz. <span class="hide-sm">"Baştan oynat" ile üç adımı izleyin.</span></p>
+  <p class="lead">Somunu sıktığınızda parçaların tamamı sıkışmaz. Parçaları sünger gibi düşünün: Somunun bastığı yer çöker, uzaktaki kısım neredeyse hiç sıkışmaz.</p>
   <p class="series">Serinin diğer sayfaları: <a href="../civata-on-gerilme/">Ön gerilme üçgeni</a> · <a href="../civata-onlemler/">k<sub>c</sub>/k<sub>p</sub> önlemleri</a></p>
 </header>
 
 <div class="stage">
-  <section class="panel" aria-label="Çeyrek kesik görünüş, durum ve ayarlar">
+  <section class="panel" aria-label="Çeyrek kesik görünüş">
     <h2><span class="lg">Çeyrek kesik görünüş: iki parça, cıvata ve somun (M16, çelik)</span><span class="sm">Çeyrek kesik görünüş (M16, çelik)</span></h2>
     <canvas id="cv3" role="img" aria-label="Sıkılan iki dairesel plaka hafif yukarıdan eğik bakışla çizilmiş. Önden çeyrek parça kesilip çıkarılınca kesitte basma gerilmesi renkle, basma bölgesinin sınırı kalın çizgiyle görülür."></canvas>
-    <p id="caption" class="caption" aria-live="polite"></p>
+  </section>
+  <section class="panel side" aria-label="Adımlar, ayarlar ve sayılar">
     <div id="status" class="status" role="status" aria-live="polite"></div>
+    <p id="caption" class="caption" aria-live="polite"></p>
     <div class="steps" aria-label="Adımlar">
-      <span class="lab">Adım:</span>
       <button data-ph="0">1 Sıkma</button>
       <button data-ph="1">2 Basma bölgesi</button>
       <button data-ph="2">3 Eşdeğer silindir</button>
@@ -144,26 +161,46 @@ table.kp tr.me td{font-weight:600}
       <div class="ctl btnrow">
         <button id="btnAll">Baştan oynat</button>
         <button id="btnPlay">Durdur</button>
-        <span class="hint hide-sm">Adımlar zaman ölçeksizdir.</span>
       </div>
       <div class="ctl"><label for="inFon"><span><span class="lg">Ön gerilme kuvveti F<sub>ön</sub></span><span class="sm">F<sub>ön</sub></span></span> <output id="oFon"></output></label><input id="inFon" type="range" min="10" max="90" step="1" value="60"></div>
-      <div class="ctl"><label for="inLp"><span><span class="lg">Parçaların toplam boyu ℓ<sub>p</sub></span><span class="sm">Boy ℓ<sub>p</sub></span></span> <output id="oLp"></output></label><input id="inLp" type="range" min="20" max="80" step="2" value="40"></div>
+      <div class="ctl"><label for="inLp"><span><span class="lg">Toplam parça boyu ℓ<sub>p</sub></span><span class="sm">Boy ℓ<sub>p</sub></span></span> <output id="oLp"></output></label><input id="inLp" type="range" min="20" max="80" step="2" value="40"></div>
     </div>
+    <h2 class="sec">Eşdeğer silindirle hesap <span>(s. 75)</span></h2>
+    <dl class="vals" id="vals"></dl>
+    <p class="given">AA = 24 mm (anahtar ağzı açıklığı), d<sub>h</sub> = 17,5 mm (delik çapı), E&nbsp;=&nbsp;210&nbsp;000&nbsp;N/mm² (çelik).</p>
     <ul class="legend" aria-label="Şekildeki işaretler">
-      <li><svg viewBox="0 0 30 20"><defs><linearGradient id="gC" x1="0" x2="1"><stop offset="0" stop-color="var(--sheet)"/><stop offset="1" stop-color="var(--com)"/></linearGradient></defs><rect x="1" y="4" width="28" height="12" fill="url(#gC)" stroke="var(--ink)" stroke-width="0.6"/></svg><span class="t">Kırmızı: Parçalardaki basma gerilmesi. Renk koyulaştıkça basma artar. Tam kırmızı, eşdeğer silindirdeki basınca (F<sub>ön</sub>/A<sub>p</sub>) eşit ya da ondan büyüktür. A<sub>p</sub>, eşdeğer silindirin kesit alanıdır.</span></li>
-      <li><svg viewBox="0 0 30 20"><defs><linearGradient id="gT" x1="0" x2="1"><stop offset="0" stop-color="var(--sheet)"/><stop offset="1" stop-color="var(--ten)"/></linearGradient></defs><rect x="9" y="1" width="12" height="18" fill="url(#gT)" stroke="var(--ink)" stroke-width="0.6"/></svg><span class="t">Mavi: Cıvatadaki çekme gerilmesi σ = F/A<sub>c</sub> (A<sub>c</sub>: diş dibi kesiti). Sıkma başında gri, sonunda tam mavidir. Parçalarda görülen soluk mavi lekeler küçük çekme bölgeleridir.</span></li>
-      <li><svg viewBox="0 0 30 20"><path d="M2 4 Q15 8 28 4 M2 10 Q15 13 28 10 M2 16 L28 16 M8 2 L9 18 M16 2 L16 18 M24 2 L23 18" stroke="var(--ink)" stroke-opacity="0.45" stroke-width="0.8" fill="none"/></svg><span class="t">İnce ızgara: Parçaya çizilmiş düşünülen çizgiler. Parça sıkıştıkça birbirine yaklaşırlar. Üst yüzdeki halkalar da bu çizgilerdir. Parçaların şekil değiştirmesi <span id="lgN"></span> kat büyütüldü.</span></li>
-      <li><svg viewBox="0 0 30 20"><path d="M6 2 C22 6 22 14 8 18" stroke="var(--ink)" stroke-width="2.2" fill="none"/><path d="M6 2 C22 6 22 14 8 18 L2 18 L2 2Z" fill="var(--com)" fill-opacity="0.25" stroke="none"/></svg><span class="t">Kalın çizgi (2. adım): Basma bölgesinin sınırı. Sınırda basma gerilmesi, somun altındaki ortalama basınç q'nun %3'üne iner. Sınır eksen çevresinde döndürülünce soluk kırmızı cisim çıkar; notta buna "paraboloid" denir.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="15" y1="1" x2="15" y2="19" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/></svg><span class="t">Kalın kesikli çizgi (3. adım): Eşdeğer silindir, D<sub>eş</sub> = AA + k<sub>malz</sub>·ℓ<sub>p</sub> (s. 75).</span></li>
-      <li><svg viewBox="0 0 30 20"><path d="M8 4 L15 1 L22 4 L22 17 L15 20 L8 17Z" fill="var(--steel1)" stroke="var(--ink)" stroke-width="0.9"/><line x1="15" y1="1" x2="15" y2="20" stroke="var(--ink)" stroke-width="0.9"/></svg><span class="t">Gri: Cıvata, somun ve baş. Somun sıkılırken (üstten bakınca) saat yönünde döner; dönme açısı Δθ sol üstte yazar ve büyütülmedi. Somunun kesiği somunla birlikte döner, sıkma bitince parçaların kesiğiyle çakışır. Cıvata uzadıkça ucu somundan dışarı çıkar. Cıvatanın uzaması <span id="lgNC"></span> kat büyütüldü, parçalarınkinden az. Bu yüzden iki uzamayı çizimde karşılaştırmayın; gerçek değerler durum kutusunda.</span></li>
-      <li><svg viewBox="0 0 30 20"><rect x="1" y="3" width="28" height="6" fill="var(--part)" stroke="var(--ink)" stroke-width="0.6"/><path d="M8 11 L29 9.5 L29 12.5 L8 11Z" fill="var(--gap)"/><rect x="1" y="12" width="28" height="6" fill="var(--part)" stroke="var(--ink)" stroke-width="0.6"/></svg><span class="t">Koyu: İki yüzey arasındaki açıklık. Dış kenardaki koyu kama, iki parçanın birbirinden ayrıldığı yerdir. Parçalar yalnız D<sub>t</sub> çapı içinde birbirine değer. Cıvata ile delik duvarı arasındaki ince şerit de açıklıktır (d<sub>h</sub> − d = 1,5 mm).</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="15" y1="1" x2="15" y2="19" stroke="var(--muted)" stroke-width="0.9" stroke-dasharray="6 2 1.5 2"/></svg><span class="t">Noktalı kesikli çizgi: Cıvata ekseni. d<sub>a</sub>/2 ve D<sub>eş</sub>/2 eksenden ölçülen yarıçaplardır; d<sub>a</sub> somun ve başın oturma çapıdır (Şekil 3.49). ℓ<sub>p</sub>, parçaların sıkılmadan önceki toplam boyudur.</span></li>
+      <li><svg viewBox="0 0 30 20"><defs><linearGradient id="gC" x1="0" x2="1"><stop offset="0" stop-color="var(--sheet)"/><stop offset="1" stop-color="var(--com)"/></linearGradient></defs><rect x="1" y="4" width="28" height="12" fill="url(#gC)" stroke="var(--ink)" stroke-width="0.6"/></svg><span class="t">Kırmızı: Basma gerilmesi. Renk koyulaştıkça basma artar.</span></li>
+      <li><svg viewBox="0 0 30 20"><defs><linearGradient id="gT" x1="0" x2="1"><stop offset="0" stop-color="var(--sheet)"/><stop offset="1" stop-color="var(--ten)"/></linearGradient></defs><rect x="9" y="1" width="12" height="18" fill="url(#gT)" stroke="var(--ink)" stroke-width="0.6"/></svg><span class="t">Mavi: Çekme gerilmesi. Cıvata sıkıldıkça mavileşir.</span></li>
+      <li><svg viewBox="0 0 30 20"><path d="M2 4 Q15 8 28 4 M2 10 Q15 13 28 10 M2 16 L28 16 M8 2 L9 18 M16 2 L16 18 M24 2 L23 18" stroke="var(--ink)" stroke-opacity="0.45" stroke-width="0.8" fill="none"/></svg><span class="t">İnce ızgara: Parçaya çizilmiş düşünülen çizgiler. Parça sıkıştıkça birbirine yaklaşırlar.</span></li>
+      <li><svg viewBox="0 0 30 20"><path d="M6 2 C22 6 22 14 8 18" stroke="var(--ink)" stroke-width="2.2" fill="none"/><path d="M6 2 C22 6 22 14 8 18 L2 18 L2 2Z" fill="var(--com)" fill-opacity="0.25" stroke="none"/></svg><span class="t">Kalın çizgi: Basma bölgesinin sınırı (2. adım).</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="15" y1="1" x2="15" y2="19" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/></svg><span class="t">Kalın kesikli çizgi: Eşdeğer silindir (3. adım).</span></li>
     </ul>
   </section>
-  <div class="right">
+</div>
+
+<section class="notes">
+  <div>
+    <h3>Nasıl okunur?</h3>
+    <p>İki eşit çelik plaka M16 cıvatayla sıkılmış. Şekle hafif yukarıdan bakıyorsunuz. Önden çeyrek parça kesilip çıkarılmış. Şekil 3.49 bu kesitin düz çizimidir. Baş altta, somun üstte. Parçaların şekil değiştirmesi gözle görülsün diye büyütüldü. Büyütme şeklin sol üstünde yazar. Plakalar dış kenarda birbirinden hafifçe ayrılır. Bu aralık çizimde koyu görünür.</p>
+  </div>
+  <div>
+    <h3>Semboller</h3>
+    <p class="refs">D<sub>eş</sub>: Eşdeğer silindirin dış çapı. Bağıntıdaki 0,1 katsayısı çelik içindir (k<sub>malz</sub>, s. 75). A<sub>p</sub>: Eşdeğer silindirin kesit alanı. k<sub>p</sub>: Parçaların rijitliği. δ<sub>p</sub>: Parçaların toplam kısalması. d<sub>a</sub>: Somunun ve başın parçaya oturduğu çap. ℓ<sub>p</sub>: Parçaların sıkılmadan önceki toplam boyu.</p>
+  </div>
+  <div>
+    <h3>Kabuller ve kaynak</h3>
+    <p class="refs">İki plaka aynı kalınlıkta (ℓ<sub>p</sub>/2) ve çelik. Parça dış çapı D<sub>A</sub> = 100 mm alındı (varsayım). Renkler ve basma bölgesinin sınırı sonlu eleman çözümünden gelir. Sınırda basma gerilmesi, somun altındaki ortalama basıncın %3'üne iner. Cıvatanın uzaması parçaların kısalmasından daha az büyütüldü. Bu yüzden ikisini çizimde karşılaştırmayın. Adımlar zaman ölçeksizdir.</p>
+    <p class="refs">F. Dikmen, <i>Makine Elemanları 1 Ders Notları</i>, YTÜ, s. 72–75, Şekil 3.49; Tablo-Diy. s. 1, 10, 11.</p>
+  </div>
+</section>
+
+<details class="more" id="more">
+  <summary>Ayrıntılar: Notun bağıntısı ne kadar doğru? <span>(ders kapsamı dışında, meraklısına)</span></summary>
+  <p class="refs">Bu bölümde notun bağıntısı, sonlu eleman (SE) çözümüyle ve başka kaynaklardaki modellerle karşılaştırılır. Sayılar yukarıdaki ayarlara göre değişir.</p>
+  <div class="moregrid">
     <section class="panel" aria-label="Ara yüzdeki basınç dağılımı">
       <h2>İki parça birbirine ne kadar bastırıyor?</h2>
-      <p class="sub">Kırmızı eğri: Sonlu eleman (SE) çözümünde iki parçanın birbirine bastığı basınç p, eksenden uzaklık r'ye göre. Kesikli çizgi: Notun eşdeğer silindirinde varsayılan düzgün basınç F<sub>ön</sub>/A<sub>p</sub>. Kuvvet, eğrinin altındaki düz alan değildir: Her r'deki basınç o halkanın alanıyla (2πr·dr) çarpılıp toplanır. Böyle toplanınca iki dağılım da F<sub>ön</sub>'ü verir. SE basıncı deliğin yanında yüksek, dışa doğru azalır ve parçaların ayrıldığı yerde sıfıra iner.</p>
+      <p class="sub">Kırmızı eğri: SE çözümünde iki parçanın birbirine bastığı basınç p, eksenden uzaklık r'ye göre. Kesikli çizgi: Notun eşdeğer silindirinde varsayılan düzgün basınç F<sub>ön</sub>/A<sub>p</sub>. Kuvvet, eğrinin altındaki düz alan değildir: Her r'deki basınç o halkanın alanıyla (2πr·dr) çarpılıp toplanır. Böyle toplanınca iki dağılım da F<sub>ön</sub>'ü verir. SE basıncı deliğin yanında yüksek, dışa doğru azalır ve parçaların ayrıldığı yerde sıfıra iner.</p>
       <canvas id="cvP" role="img" aria-label="Ara yüzde yarıçapa göre basınç: SE çözümü ve eşdeğer silindir"></canvas>
     </section>
     <section class="panel" aria-label="Çapların parça boyuna göre değişimi">
@@ -171,25 +208,23 @@ table.kp tr.me td{font-weight:600}
       <p class="sub">Dört çap da ortası delik (d<sub>h</sub>) bir silindirin dış çapıdır; farkları neye eşit tutulduklarıdır. Kalın kesikli D<sub>eş</sub>: Notun bağıntısı, AA + 0,1·ℓ<sub>p</sub>. Yeşil D<sub>k</sub>: Rijitliği SE ile aynı olan silindir; E·A/ℓ<sub>p</sub> = k<sub>p,SE</sub>. İnce gri kesikli D<sub>V</sub>: Hacmi, 2. adımdaki basma bölgesinin hacmine eşit olan silindir (notun "hacimce eşdeğer" tanımı). Kırmızı D<sub>t</sub>: Parçaların birbirine değdiği çap. Mor kesikli düşey çizgi: Şu anki ℓ<sub>p</sub>.</p>
       <canvas id="cvD" role="img" aria-label="Parça boyuna göre eşdeğer çaplar"></canvas>
     </section>
-    <section class="panel" aria-label="Sayılar">
+    <section class="panel span2" aria-label="Sayılar">
       <h2>Sayılar</h2>
-      <dl class="vals" id="vals"></dl>
+      <dl class="vals" id="valsX"></dl>
     </section>
   </div>
-</div>
-
-<section class="notes">
-  <div>
-    <h3>Nasıl okunur?</h3>
-    <p>İki eşit çelik plaka M16 cıvatayla sıkılmış. Görünüş hafif yukarıdan; önden çeyrek parça kesilip çıkarılmış, Şekil 3.49 bu kesitin düz çizimidir. Baş altta, somun üstte. 1. adımda somun sıkılır, 2. adımda basma bölgesinin sınırı, 3. adımda eşdeğer silindir çizilir. Ayarlarla ön gerilme kuvvetini (F<sub>ön</sub>) ve parçaların toplam boyunu (ℓ<sub>p</sub>) değiştirebilirsiniz.</p>
-  </div>
+  <section class="notes">
   <div>
     <h3>Gerçek parçada ne olur?</h3>
-    <p>Somun parçaya yalnız d<sub>a</sub> çaplı halkada basar. Kuvvet parçanın içinde yanlara yayılarak iki parçanın ara yüzüne iner. Bu yüzden basma bölgesi somunun altında dar başlar, aşağı indikçe genişler. Not bu bölgenin biçimi için denklem vermez, deneylere dayanır (s. 75). Buradaki sınır sonlu eleman (SE) çözümünden çıktı. Uzaktaki kısım neredeyse hiç kuvvet taşımaz. Plakalar hafifçe eğilir ve dış kenarda birbirinden ayrılır. Bu ayrılma mikrometre düzeyindedir, çizimde büyütüldü. Plaka inceldikçe ayrılma artar (ℓ<sub>p</sub> = 20 mm'yi deneyin).</p>
+    <p>Somun parçaya yalnız d<sub>a</sub> çaplı halkada basar. Kuvvet parçanın içinde yanlara yayılarak iki parçanın ara yüzüne iner. Bu yüzden basma bölgesi somunun altında dar başlar, aşağı indikçe genişler. Not bu bölgenin biçimi için denklem vermez, deneylere dayanır (s. 75). Buradaki sınır SE çözümünden çıktı. Uzaktaki kısım neredeyse hiç kuvvet taşımaz. Plakalar hafifçe eğilir ve dış kenarda birbirinden ayrılır. Parçalar yalnız D<sub>t</sub> çapı içinde birbirine değer. Bu ayrılma mikrometre düzeyindedir, çizimde büyütüldü. Plaka inceldikçe ayrılma artar (ℓ<sub>p</sub> = 20 mm'yi deneyin).</p>
   </div>
   <div>
     <h3>Eşdeğer silindir neye eşdeğer?</h3>
     <p>Notta silindirin paraboloide hacimce eşdeğer olduğu yazar (s. 75). Hesaba giren büyüklük ise k<sub>p</sub>'dir. SE çözümünde aynı k<sub>p</sub>'yi veren silindirin çapı D<sub>k</sub>, D<sub>eş</sub>'ten 2–7 mm büyük çıkar (ℓ<sub>p</sub> = 20…80 mm). Bu fark k<sub>p</sub>'de %34–72'lik bir farka karşılık gelir. Yani not, parçaları SE çözümüne göre daha esnek hesaplar. Basma bölgesiyle aynı hacimdeki silindirin çapı D<sub>V</sub> ise D<sub>k</sub>'den de büyüktür, çünkü bölgenin dış kısmı az sıkışır. Bu yüzden "eşdeğer" sözünü "aynı yaylanmayı veren" diye okumak daha doğru olur.</p>
+  </div>
+  <div>
+    <h3>Somun ve cıvata</h3>
+    <p>Somun sıkılırken (üstten bakınca) saat yönünde döner. Somunun kesiği somunla birlikte döner ve sıkma bitince parçaların kesiğiyle çakışır. Dönme açısı Δθ büyütülmeden çizilir. Değeri Sayılar tablosundadır. Cıvata uzadıkça ucu somundan dışarı çıkar. Cıvata ile delik duvarı arasındaki ince koyu şerit açıklıktır (d<sub>h</sub> − d = 1,5 mm).</p>
   </div>
   <div class="wide">
     <h3>Başka modeller aynı k<sub>p</sub>'yi veriyor mu?</h3>
@@ -200,22 +235,21 @@ table.kp tr.me td{font-weight:600}
   <div class="wide">
     <h3>Bağıntılar</h3>
     <div class="eqs">
-    <p class="eq">k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub>, &nbsp;A<sub>p</sub> = (π/4)·(D<sub>eş</sub>² − d<sub>h</sub>²) &nbsp;(s. 75)</p>
-    <p class="eq">D<sub>eş</sub> = AA + k<sub>malz</sub>·ℓ<sub>p</sub>, &nbsp;çelikte k<sub>malz</sub> = 0,1 &nbsp;(s. 75)</p>
     <p class="eq">q = F<sub>ön</sub>/[(π/4)·(d<sub>a</sub>² − d<sub>h</sub>²)]</p>
     <p class="eq">k<sub>p,SE</sub> = F<sub>ön</sub>/δ<sub>p</sub>, &nbsp;D<sub>k</sub> = √(4·k<sub>p,SE</sub>·ℓ<sub>p</sub>/(π·E) + d<sub>h</sub>²)</p>
     <p class="eq">D<sub>V</sub>: (π/4)·(D<sub>V</sub>² − d<sub>h</sub>²)·ℓ<sub>p</sub> = basma bölgesinin hacmi</p>
     <p class="eq">Δθ = 360°·(δ<sub>c</sub> + δ<sub>p</sub>)/P, &nbsp;δ<sub>c</sub> = F/k<sub>c</sub>, δ<sub>p</sub> = F/k<sub>p,SE</sub></p>
     <p class="eq">VDI 2230: D<sub>A,Gr</sub> = d<sub>w</sub> + ℓ<sub>K</sub>·tan φ, &nbsp;tan φ = 0,362 + 0,032·ln(β<sub>L</sub>/2) + 0,153·ln y</p>
     </div>
-    <p class="refs">Semboller. d<sub>h</sub>: delik çapı (17,5 mm). d<sub>a</sub>: somun ve başın oturma çapı (Şekil 3.49). AA: anahtar ağzı açıklığı (24 mm). D<sub>A</sub>: parçaların dış çapı. D<sub>t</sub>: parçaların birbirine değdiği çap. q: oturma halkasındaki ortalama basınç. σ<sub>z</sub>: eksen doğrultusundaki normal gerilme (basmada eksi). δ<sub>p</sub>: iki parçanın toplam kısalması, δ<sub>c</sub>: cıvatanın uzaması. P: vida adımı (2 mm). VDI'daki d<sub>w</sub> ve ℓ<sub>K</sub>, buradaki d<sub>a</sub> ve ℓ<sub>p</sub>'dir; β<sub>L</sub> = ℓ<sub>K</sub>/d<sub>w</sub>, y = D<sub>A</sub>/d<sub>w</sub>.</p>
+    <p class="refs">Semboller. D<sub>A</sub>: parçaların dış çapı. D<sub>t</sub>: parçaların birbirine değdiği çap. q: oturma halkasındaki ortalama basınç. σ<sub>z</sub>: eksen doğrultusundaki normal gerilme (basmada eksi). δ<sub>c</sub>: cıvatanın uzaması. P: vida adımı (2 mm). VDI'daki d<sub>w</sub> ve ℓ<sub>K</sub>, buradaki d<sub>a</sub> ve ℓ<sub>p</sub>'dir; β<sub>L</sub> = ℓ<sub>K</sub>/d<sub>w</sub>, y = D<sub>A</sub>/d<sub>w</sub>.</p>
     <h3>Kabuller</h3>
-    <p class="refs">İki plaka aynı kalınlıkta (ℓ<sub>p</sub>/2) ve çelik: E = 210 000 N/mm², ν = 0,3 (Tablo-Diy. s. 1). Parça dış çapı D<sub>A</sub> = 100 mm alındı; 120 mm'de k<sub>p</sub> %1'den az değişir. Oturma çapı d<sub>a</sub> ≈ AA = 24 mm (Tablo-Diy. s. 11'deki şekilde "≈ Ø s"). Somun ve baş rijit kabul edildi, oturma halkasında parça yüzü düz iner. Halkada sürtünme katsayısı μ = 0,12'dir; bu, VDI 2230 sürtünme sınıfı B'nin (0,08…0,16) ortasıdır (Bossard, <i>TF.049</i>). İki parçanın ara yüzü sürtünmesizdir ve yalnız basma taşır. Malzeme doğrusal elastiktir. Bu kabullerle bölgenin biçimi F<sub>ön</sub>'e bağlı değildir; F<sub>ön</sub> yalnız çökmeyi ve rengin koyuluğunu artırır.</p>
-    <p class="refs">Basma bölgesinin sınırı σ<sub>z</sub> = −0,03·q alındı. Sınır σ<sub>z</sub> = 0 alınamaz, çünkü serbest yüzeyde σ<sub>z</sub> zaten sıfırdır. Eşik değişince bölge genişler ya da daralır: ℓ<sub>p</sub> = 40 mm'de eşik %1, %3 ve %5 iken D<sub>V</sub> = 47,3; 42,7 ve 39,9 mm olur. Somunun dönme açısı Δθ, somunun cıvata üzerindeki ilerlemesinden (δ<sub>c</sub> + δ<sub>p</sub>) hesaplandı; diş ve somun şekil değiştirmesi ihmal edildi. Animasyon zaman ölçeksizdir.</p>
+    <p class="refs">E = 210 000 N/mm², ν = 0,3 (Tablo-Diy. s. 1). Parça dış çapı D<sub>A</sub> = 100 mm alındı; 120 mm'de k<sub>p</sub> %1'den az değişir. Oturma çapı d<sub>a</sub> ≈ AA = 24 mm (Tablo-Diy. s. 11'deki şekilde "≈ Ø s"). Somun ve baş rijit kabul edildi, oturma halkasında parça yüzü düz iner. Halkada sürtünme katsayısı μ = 0,12'dir; bu, VDI 2230 sürtünme sınıfı B'nin (0,08…0,16) ortasıdır (Bossard, <i>TF.049</i>). İki parçanın ara yüzü sürtünmesizdir ve yalnız basma taşır. Malzeme doğrusal elastiktir. Bu kabullerle bölgenin biçimi F<sub>ön</sub>'e bağlı değildir; F<sub>ön</sub> yalnız çökmeyi ve rengin koyuluğunu artırır. Tam kırmızı, eşdeğer silindirdeki basınca (F<sub>ön</sub>/A<sub>p</sub>) eşit ya da ondan büyük basmadır.</p>
+    <p class="refs">Basma bölgesinin sınırı σ<sub>z</sub> = −0,03·q alındı. Sınır σ<sub>z</sub> = 0 alınamaz, çünkü serbest yüzeyde σ<sub>z</sub> zaten sıfırdır. Eşik değişince bölge genişler ya da daralır: ℓ<sub>p</sub> = 40 mm'de eşik %1, %3 ve %5 iken D<sub>V</sub> = 47,3; 42,7 ve 39,9 mm olur. Somunun dönme açısı Δθ, somunun cıvata üzerindeki ilerlemesinden (δ<sub>c</sub> + δ<sub>p</sub>) hesaplandı; diş ve somun şekil değiştirmesi ihmal edildi.</p>
     <p class="refs">Çözüm. Parçalar her ℓ<sub>p</sub> için tarayıcıda, dört düğümlü eksenel simetrik (aksisimetrik) sonlu elemanlarla çözülür. Temas aktif küme yöntemiyle, somun altındaki sürtünme yineli olarak hesaplanır. Sonuçlar iki bağımsız çözümle karşılaştırıldı: scikit-fem (ikinci dereceden üçgen eleman) ve CalculiX. Somun kenarında gerilme tekil olduğundan sayfanın ağı, yakınsanmış çözümden %2–3 rijit sonuç verir.</p>
-    <p class="refs">Kaynaklar. F. Dikmen, <i>Makine Elemanları 1 Ders Notları</i>, YTÜ, s. 72–75, Şekil 3.49; Tablo-Diy. s. 1, 10, 11. VDI 2230 Blatt 1:2015, deformasyon konisi; bağıntılar ikincil kaynaktan alındı (S. Voigt, <i>Schraubenverbindungen: Tragfähigkeitsnachweis nach VDI 2230</i>, Hochschule Anhalt, ders sunumu). R. G. Budynas, J. K. Nisbett, <i>Shigley's Mechanical Engineering Design</i>, 10. baskı, Bölüm 8.5 (Denk. 8-22, 8-23, Tablo 8-8). J. Wileman, M. Choudury, I. Green, "Computation of member stiffness in bolted connections", <i>J. Mech. Des.</i> 113 (1991) 432–437.</p>
+    <p class="refs">Kaynaklar. VDI 2230 Blatt 1:2015, deformasyon konisi; bağıntılar ikincil kaynaktan alındı (S. Voigt, <i>Schraubenverbindungen: Tragfähigkeitsnachweis nach VDI 2230</i>, Hochschule Anhalt, ders sunumu). R. G. Budynas, J. K. Nisbett, <i>Shigley's Mechanical Engineering Design</i>, 10. baskı, Bölüm 8.5 (Denk. 8-22, 8-23, Tablo 8-8). J. Wileman, M. Choudury, I. Green, "Computation of member stiffness in bolted connections", <i>J. Mech. Des.</i> 113 (1991) 432–437.</p>
   </div>
-</section>
+  </section>
+</details>
 </div>
 
 <script>
@@ -544,7 +578,6 @@ function rebuild(){
   // cıvata büyütmesi: 90 kN'da somunun cıvata üzerindeki ilerlemesi (δ_c + δ_p) çizimde ≈ 10 mm olsun; parçalarınkini aşmasın
   const kc = ESD.MAT.E*144/st.lp, wantC = 10/(90e3/kc + 90e3/S.kFE);
   NC = NICE_C[0]; for (const v of NICE_C) if (v <= Math.min(wantC, N)) NC = v;
-  $('lgN').textContent = N; $('lgNC').textContent = NC;
 }
 
 // ---- yer değiştirme ve gerilme ara değerlemesi (F = 1 N)
@@ -652,7 +685,7 @@ function view(){
 }
 
 // ---- 3B çizim (painter sırası: kenar, üst yüz, baş, kesit yüzleri, basma cismi, cıvata gövdesi, yüz çizgileri, somun, uç, cıvata hattı, ölçüler); çeyrek kesik her adımda açık
-function sceneH(w, phone){ return Math.round(Math.min(phone ? 560 : 540, Math.max(phone ? 330 : 420, w*(phone ? 0.96 : 0.8)))); }
+function sceneH(w, phone){ return Math.round(Math.min(phone ? 560 : 640, Math.max(phone ? 330 : 420, w*(phone ? 0.96 : 0.76)))); }
 const ringsR = (() => { const a = []; for (let r = rh; r < R - 0.5; r += 4) a.push(r); a.push(R); return a; })();
 const zFrac = [0.25, 0.5, 0.75];
 function rimSegs(a, b){
@@ -971,7 +1004,7 @@ function draw3(V){
   const phone = cv.getBoundingClientRect().width < 560;
   const {ctx, w, h} = fit(cv, vw => sceneH(vw, phone));
   ctx.clearRect(0,0,w,h);
-  const fs = phone ? 11 : 12.5, padT = 3*(fs + 3) + 10, padB = 4;   // üstte üç yazı satırı
+  const fs = phone ? 11 : 12.5, padT = (fs + 3) + 12, padB = 4;   // üstte tek yazı satırı (büyütme)
   // ölçek: şu anki ℓ_p sahnesinin izdüşüm sınır kutusu tuvale sığsın, ortalansın.
   // Ölçek yalnız ℓ_p değişince değişir (F_ön ve adımlar değiştirmez).
   fitScene(w, h, padT, padB, phone);
@@ -1016,9 +1049,7 @@ function draw3(V){
     line(ctx, a0[0], a0[1], a1[0], a1[1], C.muted, 0.7); line(ctx, b0[0], b0[1], b1[0], b1[1], C.muted, 0.7);
     const m = [(a[0]+b[0])/2, (a[1]+b[1])/2]; arrow(ctx, m[0], m[1], a[0], a[1], C.ink, 1.1, 6); arrow(ctx, m[0], m[1], b[0], b[1], C.ink, 1.1, 6);
     rich(ctx, 'ℓ_{p}', a[0] + 5, m[1] + 4, { size:fs, weight:600, bg:true }); }
-  rich(ctx, 'şekil değiştirme: parçalar ×'+N+', cıvata ×'+NC, 8, 16, { size:fs-0.5, color:C.muted });
-  rich(ctx, 'F = '+kN(V.F)+' kN', 8, 16 + fs + 3, { size:fs-0.5, color:C.muted });
-  rich(ctx, 'somun Δθ = '+fmt(dTheta(V.F),1)+'° (gerçek açı)', 8, 16 + 2*(fs + 3), { size:fs-0.5, color:C.muted });
+  rich(ctx, 'çizimde şekil değiştirme: parçalar ×'+N+', cıvata ×'+NC, 8, 16, { size:fs-0.5, color:C.muted });
 }
 
 // ---- sağ grafik 1: ara yüzdeki basınç
@@ -1083,48 +1114,69 @@ function drawD(){
 
 // ---- metinler
 let lastSig = '';
+// adım metinleri: k = a (sıkma başı), b (sıkılıyor), c (sıkıldı), d (basma bölgesi), e (eşdeğer silindir) → [başlık, sayı satırı, açıklama]
+const S1 = ' Somunun altındaki halka parçalara bastırır. Parçalar kırmızılaşır (basma), cıvata mavileşir (çekme) ve uzar. Basma somunun altında en büyüktür. Aşağı indikçe yanlara yayılır ve azalır.';
+function stepText(k, F){
+  if (k === 'a') return ['1 | Sıkma', 'F = 0 kN', 'Somun elle oturtuldu. Henüz kuvvet yok.'];
+  if (k === 'b') return ['1 | Sıkma', 'F = '+kN(F)+' kN', 'Somun dönüyor, kuvvet artıyor.'+S1];
+  if (k === 'c') return ['1 | Sıkma', 'F = F<sub>ön</sub> = '+kN(st.Fon)+' kN', 'Somun sıkıldı.'+S1];
+  if (k === 'd') return ['2 | Basma bölgesi', 'Notta bu bölgeye paraboloid denir (s. 75).', 'Kalın çizgi basma bölgesinin sınırıdır. İçinde parçalar belirgin biçimde sıkışır, dışında neredeyse hiç sıkışmaz. Sınır eksen çevresinde döndürülünce fıçıya benzer bir cisim çıkar (soluk kırmızı).'];
+  return ['3 | Eşdeğer silindir', 'D<sub>eş</sub> = '+B.AA+' + 0,1·'+st.lp+' = '+fmt(ESD.note(st.lp).Des,1)+' mm', 'Hesapta basma bölgesinin yerine D<sub>eş</sub> çaplı, ortası delik bir silindir alınır (kesikli çizgi). Silindirin her yerinin aynı basıncı taşıdığı kabul edilir.'];
+}
+// durum kutusu ve açıklama, adımların en uzun metnine göre yer ayırır: adım değişince altındaki düğmeler ve ayarlar yer değiştirmesin
+let resW = -1;
+function reserveText(){
+  const stEl = $('status'), cap = $('caption'), w = Math.round(cap.getBoundingClientRect().width);
+  if (w === resW || w < 10) return; resW = w;
+  const keepS = stEl.innerHTML, keepC = cap.innerHTML; let hS = 0, hC = 0;
+  stEl.style.minHeight = cap.style.minHeight = '';
+  for (const k of ['a','b','c','d','e']){ const t = stepText(k, st.Fon);
+    stEl.innerHTML = '<span class="big">'+t[0]+'</span><span class="nums">'+t[1]+'</span>'; cap.innerHTML = t[2];
+    hS = Math.max(hS, stEl.getBoundingClientRect().height); hC = Math.max(hC, cap.getBoundingClientRect().height); }
+  stEl.innerHTML = keepS; cap.innerHTML = keepC;
+  stEl.style.minHeight = Math.ceil(hS)+'px'; cap.style.minHeight = Math.ceil(hC)+'px';
+}
 function updateText(V){
   const sig = [st.lp, st.Fon, st.phase, V.p >= 1, Math.round(V.F/500)].join('|');
   if (sig === lastSig) return; lastSig = sig;
   const nt = ESD.note(st.lp), q = st.Fon/(Math.PI*(ra*ra - rh*rh)), row = ESD_TAB.find(r => r[0] === st.lp);
   const kSE = S.kFE, Dk = S.Dk, Dt = 2*S.rc, DV = S.DV;
-  let head = '', nums = '', txt = '';
   const kc = kcNow();
-  const gapPx = 2*N*st.Fon*S.u[2*S.id(S.NR-1, 0)+1]*G.g;   // F_ön'de dış kenarda çizilen ara yüz açıklığı [px]
-  if (V.ph === 0 && V.F < 0.02*st.Fon){ head = '1 | Sıkma'; nums = 'F = 0 kN → F<sub>ön</sub> = '+kN(st.Fon)+' kN';
-    txt = 'Somun elle oturtuldu; henüz kuvvet yok.'; }
-  else if (V.ph === 0){ head = '1 | Sıkma'; nums = 'F = '+kN(V.F)+' kN → F<sub>ön</sub> = '+kN(st.Fon)+' kN · δ<sub>c</sub> = '+fmt(V.F/kc*1000,0)+' µm, δ<sub>p</sub> = '+fmt(V.F/kSE*1000,1)+' µm (δ<sub>c</sub>/δ<sub>p</sub> = '+fmt(kSE/kc,1)+') · Δθ = '+fmt(dTheta(V.F),1)+'°';
-    txt = (V.p < 1 ? 'Somun dönüyor, F artıyor.' : 'Somun sıkıldı.')+' Somunun altındaki halka parçalara bastırır. Somun çevresi çöker, kesitte parçalar kırmızılaşır (basma), cıvata mavileşir (çekme) ve uzar: Ucu somundan dışarı çıkar. Basma somunun altında en büyüktür (F<sub>ön</sub>\'de ortalama q = '+fmt(q,0)+' N/mm², en çok somun kenarında); aşağı indikçe yanlara yayılıp azalır. Parçalar yalnız D<sub>t</sub> = '+fmt(Dt,1)+' mm çapı içinde birbirine değer'+(gapPx >= 1.5 ? '; dış kenarda aralarında açıklık oluşur.' : '.'); }
-  else if (V.ph === 1){ head = '2 | Basma bölgesi ("paraboloid")'; nums = 'Üstte '+fmt(2*ra,0)+' mm, en geniş yerinde '+fmt(2*S.rbMax,1)+' mm, ara yüzde '+fmt(2*S.rb[0],1)+' mm';
-    txt = 'Kalın çizgi basma bölgesinin sınırıdır: İçeride parçalar belirgin biçimde sıkışır, dışarıda neredeyse hiç sıkışmaz. Sınır eksen çevresinde döndürülünce fıçıya benzer bir cisim çıkar (soluk kırmızı). Not bu cisme paraboloid der (s. 75).'; }
-  else { head = '3 | Eşdeğer silindir'; nums = 'D<sub>eş</sub> = '+B.AA+' + 0,1·'+st.lp+' = '+fmt(nt.Des,1)+' mm · k<sub>p</sub> = '+fmt(nt.k/1000,0)+' kN/mm (SE: '+fmt(kSE/1000,0)+')';
-    txt = 'Hesapta basma bölgesinin yerine D<sub>eş</sub> çaplı, ortası delik bir silindir konur. Silindirin her yeri aynı basıncı taşır (sağdaki grafik). SE ile aynı k<sub>p</sub>\'yi veren silindirin çapı D<sub>k</sub> = '+fmt(Dk,1)+' mm olurdu.'; }
-  $('status').innerHTML = '<span class="big">'+head+'</span><span class="nums">'+nums+'</span>';
-  $('caption').innerHTML = txt;
+  const T3 = stepText(V.ph === 0 ? (V.F < 0.02*st.Fon ? 'a' : V.p < 1 ? 'b' : 'c') : V.ph === 1 ? 'd' : 'e', V.F);
+  $('status').innerHTML = '<span class="big">'+T3[0]+'</span><span class="nums">'+T3[1]+'</span>';
+  $('caption').innerHTML = T3[2];
+  reserveText();
   document.querySelectorAll('.steps button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.ph === st.phase)));
+  // ana ekran: notun bağıntılarıyla dört sayı
+  const main = [
+    ['D<sub>eş</sub> = AA + 0,1·ℓ<sub>p</sub>', fmt(nt.Des,1)+' mm'],
+    ['A<sub>p</sub> = (π/4)·(D<sub>eş</sub>² − d<sub>h</sub>²)', fmt(nt.Ap,0)+' mm²'],
+    ['k<sub>p</sub> = E·A<sub>p</sub>/ℓ<sub>p</sub>', fmt(nt.k/1000,0)+' kN/mm'],
+    ['δ<sub>p</sub> = F<sub>ön</sub>/k<sub>p</sub>', fmt(st.Fon/nt.k*1000,1)+' µm'],
+  ];
+  $('vals').innerHTML = main.map(r => '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('');
+  // ayrıntılar: SE çözümü ve cıvata
   const rows = [
+    ['grp','Şu an (ℓ<sub>p</sub> = '+st.lp+' mm, F<sub>ön</sub> = '+kN(st.Fon)+' kN)'],
+    ['k<sub>p</sub> = E·A<sub>p</sub>/ℓ<sub>p</sub> (not)', fmt(nt.k/1000,0)+' kN/mm'],
+    ['k<sub>p</sub> (SE, rijit somun, μ = 0,12)', fmt(kSE/1000,0)+' kN/mm'],
+    ['δ<sub>p</sub> (not) ve δ<sub>p</sub> (SE)', fmt(st.Fon/nt.k*1000,1)+' µm, '+fmt(st.Fon/kSE*1000,1)+' µm'],
+    ['D<sub>eş</sub> (not)', fmt(nt.Des,1)+' mm'],
+    ['D<sub>k</sub>: SE ile aynı k<sub>p</sub>', fmt(Dk,1)+' mm'],
+    ['D<sub>V</sub>: basma bölgesiyle aynı hacim (SE)', fmt(DV,1)+' mm'],
+    ['D<sub>t</sub>: temas çapı (SE)', fmt(Dt,1)+' mm'],
+    ['Basma bölgesinin çapı: üstte, en geniş yerinde, ara yüzde', fmt(2*ra,0)+' mm, '+fmt(2*S.rbMax,1)+' mm, '+fmt(2*S.rb[0],1)+' mm'],
+    ['q = F<sub>ön</sub>/[(π/4)(d<sub>a</sub>² − d<sub>h</sub>²)] (somun altında ortalama basınç)', fmt(q,0)+' N/mm²'],
+    ['k<sub>c</sub> = E<sub>c</sub>·A<sub>c</sub>/ℓ<sub>c</sub> (not, A<sub>c</sub> = 144 mm²)', fmt(kc/1000,0)+' kN/mm'],
+    ['δ<sub>c</sub> = F<sub>ön</sub>/k<sub>c</sub> (cıvatanın uzaması)', fmt(st.Fon/kc*1000,1)+' µm'],
+    ['σ = F<sub>ön</sub>/A<sub>c</sub> (cıvatada çekme)', fmt(st.Fon/144,0)+' N/mm²'],
+    ['Δθ = 360°·(δ<sub>c</sub> + δ<sub>p,SE</sub>)/P (somunun dönme açısı)', fmt(dTheta(st.Fon),1)+'° (P = 2 mm)'],
     ['grp','Sabit (M16, çelik)'],
     ['d<sub>h</sub> (delik), d<sub>a</sub> ≈ AA (oturma)', fmt(B.dh,1)+' mm, '+B.AA+' mm'],
     ['D<sub>A</sub> (parça dış çapı, varsayım)', ESD.DA+' mm'],
     ['E, ν', '210 000 N/mm², 0,3'],
-    ['grp','Şu an (ℓ<sub>p</sub> = '+st.lp+' mm, F<sub>ön</sub> = '+kN(st.Fon)+' kN)'],
-    ['q = F<sub>ön</sub>/[(π/4)(d<sub>a</sub>² − d<sub>h</sub>²)] (ortalama)', fmt(q,0)+' N/mm²'],
-    ['D<sub>eş</sub> = AA + 0,1·ℓ<sub>p</sub> (not)', fmt(nt.Des,1)+' mm'],
-    ['A<sub>p</sub> = (π/4)(D<sub>eş</sub>² − d<sub>h</sub>²)', fmt(nt.Ap,0)+' mm²'],
-    ['k<sub>p</sub> = E·A<sub>p</sub>/ℓ<sub>p</sub> (not)', fmt(nt.k/1000,0)+' kN/mm'],
-    ['δ<sub>p</sub> = F<sub>ön</sub>/k<sub>p</sub> (not)', fmt(st.Fon/nt.k*1000,1)+' µm'],
-    ['k<sub>c</sub> = E<sub>c</sub>·A<sub>c</sub>/ℓ<sub>c</sub> (not, A<sub>c</sub> = 144 mm²)', fmt(kc/1000,0)+' kN/mm'],
-    ['δ<sub>c</sub> = F<sub>ön</sub>/k<sub>c</sub> (cıvatanın uzaması)', fmt(st.Fon/kc*1000,1)+' µm'],
-    ['σ = F<sub>ön</sub>/A<sub>c</sub> (cıvatada çekme)', fmt(st.Fon/144,0)+' N/mm²'],
-    ['k<sub>p</sub> (SE, rijit somun, μ = 0,12)', fmt(kSE/1000,0)+' kN/mm'],
-    ['δ<sub>p</sub> (SE)', fmt(st.Fon/kSE*1000,1)+' µm'],
-    ['D<sub>k</sub>: SE ile aynı k<sub>p</sub>', fmt(Dk,1)+' mm'],
-    ['D<sub>t</sub>: temas çapı (SE)', fmt(Dt,1)+' mm'],
-    ['D<sub>V</sub>: basma bölgesiyle aynı hacim (SE)', fmt(DV,1)+' mm'],
-    ['Δθ = 360°·(δ<sub>c</sub> + δ<sub>p,SE</sub>)/P (somunun dönme açısı)', fmt(dTheta(st.Fon),1)+'° (P = 2 mm)'],
-    ['Çizimde büyütme', 'parçalar ×'+N+', cıvata ×'+NC],
   ];
-  $('vals').innerHTML = rows.map(r => r[0]==='grp' ? '<dt class="grp">'+r[1]+'</dt>' : '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('');
+  $('valsX').innerHTML = rows.map(r => r[0]==='grp' ? '<dt class="grp">'+r[1]+'</dt>' : '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('');
   // k_p tablosu
   const V2 = ESD.vdi(st.lp), sh = ESD.shigley(st.lp), wl = ESD.wileman(st.lp);
   const T = [
@@ -1145,7 +1197,8 @@ function updateButtons(){
   if (bp.textContent !== t) bp.textContent = t;
   if (bp.disabled !== dis) bp.disabled = dis;
 }
-function draw(){ const V = view(); draw3(V); drawP(); drawD(); updateText(V); updateButtons(); }
+const more = $('more');
+function draw(){ const V = view(); draw3(V); if (more.open){ drawP(); drawD(); } updateText(V); updateButtons(); }
 
 function tick(ts){
   if (st.last == null) st.last = ts;
@@ -1173,7 +1226,8 @@ document.querySelectorAll('.steps button').forEach(b => b.addEventListener('clic
   st.phase = +b.dataset.ph; st.p = 0; st.auto = false; st.hold = 0; st.playing = true; lastSig=''; st.needs = true; }));
 $('btnAll').addEventListener('click', () => { st.phase = 0; st.p = 0; st.hold = 0; st.auto = true; st.playing = true; lastSig=''; st.needs = true; });
 $('btnPlay').addEventListener('click', () => { st.playing = !st.playing; lastSig=''; st.needs = true; });
-window.addEventListener('resize', () => { st.needs = true; });
+window.addEventListener('resize', () => { lastSig = ''; st.needs = true; });
+more.addEventListener('toggle', () => { st.needs = true; });
 
 $('oLp').textContent = st.lp+' mm'; $('oFon').textContent = kN(st.Fon)+' kN';
 rebuild();
