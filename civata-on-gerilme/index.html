@@ -45,24 +45,25 @@ h1{font-size:clamp(1.4rem,2.6vw,2.15rem);font-weight:600;line-height:1.15;margin
 .lead{grid-column:1/-1;margin:4px 0 0;max-width:80ch;color:var(--muted)}
 .series{grid-column:1/-1;margin:0;font-size:.86rem;color:var(--muted)}
 .series a{color:var(--ink)}
-.stage{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);gap:12px;align-items:start}
+.stage{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(320px,1fr);gap:12px;align-items:stretch}
+sub{line-height:0}
 .panel{background:var(--sheet);border:1px solid var(--line);border-radius:3px;position:relative}
 .panel h2{font-size:.95rem;font-weight:600;margin:0;padding:8px 12px 0}
 .panel .sub{font-size:.84rem;color:var(--muted);margin:2px 0 0;padding:0 12px}
 canvas{display:block;width:100%}
 #cvF{height:280px}
 .right{display:grid;gap:12px;align-content:start}
-.caption{margin:2px 12px 0;font-size:.88rem;min-height:2.7em;color:var(--ink)}
-.status{margin:6px 12px 0;padding:6px 12px;border-radius:3px;border-left:5px solid var(--mb);background:var(--okbg);display:flex;flex-wrap:wrap;gap:2px 16px;align-items:baseline}
+.caption{margin:8px 12px 0;font-size:.9rem;color:var(--ink)}
+.status{margin:12px 12px 0;padding:6px 12px;border-radius:3px;border-left:5px solid var(--mb);background:var(--okbg);display:flex;flex-direction:column;gap:1px}
 .status.warn{border-left-color:var(--warn);background:var(--warnbg)}
 .status .big{font-size:1.02rem;font-weight:600}
 .status.warn .big{color:var(--warn)}
 .status .nums{font-size:.88rem;color:var(--muted)}
-.vals{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:6px 12px 10px;font-size:.88rem;margin:0}
-.vals dt{color:var(--muted)} .vals dd{margin:0;text-align:right;font-weight:500}
+.vals{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:6px 12px 10px;font-size:.88rem;margin:0}
+.vals dt{color:var(--muted)} .vals dd{margin:0;text-align:right;font-weight:500;white-space:nowrap}
 .vals .grp{grid-column:1/-1;font-weight:600;color:var(--ink);margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
-.steps{display:flex;flex-wrap:wrap;gap:6px;margin:8px 12px 0;align-items:center}
-.steps .lab{font-size:.84rem;color:var(--muted);margin-right:2px}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin:10px 12px 0;align-items:center}
+.steps button{flex:1 1 auto}
 .controls{border-top:1px solid var(--line);margin:8px 12px 0;padding:10px 0 10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 20px;align-items:end}
 .ctl label{display:flex;justify-content:space-between;align-items:baseline;font-size:.86rem;color:var(--muted);gap:8px}
 .ctl output{color:var(--ink);font-weight:500;white-space:nowrap}
@@ -78,23 +79,48 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .steps button{padding:4px 10px;min-height:32px;font-size:.86rem}
 .legend{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0 12px;padding:8px 0 10px;border-top:1px solid var(--line);font-size:.84rem;list-style:none}
 .legend li{display:flex;align-items:center;gap:8px;line-height:1.3;flex:1 1 300px}
+.lgA{margin-top:4px}
+.lgB{display:none}
+@media (max-width:1080px){.lgA{display:none} .lgB{display:flex;margin-top:10px}}
 .legend svg{flex:none;width:30px;height:20px;overflow:visible}
 .legend .t{color:var(--muted)}
 .notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px 28px;margin-top:20px}
-.notes > div:last-child{grid-column:1/-1;border-top:1px solid var(--line);padding-top:10px}
-.notes > div:last-child .refs{max-width:115ch}
+.notes > div.wide{grid-column:1/-1;border-top:1px solid var(--line);padding-top:10px}
+.notes > div.wide .refs{max-width:115ch}
 .notes h3{font-size:1.05rem;font-weight:600;margin:0 0 6px}
 .notes p{margin:0 0 8px;max-width:70ch}
 .eqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 32px}
 .eq{font-family:"IBM Plex Serif",Georgia,serif;font-size:1rem;margin:0 0 4px}
 .refs{font-size:.85rem;color:var(--muted)}
 .yorum{color:var(--muted);font-style:italic}
-@media (max-width:1050px){.controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:900px){.stage{grid-template-columns:1fr}}
-@media (min-width:901px) and (min-height:760px){.stage > .panel{position:sticky;top:8px}}
+@media (max-width:1080px){.stage{grid-template-columns:1fr}}
+.side{display:flex;flex-direction:column}
+.side .controls{grid-template-columns:1fr;gap:10px}
+.tblwrap{overflow-x:auto;margin:0 12px}
+.side .tblwrap{margin-top:2px}
+.ctab{border-collapse:collapse;font-size:.88rem;width:100%}
+.ctab th,.ctab td{padding:4px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.ctab th:first-child,.ctab td:first-child{text-align:left;white-space:normal;padding-left:0}
+.ctab th:last-child,.ctab td:last-child{padding-right:0}
+.ctab th{font-weight:600;color:var(--muted)}
+.mini td:nth-child(n+2){font-weight:500;vertical-align:top}
+.side .mini{max-width:560px}
+.mini .why{display:block;font-size:.8rem;color:var(--muted)}
+.side .caption{margin-bottom:10px}
+details.more{margin-top:22px;border-top:2px solid var(--ink);padding-top:10px}
+details.more > summary{cursor:pointer;font-size:1.02rem;font-weight:600;padding:2px 0}
+details.more > summary span{font-weight:400;color:var(--muted);font-size:.9rem}
+details.more > .refs{margin:8px 0 0}
+details.more h3.sec{font-size:1.05rem;font-weight:600;margin:16px 0 6px}
+details.more .controls{margin:0;border-top:0;padding-top:4px;grid-template-columns:repeat(3,minmax(0,1fr))}
+details.more, details.more *{box-sizing:border-box}   /* details içeriği tarayıcının iç yuvasından miras alır; inherit burada content-box verir */
+.moregrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px;align-items:start}
+.moregrid .panel{padding-bottom:10px}
+.moregrid .panel h2 + .sub{margin-bottom:4px}
+@media (max-width:900px){.moregrid{grid-template-columns:1fr} details.more .controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:600px){
   .wrap{padding:12px 10px 32px}
-  .controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px}
+  .controls{gap:6px 14px}
   .ctl label{font-size:.8rem}
   .lg{display:none} .sm{display:inline}
   .author{font-size:.75rem}
@@ -103,11 +129,10 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   .hide-sm{display:none}
   .legend{font-size:.8rem}
   .caption{font-size:.84rem}
-  .steps{gap:4px} .steps .lab{display:none}
+  .steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
   .steps button{padding:3px 8px;font-size:.8rem}
-  .stage > .panel:first-child{display:flex;flex-direction:column}
-  .stage > .panel:first-child > .caption{order:5;margin-top:8px}
-  .stage > .panel:first-child > .legend{order:6}
+  .status{margin-top:10px}
+  .ctab{font-size:.84rem}
 }
 </style>
 </head>
@@ -124,13 +149,22 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 </header>
 
 <div class="stage">
-  <section class="panel" aria-label="Cıvata bağlantısı, ön gerilme üçgeni ve ayarlar">
+  <section class="panel" aria-label="Cıvata bağlantısı ve ön gerilme üçgeni">
     <h2><span class="lg">Kesit (Şekil 3.44) ve ön gerilme üçgeni (Şekil 3.45, 3.46)</span><span class="sm">Kesit ve ön gerilme üçgeni</span></h2>
+    <p class="sub" id="given"></p>
     <canvas id="cvMain" role="img" aria-label="Solda iki parçayı sıkan cıvatanın kesiti, sağda kuvvet-uzama diyagramı. Sıkma ve işletme kuvveti adım adım gösterilir."></canvas>
-    <p id="caption" class="caption" aria-live="polite"></p>
+    <ul class="legend lgA" aria-label="Şekildeki işaretler">
+      <li><svg viewBox="0 0 30 20"><line x1="3" y1="17" x2="27" y2="3" stroke="var(--ten)" stroke-width="2.4"/></svg><span class="t">Mavi: Cıvata. Uzaması δ<sub>c</sub>, eğimi k<sub>c</sub> = tan φ.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="3" y1="3" x2="27" y2="17" stroke="var(--com)" stroke-width="2.4"/></svg><span class="t">Kırmızı: Parçalar. Kısalması δ<sub>p</sub>, eğimi k<sub>p</sub> = tan ψ.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="6" y1="18" x2="6" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M6 2 L2.5 8 L9.5 8Z" fill="var(--fis)"/><line x1="24" y1="18" x2="24" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M24 2 L20.5 8 L27.5 8Z" fill="var(--fis)"/></svg><span class="t">Mor: İşletme kuvveti F<sub>iş</sub> ve ek şekil değiştirme δ'.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--muted)" stroke-dasharray="3 2"/><line x1="1" y1="15" x2="29" y2="15" stroke="var(--muted)" stroke-dasharray="3 2"/></svg><span class="t">Kesikli ince çizgi: Sıkılmamış durumdaki konum.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="1" y1="12" x2="29" y2="12" stroke="var(--ink)" stroke-width="1.2"/><path d="M3 12 L7 6 M9 12 L13 6 M15 12 L19 6 M21 12 L25 6 M27 12 L29 9" stroke="var(--ink)" stroke-width="0.8"/></svg><span class="t">Taralı çizgi: Cıvatanın akma sınırı F<sub>0,2</sub> (8.8).</span></li>
+      <li><svg viewBox="0 0 30 20"><circle cx="9" cy="10" r="4.5" fill="var(--ten)" stroke="var(--sheet)" stroke-width="1.5"/><circle cx="21" cy="10" r="4.5" fill="var(--com)" stroke="var(--sheet)" stroke-width="1.5"/></svg><span class="t">Noktalar: Cıvatanın ve parçaların şu anki durumu.</span></li>
+    </ul>
+  </section>
+  <section class="panel side" aria-label="Adımlar, ayarlar ve değerler">
     <div id="status" class="status" role="status" aria-live="polite"></div>
     <div class="steps" aria-label="Adımlar">
-      <span class="lab">Adım:</span>
       <button data-ph="0">1 Sıkılmamış</button>
       <button data-ph="1">2 Sıkma</button>
       <button data-ph="2">3 Üçgen</button>
@@ -139,38 +173,23 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
     <div class="controls" aria-label="Ayarlar">
       <div class="ctl btnrow">
         <button id="btnAll">Baştan oynat</button>
-        <button id="btnPlay">Durdur</button>
         <button id="btnDyn" aria-pressed="false">Dinamik yük</button>
-        <span class="hint hide-sm">"Dinamik yük": F<sub>iş</sub>, 0 ile ayardaki değer arasında gidip gelir.</span>
+        <button id="btnPlay">Durdur</button>
       </div>
-      <div class="ctl"><label for="inFon"><span><span class="lg">Ön gerilme kuvveti F<sub>ön</sub></span><span class="sm">F<sub>ön</sub></span></span> <output id="oFon"></output></label><input id="inFon" type="range" min="5" max="90" step="1" value="60"></div>
-      <div class="ctl"><label for="inFis"><span><span class="lg">İşletme kuvveti F<sub>iş</sub></span><span class="sm">F<sub>iş</sub></span></span> <output id="oFis"></output></label><input id="inFis" type="range" min="0" max="90" step="1" value="20"></div>
-      <div class="ctl"><label for="inLp"><span><span class="lg">Parçaların toplam boyu ℓ<sub>p</sub></span><span class="sm">Boy ℓ<sub>p</sub></span></span> <output id="oLp"></output></label><input id="inLp" type="range" min="20" max="80" step="2" value="40"></div>
-      <div class="ctl"><label for="selBolt"><span class="lg">Cıvata (Tablo-Diy. s. 10–11)</span><span class="sm">Cıvata</span></label><select id="selBolt"><option>M10</option><option>M12</option><option selected>M16</option><option>M20</option><option>M24</option></select></div>
-      <div class="ctl"><label for="selGr"><span class="lg">Cıvata kalitesi (ISO 898-1)</span><span class="sm">Kalite</span></label><select id="selGr"><option>4.6</option><option>5.6</option><option selected>8.8</option><option>10.9</option><option>12.9</option></select></div>
-      <div class="ctl"><label for="selMat"><span class="lg">Sıkılan parçaların malzemesi</span><span class="sm">Parça malzemesi</span></label><select id="selMat"><option value="celik" selected>Çelik</option><option value="dokum">Dökme demir (GG30)</option><option value="al">Alüminyum alaşımı</option></select></div>
+      <div class="ctl"><label for="inFon"><span>Ön gerilme kuvveti F<sub>ön</sub></span> <output id="oFon"></output></label><input id="inFon" type="range" min="5" max="90" step="1" value="60"></div>
+      <div class="ctl"><label for="inFis"><span>İşletme kuvveti F<sub>iş</sub></span> <output id="oFis"></output></label><input id="inFis" type="range" min="0" max="90" step="1" value="20"></div>
     </div>
-    <ul class="legend" aria-label="Şekildeki işaretler">
-      <li><svg viewBox="0 0 30 20"><rect x="1" y="1" width="28" height="9" fill="var(--sheet)" stroke="var(--ink)"/><path d="M4 10 L13 1 M10 10 L19 1 M16 10 L25 1 M22 10 L29 3" stroke="var(--hatch)" stroke-width="0.8"/><rect x="1" y="10" width="28" height="9" fill="var(--sheet)" stroke="var(--ink)"/><path d="M1 13 L7 19 M5 10 L14 19 M11 10 L20 19 M17 10 L26 19 M23 10 L29 16" stroke="var(--hatch)" stroke-width="0.8"/></svg><span class="t">Sıkılan iki parça, kesit. Kalınlıkları ℓ<sub>p</sub>/2. Komşu parçalar zıt yönde taranır.</span></li>
-      <li><svg viewBox="0 0 30 20"><rect x="3" y="12" width="24" height="7" fill="var(--steel1)" stroke="var(--ink)"/><rect x="10" y="1" width="10" height="11" fill="var(--steel1)" stroke="var(--ink)"/><line x1="9" y1="12" x2="9" y2="19" stroke="var(--ink)" stroke-width="0.8"/><line x1="21" y1="12" x2="21" y2="19" stroke="var(--ink)" stroke-width="0.8"/></svg><span class="t">Cıvata. Baş altta, somun üstte (Şekil 3.44 gibi). Cıvata ve somun kesitte taranmaz. Baş sabit tutuldu, somun gerçek açısıyla döner. Noktalı-kesikli çizgi eksen; ince çizgi diş dibi (d<sub>3</sub>), kalın enine çizgi diş bitimidir.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--muted)" stroke-dasharray="3 2"/><line x1="1" y1="15" x2="29" y2="15" stroke="var(--muted)" stroke-dasharray="3 2"/></svg><span class="t">Kesikli ince çizgi: 1. adımdaki (sıkılmamış) konum. Üstteki çizgi cıvata ucunun, alttaki üst parça yüzeyinin eski yerini gösterir.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="9" y1="2" x2="9" y2="18" stroke="var(--ten)" stroke-width="1.4"/><path d="M9 2 L6 7 L12 7Z M9 18 L6 13 L12 13Z" fill="var(--ten)"/><line x1="21" y1="5" x2="21" y2="15" stroke="var(--com)" stroke-width="1.4"/><path d="M21 5 L18 10 L24 10Z M21 15 L18 10 L24 10Z" fill="var(--com)"/></svg><span class="t">Ölçüler: mavi, cıvatanın uzaması; kırmızı, parçaların kısalması. Şekil değiştirmeler çizimde <span id="lgN"></span> kat büyütüldü.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="8" y1="10" x2="8" y2="2" stroke="var(--ten)" stroke-width="2"/><path d="M8 1 L4.5 7 L11.5 7Z" fill="var(--ten)"/><line x1="8" y1="10" x2="8" y2="18" stroke="var(--ten)" stroke-width="2"/><path d="M8 19 L4.5 13 L11.5 13Z" fill="var(--ten)"/><line x1="22" y1="1" x2="22" y2="8" stroke="var(--com)" stroke-width="2"/><path d="M22 10 L18.5 4 L25.5 4Z" fill="var(--com)"/><line x1="22" y1="19" x2="22" y2="12" stroke="var(--com)" stroke-width="2"/><path d="M22 10 L18.5 16 L25.5 16Z" fill="var(--com)"/></svg><span class="t">İç kuvvetler: cıvatada çekme (mavi, dışa bakan oklar), parçalarda basma (kırmızı, birbirine bakan oklar). Ok boyu kuvvetle orantılıdır, iki renkte ölçek ortaktır.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="6" y1="18" x2="6" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M6 2 L2.5 8 L9.5 8Z" fill="var(--fis)"/><line x1="24" y1="18" x2="24" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M24 2 L20.5 8 L27.5 8Z" fill="var(--fis)"/></svg><span class="t">Mor: işletme kuvveti F<sub>iş</sub> ve onun doğurduğu ek şekil değiştirme δ'. Kesitte dört ok vardır: üst yüzde iki ok yukarı, alt yüzde iki ok aşağı çeker. Her ok F<sub>iş</sub>/2'yi gösterir, bir yüzdeki iki okun toplamı F<sub>iş</sub>'tir. Mor okların ölçeği ayrıdır.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="2" y1="18" x2="16" y2="3" stroke="var(--ten)" stroke-width="2.2"/><line x1="16" y1="3" x2="28" y2="18" stroke="var(--com)" stroke-width="2.2"/></svg><span class="t">Diyagramda mavi doğru cıvatanın karakteristiği, eğimi k<sub>c</sub> = tan φ. İnce kısmı doğrunun devamıdır. Kırmızı doğru sıkılan parçaların karakteristiği, eğimi k<sub>p</sub> = tan ψ.</span></li>
-      <li><svg viewBox="0 0 30 20"><path d="M2 18 L14 3 L14 18Z" fill="var(--tenbg)" stroke="none"/><path d="M14 18 L14 3 L28 18Z" fill="var(--combg)" stroke="none"/><line x1="14" y1="3" x2="14" y2="18" stroke="var(--ink)" stroke-width="1"/></svg><span class="t">Açık mavi alan cıvatanın, açık kırmızı alan parçaların üçgenidir. Düşey ok F<sub>ön</sub>'ü gösterir. Mavi ve kırmızı nokta cıvatanın ve parçaların şu anki durumudur. Geniş ekranda 2. adımda (−) kısalmayı, (+) uzamayı gösterir.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="1" y1="12" x2="29" y2="12" stroke="var(--ink)" stroke-width="1.2"/><path d="M3 12 L7 6 M9 12 L13 6 M15 12 L19 6 M21 12 L25 6 M27 12 L29 9" stroke="var(--ink)" stroke-width="0.8"/></svg><span class="t">Cıvatanın akma sınırı F<sub>0,2</sub> = R<sub>p0,2</sub>·A<sub>c</sub> (4.6 ve 5.6'da R<sub>eL</sub>). Yalnız cıvata kalitesine bağlıdır; parça malzemesi onu değiştirmez.</span></li>
-      <li><svg viewBox="0 0 30 20"><line x1="4" y1="10" x2="26" y2="10" stroke="var(--ink)" stroke-width="1.2"/><path d="M4 10 L9 7 L9 13Z M26 10 L21 7 L21 13Z" fill="var(--ink)"/></svg><span class="t">Ayrılma aralığı ("aralık" ölçüsü). Yalnız parçalar birbirinden ayrılınca çıkar.</span></li>
+    <div class="tblwrap"><table class="ctab mini" id="mini"></table></div>
+    <p id="caption" class="caption" aria-live="polite"></p>
+    <ul class="legend lgB" aria-label="Şekildeki işaretler">
+      <li><svg viewBox="0 0 30 20"><line x1="3" y1="17" x2="27" y2="3" stroke="var(--ten)" stroke-width="2.4"/></svg><span class="t">Mavi: Cıvata. Uzaması δ<sub>c</sub>, eğimi k<sub>c</sub> = tan φ.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="3" y1="3" x2="27" y2="17" stroke="var(--com)" stroke-width="2.4"/></svg><span class="t">Kırmızı: Parçalar. Kısalması δ<sub>p</sub>, eğimi k<sub>p</sub> = tan ψ.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="6" y1="18" x2="6" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M6 2 L2.5 8 L9.5 8Z" fill="var(--fis)"/><line x1="24" y1="18" x2="24" y2="6" stroke="var(--fis)" stroke-width="2"/><path d="M24 2 L20.5 8 L27.5 8Z" fill="var(--fis)"/></svg><span class="t">Mor: İşletme kuvveti F<sub>iş</sub> ve ek şekil değiştirme δ'.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="1" y1="5" x2="29" y2="5" stroke="var(--muted)" stroke-dasharray="3 2"/><line x1="1" y1="15" x2="29" y2="15" stroke="var(--muted)" stroke-dasharray="3 2"/></svg><span class="t">Kesikli ince çizgi: Sıkılmamış durumdaki konum.</span></li>
+      <li><svg viewBox="0 0 30 20"><line x1="1" y1="12" x2="29" y2="12" stroke="var(--ink)" stroke-width="1.2"/><path d="M3 12 L7 6 M9 12 L13 6 M15 12 L19 6 M21 12 L25 6 M27 12 L29 9" stroke="var(--ink)" stroke-width="0.8"/></svg><span class="t">Taralı çizgi: Cıvatanın akma sınırı F<sub>0,2</sub> (8.8).</span></li>
+      <li><svg viewBox="0 0 30 20"><circle cx="9" cy="10" r="4.5" fill="var(--ten)" stroke="var(--sheet)" stroke-width="1.5"/><circle cx="21" cy="10" r="4.5" fill="var(--com)" stroke="var(--sheet)" stroke-width="1.5"/></svg><span class="t">Noktalar: Cıvatanın ve parçaların şu anki durumu.</span></li>
     </ul>
   </section>
-  <div class="right">
-    <section class="panel" aria-label="İşletme kuvvetine göre cıvata ve parça kuvveti">
-      <h2>F<sub>iş</sub> büyüdükçe kuvvetler</h2>
-      <p class="sub">Mavi çizgi cıvatadaki toplam kuvveti (F<sub>top</sub>), kırmızı çizgi parçalarda kalan ön gerilmeyi (F'<sub>ön</sub>) gösterir. Gri kesikli çizgi F = F<sub>iş</sub> doğrusudur: ön gerilmesiz bir cıvata bu doğruyu izlerdi. Mor kesikli çizgi şu anki F<sub>iş</sub>'tir; dinamik yükte açık mor bant F<sub>iş</sub>'in gidip geldiği aralıktır. Grafik, üçgendeki bağıntılardan çizildi. <b>Bu grafik üçgenin kendisi değildir:</b> Üçgendeki mor çizginin üst ucu burada mavi nokta (F<sub>top</sub>), alt ucu kırmızı noktadır (F'<sub>ön</sub>). Yatay eksende δ yerine F<sub>iş</sub> olduğu için eğimler de farklıdır: Ayrılmaya kadar mavi eğim k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>), kırmızı eğim −k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>); üçgende ise eğimler k<sub>c</sub> ve k<sub>p</sub>'dir.</p>
-      <canvas id="cvF" role="img" aria-label="İşletme kuvvetine göre cıvata kuvveti ve parçalarda kalan ön gerilme, ayrılma noktası ile"></canvas>
-      <dl class="vals" id="vals"></dl>
-    </section>
-  </div>
 </div>
 
 <section class="notes">
@@ -180,7 +199,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   </div>
   <div>
     <h3>Üçgen nasıl kurulur?</h3>
-    <p>Sıkmada cıvata ve parçalar aynı F<sub>ön</sub>'ü taşır ve Hooke kanununa uyar. Cıvata uzar, parçalar kısalır, bu yüzden iki doğru zıt yönlere çıkar. Parçaların doğrusu δ<sub>c</sub> + δ<sub>p</sub> kadar sağa kayınca tepede birleşir (Şekil 3.45). Üçgenin tabanı (δ<sub>c</sub> + δ<sub>p</sub>), somunun cıvata üzerinde ilerlediği yoldur. Somun bunun için Δθ = 360°·(δ<sub>c</sub> + δ<sub>p</sub>)/P kadar döner.</p>
+    <p>Sıkmada cıvata ve parçalar aynı F<sub>ön</sub>'ü taşır ve Hooke kanununa uyar. Cıvata uzar, parçalar kısalır, bu yüzden iki doğru zıt yönlere çıkar. Parçaların doğrusu δ<sub>c</sub> + δ<sub>p</sub> kadar sağa kayınca tepede birleşir (Şekil 3.45). Üçgenin tabanı (δ<sub>c</sub> + δ<sub>p</sub>), somunun cıvata üzerinde ilerlediği yoldur.</p>
   </div>
   <div>
     <h3>F<sub>iş</sub> nasıl bölüşülür?</h3>
@@ -190,7 +209,41 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
     <h3>Neden F<sub>ön</sub> ≈ 3·F<sub>iş</sub>?</h3>
     <p>Not iki sebep verir (s. 74). Birincisi: Pürüzler baştan ezilir, gevşeme olmaz. İkincisi: Dinamik yükte kuvvet genliği küçülür; s. 81'e göre F<sub>g</sub> = F<sub>z</sub>/2. Ön gerilme olmasaydı genlik F<sub>iş</sub>/2 olurdu. F'<sub>ön</sub> sıfıra inerse parçalar ayrılır ve F<sub>iş</sub>'in tamamı cıvataya geçer. Denemek için F<sub>ön</sub> = 12 kN yapıp "Dinamik yük"ü açın.</p>
   </div>
-  <div>
+  <div class="wide">
+    <h3>Semboller</h3>
+    <p class="refs">F<sub>z</sub>: F<sub>iş</sub>'in cıvataya gelen kısmı. F<sub>b</sub>: F<sub>iş</sub>'in parçalara gelen kısmı. F<sub>top</sub>: Cıvatadaki toplam kuvvet. F'<sub>ön</sub>: Parçalarda kalan ön gerilme kuvveti. k<sub>c</sub>, k<sub>p</sub>: Cıvatanın ve parçaların rijitliği. E<sub>c</sub>, E<sub>p</sub>: Elastisite modülleri. A<sub>c</sub>: Cıvatanın diş dibi kesiti. A<sub>p</sub>: Parçaların eşdeğer silindir kesiti. ℓ<sub>c</sub> = ℓ<sub>p</sub>: Sıkılan parçaların toplam boyu. δ<sub>c</sub>: Cıvatanın uzaması. δ<sub>p</sub>: Parçaların kısalması. δ': F<sub>iş</sub>'in doğurduğu ek şekil değiştirme. F<sub>0,2</sub>: Cıvatanın akma sınırındaki kuvvet. F<sub>ayr</sub>: Parçaların ayrıldığı işletme kuvveti. F<sub>g</sub>: Dinamik yükte cıvatadaki kuvvetin genliği (s. 81).</p>
+    <p class="refs">Şekil değiştirmeler büyütülerek çizildi; kat şeklin sol üstünde yazar. Animasyonlar zaman ölçeksizdir, dinamik yük 0,5 Hz. Cıvata boyutu, ℓ<sub>p</sub> ve parça malzemesi aşağıdaki Ayrıntılar bölümündedir.</p>
+    <p class="refs">F. Dikmen, <i>Makine Elemanları 1 Ders Notları</i>, YTÜ, s. 72–76, 79–81, Şekil 3.44–3.46; Tablo-Diy. s. 1, 10, 11.</p>
+  </div>
+</section>
+
+<details class="more" id="more">
+  <summary>Ayrıntılar: Diğer ayarlar, F–F<sub>iş</sub> grafiği ve hesap <span>(meraklısına)</span></summary>
+  <p class="refs">Buradaki ayarlar üstteki şekli de değiştirir. Seçili değerler şeklin başlığının altında yazar.</p>
+  <h3 class="sec">Diğer ayarlar</h3>
+  <div class="controls" aria-label="Diğer ayarlar">
+    <div class="ctl"><label for="inLp"><span><span class="lg">Toplam parça boyu ℓ<sub>p</sub></span><span class="sm">Boy ℓ<sub>p</sub></span></span> <output id="oLp"></output></label><input id="inLp" type="range" min="20" max="80" step="2" value="40"></div>
+    <div class="ctl"><label for="selBolt"><span class="lg">Cıvata, 8.8 (Tablo-Diy. s. 10–11)</span><span class="sm">Cıvata (8.8)</span></label><select id="selBolt"><option>M10</option><option>M12</option><option selected>M16</option><option>M20</option><option>M24</option></select></div>
+    <div class="ctl"><label for="selMat"><span class="lg">Sıkılan parçaların malzemesi</span><span class="sm">Parça malzemesi</span></label><select id="selMat"><option value="celik" selected>Çelik</option><option value="dokum">Dökme demir (GG30)</option><option value="al">Alüminyum alaşımı</option></select></div>
+  </div>
+  <div class="moregrid">
+    <section class="panel" aria-label="İşletme kuvvetine göre cıvata ve parça kuvveti">
+      <h2>F<sub>iş</sub> büyüdükçe kuvvetler</h2>
+      <p class="sub">Mavi çizgi cıvatadaki toplam kuvveti (F<sub>top</sub>), kırmızı çizgi parçalarda kalan ön gerilmeyi (F'<sub>ön</sub>) gösterir. Gri kesikli çizgi F = F<sub>iş</sub> doğrusudur: ön gerilmesiz bir cıvata bu doğruyu izlerdi. Mor kesikli çizgi şu anki F<sub>iş</sub>'tir; dinamik yükte açık mor bant F<sub>iş</sub>'in gidip geldiği aralıktır. Grafik, üçgendeki bağıntılardan çizildi. <b>Bu grafik üçgenin kendisi değildir:</b> Üçgendeki mor çizginin üst ucu burada mavi nokta (F<sub>top</sub>), alt ucu kırmızı noktadır (F'<sub>ön</sub>). Yatay eksende δ yerine F<sub>iş</sub> olduğu için eğimler de farklıdır: Ayrılmaya kadar mavi eğim k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>), kırmızı eğim −k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>); üçgende ise eğimler k<sub>c</sub> ve k<sub>p</sub>'dir.</p>
+      <canvas id="cvF" role="img" aria-label="İşletme kuvvetine göre cıvata kuvveti ve parçalarda kalan ön gerilme, ayrılma noktası ile"></canvas>
+    </section>
+    <section class="panel" aria-label="Hesaptaki bütün değerler">
+      <h2>Hesaptaki bütün değerler</h2>
+      <dl class="vals" id="vals"></dl>
+    </section>
+  </div>
+  <section class="notes">
+  <div class="wide" style="border-top:0;padding-top:0">
+    <h3>Şekildeki ayrıntılar</h3>
+    <p>Kesitte baş altta, somun üstte (Şekil 3.44 gibi). Baş sabit tutuldu, somun gerçek açısıyla döner: Δθ = 360°·(δ<sub>c</sub> + δ<sub>p</sub>)/P. Komşu parçalar zıt yönde taranır; cıvata ve somun kesitte taranmaz. Noktalı-kesikli çizgi eksen, ince çizgi diş dibi (d<sub>3</sub>), kalın enine çizgi diş bitimidir. Kesikli çizgilerden üstteki cıvata ucunun, alttaki üst parça yüzeyinin eski yerini gösterir.</p>
+    <p>İç kuvvet oklarının boyu kuvvetle orantılıdır, iki renkte ölçek ortaktır. Kesitteki dört mor okun her biri F<sub>iş</sub>/2'yi gösterir; mor okların ölçeği ayrıdır. "Aralık" ölçüsü yalnız parçalar birbirinden ayrılınca çıkar. Diyagramda mavi doğrunun ince kısmı doğrunun devamıdır. Açık mavi alan cıvatanın, açık kırmızı alan parçaların üçgenidir. Geniş ekranda 2. adımda (−) kısalmayı, (+) uzamayı gösterir.</p>
+  </div>
+  <div class="wide">
     <h3>Bağıntılar</h3>
     <div class="eqs">
     <p class="eq">k<sub>c</sub> = tan φ = E<sub>c</sub>·A<sub>c</sub>/ℓ<sub>c</sub>, &nbsp;A<sub>c</sub> = (π/4)·d<sub>3</sub>²</p>
@@ -201,11 +254,12 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
     <p class="eq">F<sub>ayr</sub> = F<sub>ön</sub>·(k<sub>c</sub> + k<sub>p</sub>)/k<sub>p</sub> &nbsp;(F'<sub>ön</sub> = 0 koşulundan)</p>
     </div>
     <p class="refs">D<sub>eş</sub> ℓ<sub>p</sub> ile büyür: Parçalar kalınlaştıkça sıkılan bölge yanlara doğru genişler (s. 75, Şekil 3.49), bu yüzden A<sub>p</sub> de büyür. k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub> yine de azalır, çünkü ℓ<sub>p</sub> daha hızlı büyür.</p>
-    <p class="refs">Semboller. d<sub>3</sub>: diş dibi çapı, d<sub>h</sub>: delik çapı, AA: anahtar ağzı, D<sub>eş</sub>: eşdeğer silindir çapı, P: vida adımı, F<sub>g</sub>: kuvvet genliği.</p>
-    <p class="refs">Kabuller. Şekil değiştirmeler elastik, ℓ<sub>c</sub> = ℓ<sub>p</sub>, A<sub>c</sub> bütün boyda geçerli (s. 75). İki parça aynı malzemeden ve eşit kalınlıkta. E<sub>c</sub> = 210 000 N/mm², bütün kalitelerde aynı. F<sub>iş</sub> baş ve somun altındaki yüzeylere yakın etki eder (içeriden etki ederse bölüşüm değişir; VDI 2230). F<sub>0,2</sub> notla tutarlı olsun diye A<sub>c</sub> ile hesaplandı (ISO 898-1'deki A<sub>s</sub>'den küçük, güvenli tarafta). Sıkmada σ<sub>eş</sub> ≈ 1,3·F<sub>ön</sub>/A<sub>c</sub> (s. 80). Oturma ihmal edildi. Çizimde parçalar bütün genişlikte iner; gerçekte yalnız cıvata çevresi şekil değiştirir (Şekil 3.49). Adımlar zaman ölçeksiz, dinamik yük 0,5 Hz.</p>
+    <p class="refs">Semboller. d<sub>3</sub>: diş dibi çapı, d<sub>h</sub>: delik çapı, AA: anahtar ağzı, D<sub>eş</sub>: eşdeğer silindir çapı, P: vida adımı.</p>
+    <p class="refs">Kabuller. Şekil değiştirmeler elastik, ℓ<sub>c</sub> = ℓ<sub>p</sub>, A<sub>c</sub> bütün boyda geçerli (s. 75). İki parça aynı malzemeden ve eşit kalınlıkta. Cıvata kalitesi 8.8, E<sub>c</sub> = 210 000 N/mm². F<sub>iş</sub> baş ve somun altındaki yüzeylere yakın etki eder (içeriden etki ederse bölüşüm değişir; VDI 2230). F<sub>0,2</sub> = R<sub>p0,2</sub>·A<sub>c</sub>; notla tutarlı olsun diye A<sub>c</sub> ile hesaplandı (ISO 898-1'deki A<sub>s</sub>'den küçük, güvenli tarafta). Sıkmada σ<sub>eş</sub> ≈ 1,3·F<sub>ön</sub>/A<sub>c</sub> (s. 80). Oturma ihmal edildi. Çizimde parçalar bütün genişlikte iner; gerçekte yalnız cıvata çevresi şekil değiştirir (Şekil 3.49). Adımlar zaman ölçeksiz, dinamik yük 0,5 Hz.</p>
     <p class="refs">Kaynaklar. F. Dikmen, <i>Makine Elemanları 1 Ders Notları</i>, YTÜ, s. 72–76, 79–81; Tablo-Diy. s. 1, 10, 11. ISO 898-1:2013 (cıvata kaliteleri). Budynas &amp; Nisbett, <i>Shigley's Mechanical Engineering Design</i>, Bölüm 8 (ayrılma). VDI 2230 Blatt 1:2015.</p>
   </div>
-</section>
+  </section>
+</details>
 </div>
 
 <script>
@@ -353,14 +407,13 @@ let J = null, SC = null;                      // bağlantı ve çizim ölçekler
 
 const NICE = [10,20,25,40,50,75,100,150,200,250,300,400,500,750,1000,1500,2000];
 function rebuild(){
-  J = CIV.joint({ bolt:st.bolt, lp:st.lp, mat:st.mat, grade:st.grade });
+  J = CIV.joint({ bolt:st.bolt, lp:st.lp, mat:st.mat, grade:st.grade });   // kalite 8.8'e sabit
+  J.F02ref = J.F02_88;                       // eksenler ve ayar sınırları 8.8'in akma kuvvetine göre
   // Çizim ölçekleri yalnız bağlantı değişince hesaplanır (F ayarları ölçeği değiştirmez).
   // Büyütme N: akma kuvvetindeki cıvata uzaması çizimde yaklaşık 1,2·d olsun, aşağı yuvarlanır.
-  // Ölçekler kaliteden bağımsızdır (k_c kaliteye bağlı değil): büyütme 8.8'e, eksenler 12.9'un akma kuvvetine göre.
   const want = 1.2*J.B.d / (J.F02_88/J.kc);
   let N = NICE[0]; for (const v of NICE) if (v <= want) N = v;
-  SC = { N, XM: 1.04*J.F02ref*(1/J.kc + 1/J.kp), YM: 1.06*J.F02ref };
-  $('lgN').textContent = N;
+  SC = { N, XM: 1.04*J.F02ref*(1/J.kc + 2/J.kp), YM: 1.06*J.F02ref };   // yatayda δ_c + 2·δ_p: üçgen kurulurken taşmasın
 }
 
 // ---- adım ve anlık durum
@@ -483,11 +536,11 @@ function drawSection(ctx, x0, y0, wS, h, V, phone){
   const hw = Math.max(1.45*B.d, 0.56*J.Des), pr = Math.max(2*B.P, 0.35*B.d);
   const top = lp + B.m + pr + N*SC.YM/J.kc;               // cıvata ucunun çizilebilecek en üst noktası [mm]
   const dimCol = phone ? 44 : 60, fs = phone ? 11 : 12;
-  const Lfis = phone ? 60 : 90, tTop = 2*fs + 14, lab = fs + 6;          // F_iş okunun F_0,2'deki boyu [px], üst yazı payı [px]
+  const Lfis = phone ? 60 : 90, tTop = fs + 14, lab = fs + 6;          // F_iş okunun F_0,2'deki boyu [px], üst yazı payı [px]
   const g = Math.min((h - 16 - tTop)/(B.k + top), (h - Lfis - 8 - lab - tTop)/top, (wS - dimCol - 10)/(2*hw));
   const ax = x0 + 6 + hw*g, yb = y0 + tTop + top*g;        // eksen ve başın üst yüzü (y = 0)
   const X = xm => ax + xm*g, Y = ym => yb - ym*g;
-  const Fsc = 0.42*lp*g/J.F02ref;                           // iç kuvvet oku: px/N (kaliteden bağımsız)
+  const Fsc = 0.42*lp*g/J.F02ref;                           // iç kuvvet oku: px/N
   // şekil değiştirmeler (büyütülmüş, mm)
   const eN = N*Math.min(V.e, SC.YM/J.kc), cN = N*V.c, gN = N*Math.min(V.gap, SC.YM/J.kc);   // çizim sınırı
   const l1 = lp/2;
@@ -528,7 +581,7 @@ function drawSection(ctx, x0, y0, wS, h, V, phone){
     arrow(ctx, xa, Y(yInt2)-L, xa, Y(yInt2), C.com, 2.2, 8); arrow(ctx, xa, Y(yInt1)+L, xa, Y(yInt1), C.com, 2.2, 8); }
   // işletme kuvveti: üst parçanın üst yüzünde ve alt parçanın alt yüzünde, baş ve somunun hemen yanında
   if (V.Fis > 1){
-    const L = Math.max(4, V.Fis/J.F02ref*Lfis), xo = B.e/2 + 0.25*B.d;   // ölçek: 12.9'un F_0,2'sinde Lfis piksel
+    const L = Math.max(4, V.Fis/J.F02ref*Lfis), xo = B.e/2 + 0.25*B.d;   // ölçek: F_0,2'de Lfis piksel
     for (const sg of [-1, 1]){
       arrow(ctx, X(sg*xo), Y(yT), X(sg*xo), Y(yT)-L, C.fis, 2.2, 8);
       arrow(ctx, X(sg*xo), Y(0), X(sg*xo), Y(0)+L, C.fis, 2.2, 8);
@@ -556,7 +609,6 @@ function drawSection(ctx, x0, y0, wS, h, V, phone){
     }
   }
   rich(ctx, 'şekil değiştirme ×'+N, x0+6, y0+14, {size:fs-0.5, color:C.muted});
-  rich(ctx, 'somun Δθ = '+fmt(V.dth,1)+'°', x0+6, y0+14+fs+3, {size:fs-0.5, color:C.muted});
 }
 
 function drawTri(ctx, x0, y0, w, h, V, phone){
@@ -575,7 +627,7 @@ function drawTri(ctx, x0, y0, w, h, V, phone){
     rich(ctx, 'F_{0,2}', x0+padL-4, yy+4, {size:fs, color:C.ink, align:'right'});
     // yazı, mavi doğrunun akma çizgisini kestiği yerin karşı tarafına
     const right = X(J.F02/J.kc) < (x0+padL+xPlotR)/2;
-    if (!phone) rich(ctx, 'akma sınırı ('+st.grade+')', right ? xPlotR-2 : x0+padL+6, yy-9, {size:fs-1, color:C.muted, align: right?'right':'left', bg:true}); }
+    if (!phone) rich(ctx, 'akma sınırı ('+st.grade+')', right ? xPlotR-2 : X(0)+6, yy-9, {size:fs-1, color:C.muted, align: right?'right':'left', bg:true}); }
   // eksenler
   arrow(ctx, X(0), oy, X(0), y0+padT-12, C.ink, 1.2, 8);
   arrow(ctx, x0+padL-6, oy, xPlotR+8, oy, C.ink, 1.2, 8);
@@ -603,7 +655,8 @@ function drawTri(ctx, x0, y0, w, h, V, phone){
   // doğru adları
   { const yN = Y(SC.YM*0.74), xN = X(SC.YM*0.74/kc);
     rich(ctx, 'cıvata', xN-8, yN, {size:fs, weight:600, color:C.ten, align:'right', bg:true}); }
-  if (V.ph <= 1 && F > 0) rich(ctx, 'parçalar', X(-F/kp)-7, Y(F)+4, {size:fs, weight:600, color:C.com, align:'right', bg:true});
+  const nearY = F => Y(F) - Y(J.F02) < fs + 2 ? fs + 2 : 0;   // akma çizgisine değen etiket bir satır aşağı
+  if (V.ph <= 1 && F > 0) rich(ctx, 'parçalar', X(-F/kp)-7, Y(F)+4+nearY(F), {size:fs, weight:600, color:C.com, align:'right', bg:true});
   else if (V.ph >= 2){
     const sepNow = V.ph===3 && V.S && V.S.sep && V.Fis > 1;
     if (dpF*sx < 45) {}                                 // küçük üçgende ad yazılmaz (renk lejantta)
@@ -617,8 +670,8 @@ function drawTri(ctx, x0, y0, w, h, V, phone){
       line(ctx, X(V.ph===1 ? -Fv/kp : tR-dpF), Y(Fv), X(Fv/kc), Y(Fv), C.muted, 0.8);
       dot(ctx, X(Fv/kc), Y(Fv), 4.5, C.ten, C.sheet);
       if (V.ph===1) dot(ctx, X(-Fv/kp), Y(Fv), 4.5, C.com, C.sheet);
-      if (V.ph===1) rich(ctx, 'F', X(Fv/kc)+8, Y(Fv)+4, {size:fs, weight:600});
-      else rich(ctx, 'F_{ön}', X(Fv/kc)+8, Y(Fv)+4, {size:fs, weight:600});
+      if (V.ph===1) rich(ctx, 'F', X(Fv/kc)+8, Y(Fv)+4+nearY(Fv), {size:fs, weight:600});
+      else rich(ctx, 'F_{ön}', X(Fv/kc)+8, Y(Fv)+4+nearY(Fv), {size:fs, weight:600});
       dimH(ctx, X(0), X(Fv/kc), yD, C.ten); rich(ctx, 'δ_{c}', (X(0)+X(Fv/kc))/2, yD+fs+2, {size:fs, weight:600, color:C.ten, align:'center'});
       const xa = V.ph===1 ? -Fv/kp : tR-dpF, xb = V.ph===1 ? 0 : tR;
       if (!(V.ph===2 && V.slide>0 && V.slide<1)){        // kayarken δ_p ölçüsü gizlenir (δ_c ile üst üste binmesin)
@@ -727,45 +780,91 @@ function drawF(V){
 
 // ---- durum, açıklama ve değerler
 let lastSig = '';
+const MATAD = { celik:'çelik', dokum:'dökme demir (GG30)', al:'alüminyum alaşımı' };
+const TX = {
+  p0: 'Somun elle oturtuldu. Cıvatada ve parçalarda kuvvet yok, diyagram boş. Bu adımdaki konumlar sonraki adımlarda kesikli çizgiyle gösterilir.',
+  p1: done => (done ? 'Somun döndürüldü.' : 'Somun dönüyor.')+' Cıvata F ile çekilip uzuyor (mavi doğru), parçalar aynı F ile basılıp kısalıyor (kırmızı doğru). İki doğru başlangıçtan zıt yönlere çıkar (Şekil 3.45, sol).',
+  p2: 'Kırmızı doğru δ<sub>c</sub> + δ<sub>p</sub> kadar sağa kayar ve mavi doğruyla F<sub>ön</sub> düzeyinde birleşir. Sonra diyagram sola kayar ve başlangıç sol alt köşeye gelir (Şekil 3.45, sağ).',
+  none: Fon => 'Bağlantı sıkılmış, F<sub>iş</sub> henüz yok. Cıvata ve parçalar aynı F<sub>ön</sub> = '+Fon+' kN kuvvetini taşıyor.',
+  work: (Fis, Fz, Fb) => 'F<sub>iş</sub> = '+Fis+' kN etki ediyor. Cıvata δ\' kadar daha uzadı, parçaların kısalması δ\' kadar azaldı. F<sub>iş</sub>\'in F<sub>z</sub> = '+Fz+' kN\'luk kısmı cıvataya, F<sub>b</sub> = '+Fb+' kN\'luk kısmı parçalara geldi (Şekil 3.46).',
+  sep: (Fsep, n) => 'F<sub>iş</sub>, ayrılma kuvvetini ('+Fsep+' kN) aştı. Parçalarda basma kalmadı ve ara yüz açıldı (çizimde '+n+'). Artık F<sub>iş</sub>\'in tamamını cıvata taşıyor.',
+  dyn: (Fis, Fmin, Fmax, Fg, sep, Fsep) => 'F<sub>iş</sub> 0 ile '+Fis+' kN arasında gidip geliyor. Cıvata kuvveti '+Fmin+' ile '+Fmax+' kN arasında salınıyor, genlik F<sub>g</sub> = '+Fg+' kN. '+(sep ? 'F<sub>iş</sub>, '+Fsep+' kN\'u aştığı sürece parçalar ayrılıyor ve F<sub>iş</sub>\'in tamamı cıvataya geçiyor. Bu yüzden genlik F<sub>z</sub>/2\'den büyük.' : 'Parçalar hiç ayrılmıyor, genlik F<sub>z</sub>/2.'),
+  yld: 'Cıvatadaki kuvvet akma sınırını aşıyor. Doğrusal (elastik) model burada geçerli değildir; diyagram yalnız eğilimi gösterir. F<sub>ön</sub> ya da F<sub>iş</sub>\'i küçültün.',
+  seq: ' Sıkmada eşdeğer gerilme (σ<sub>eş</sub> ≈ 1,3·F<sub>ön</sub>/A<sub>c</sub>) akma sınırını aştı.',
+  clip: ' F<sub>top</sub> diyagramın üst sınırını aştı; çizimde sınırda tutuldu.'
+};
+const SB = (head, nums) => '<span class="big">'+head+'</span><span class="nums">'+nums+'</span>';
+// Durum kutusu ve açıklama, en uzun metne göre yer ayırır: adım ya da ayar değişince altındaki düğmeler, ayarlar ve tablo yer değiştirmesin.
+let resW = -1;
+function reserveText(){
+  const stEl = $('status'), cap = $('caption'), w = Math.round(cap.getBoundingClientRect().width);
+  if (w === resW || w < 10) return; resW = w;
+  const keepS = stEl.innerHTML, keepC = cap.innerHTML; let hS = 0, hC = 0;
+  stEl.style.minHeight = cap.style.minHeight = '';
+  const z = '000,0';
+  const caps = [TX.p0, TX.p1(true)+TX.seq, TX.p2+TX.seq, TX.none(z), TX.work(z, z, z)+TX.seq, TX.sep(z, '×2000')+TX.clip,
+    TX.dyn(z, z, z, z, true, z)+TX.clip, TX.dyn(z, z, z, z, false, z)+TX.seq, TX.yld+TX.clip];
+  const stats = [SB('1 | Sıkılmamış bağlantı', 'Kuvvet yok'), SB('2 | Sıkma', 'F = 000,0 kN → F<sub>ön</sub> = 000,0 kN'),
+    SB('3 | Ön gerilme üçgeni', 'δ<sub>c</sub> + δ<sub>p</sub> = 0000,0 µm'),
+    SB('4 | İşletme', 'F<sub>iş</sub> = 0 … 000,0 kN · F<sub>ön</sub>/F<sub>iş</sub> = 000,0'),
+    SB('Akma: F<sub>top</sub> &gt; F<sub>0,2</sub>', 'F<sub>top</sub> = 000,0 kN &gt; F<sub>0,2</sub> = 000,0 kN'),
+    SB('Sıkmada akma', 'σ<sub>eş</sub> = 0000 N/mm² &gt; R<sub>p0,2</sub> = 640 N/mm² (s. 80)'),
+    SB("Parçalar ayrıldı: F'<sub>ön</sub> = 0", 'F<sub>iş</sub> = 000,0 kN &gt; F<sub>ayr</sub> = 000,0 kN')];
+  for (const t of caps){ cap.innerHTML = t; hC = Math.max(hC, cap.getBoundingClientRect().height); }
+  for (const t of stats){ stEl.innerHTML = t; hS = Math.max(hS, stEl.getBoundingClientRect().height); }
+  stEl.innerHTML = keepS; cap.innerHTML = keepC;
+  stEl.style.minHeight = Math.ceil(hS)+'px'; cap.style.minHeight = Math.ceil(hC)+'px';
+  st.needs = true;                                        // yer ayırma sayfa düzenini değiştirebilir
+}
 function updateText(V){
   const S = V.S, B = J.B;
   const sig = [st.bolt,st.lp,st.mat,st.grade,st.Fon,st.Fis,st.phase,V.p>=1,Math.round(V.p*20),st.dyn,V.sep,Math.round(V.Fis/100),Math.round(V.F/100)].join('|');
   if (sig === lastSig) return; lastSig = sig;
   const s = $('status'), cap = $('caption');
-  const n = '×'+SC.N;
+  const n = '×'+SC.N, Rs = J.sym.replace('_','<sub>')+'</sub>';
   let head = '', nums = '', warn = false, txt = '';
-  if (V.ph === 0){ head = '1 | Sıkılmamış bağlantı'; nums = 'Kuvvet yok';
-    txt = 'Somun elle oturtuldu. Cıvatada ve parçalarda kuvvet yok, diyagram boş. Bu adımdaki konumlar sonraki adımlarda kesikli çizgiyle gösterilir.'; }
-  else if (V.ph === 1){ head = '2 | Sıkma'; nums = 'F = '+kN(V.F)+' kN → F_ön = '+kN(st.Fon)+' kN';
-    txt = (V.p >= 1 ? 'Somun döndürüldü.' : 'Somun dönüyor.')+' Cıvata F ile çekilip uzuyor (mavi doğru), parçalar aynı F ile basılıp kısalıyor (kırmızı doğru). İki doğru başlangıçtan zıt yönlere çıkar (Şekil 3.45, sol).'; nums = nums.replace('F_ön','F<sub>ön</sub>'); }
-  else if (V.ph === 2){ head = '3 | Ön gerilme üçgeni'; nums = 'δ<sub>c</sub> + δ<sub>p</sub> = '+fmt((st.Fon/J.kc+st.Fon/J.kp)*1000,1)+' µm';
-    txt = 'Kırmızı doğru δ<sub>c</sub> + δ<sub>p</sub> kadar sağa kayar ve mavi doğruyla F<sub>ön</sub> düzeyinde birleşir. Sonra diyagram sola kayar ve başlangıç sol alt köşeye gelir (Şekil 3.45, sağ).'; }
+  if (V.ph === 0){ head = '1 | Sıkılmamış bağlantı'; nums = 'Kuvvet yok'; txt = TX.p0; }
+  else if (V.ph === 1){ head = '2 | Sıkma'; nums = 'F = '+kN(V.F)+' kN → F<sub>ön</sub> = '+kN(st.Fon)+' kN'; txt = TX.p1(V.p >= 1); }
+  else if (V.ph === 2){ head = '3 | Ön gerilme üçgeni'; nums = 'δ<sub>c</sub> + δ<sub>p</sub> = '+fmt((st.Fon/J.kc+st.Fon/J.kp)*1000,1)+' µm'; txt = TX.p2; }
   if ((V.ph === 1 || V.ph === 2) && V.F > 0){
-    const seq1 = 1.3*V.F/B.Ac, Rs1 = J.sym.replace('_','<sub>')+'</sub>';
-    if (V.F > J.F02){ warn = true; head = 'Sıkmada akma: F &gt; F<sub>0,2</sub>'; nums = 'F = '+kN(V.F)+' kN · F<sub>0,2</sub> = '+kN(J.F02)+' kN ('+st.grade+')'; }
-    else if (seq1 > J.Rp){ warn = true; head = 'Sıkmada akma'; nums = 'σ<sub>eş</sub> ≈ 1,3·F/A<sub>c</sub> = '+fmt(seq1,0)+' N/mm² &gt; '+Rs1+' = '+J.Rp+' N/mm² (s. 80)'; }
+    const seq1 = 1.3*V.F/B.Ac;
+    if (V.F > J.F02){ warn = true; head = 'Sıkmada akma: F &gt; F<sub>0,2</sub>'; nums = 'F = '+kN(V.F)+' kN &gt; F<sub>0,2</sub> = '+kN(J.F02)+' kN'; }
+    else if (seq1 > J.Rp){ warn = true; head = 'Sıkmada akma'; nums = 'σ<sub>eş</sub> = '+fmt(seq1,0)+' N/mm² &gt; '+Rs+' = '+J.Rp+' N/mm² (s. 80)'; txt += TX.seq; }
   }
   if (V.ph === 3) {
-    head = '4 | İşletme'; nums = 'F<sub>iş</sub> = '+kN(V.Fis)+' kN · F<sub>ön</sub>/F<sub>iş</sub> = '+(st.Fis>0 ? fmt(st.Fon/st.Fis,1) : '∞');
-    if (V.Fis < 1) txt = 'Bağlantı sıkılmış, F<sub>iş</sub> henüz yok. Cıvata ve parçalar aynı F<sub>ön</sub> = '+kN(st.Fon)+' kN kuvvetini taşıyor.';
-    else if (!V.sep) txt = 'F<sub>iş</sub> = '+kN(V.Fis)+' kN etki ediyor. Cıvata δ\' kadar daha uzadı, parçaların kısalması δ\' kadar azaldı. F<sub>iş</sub>\'in F<sub>z</sub> = '+kN(S.Fz)+' kN\'luk kısmı cıvataya, F<sub>b</sub> = '+kN(S.Fb)+' kN\'luk kısmı parçalara geldi (Şekil 3.46).';
-    else txt = 'F<sub>iş</sub>, ayrılma kuvvetini ('+kN(S.Fsep)+' kN) aştı. Parçalarda basma kalmadı ve ara yüz açıldı (çizimde '+n+'). Artık F<sub>iş</sub>\'in tamamını cıvata taşıyor.';
-    if (st.dyn && st.Fis > 0){ const D = CIV.dyn(J, st.Fon, st.Fis); txt = 'F<sub>iş</sub> 0 ile '+kN(st.Fis)+' kN arasında gidip geliyor. Cıvata kuvveti '+kN(D.Fmin)+' ile '+kN(D.Fmax)+' kN arasında salınıyor, genlik F<sub>g</sub> = '+kN(D.Fg)+' kN. '+(CIV.state(J,st.Fon,st.Fis).sep ? 'F<sub>iş</sub>, '+kN(CIV.state(J,st.Fon,0).Fsep)+' kN\'u aştığı sürece parçalar ayrılıyor ve F<sub>iş</sub>\'in tamamı cıvataya geçiyor. Bu yüzden genlik F<sub>z</sub>/2\'den büyük.' : 'Parçalar hiç ayrılmıyor, genlik F<sub>z</sub>/2.'); }
-    const seq = 1.3*st.Fon/B.Ac, Rp = J.Rp, Rs = J.sym.replace('_','<sub>')+'</sub>';
-    if (S.yield){ warn = true; head = 'Akma: F<sub>top</sub> &gt; F<sub>0,2</sub>'; nums = 'F<sub>top</sub> = '+kN(S.Ftop)+' kN · F<sub>0,2</sub> = '+kN(J.F02)+' kN';
-      txt = 'Cıvatadaki kuvvet akma sınırını aşıyor. Doğrusal (elastik) model burada geçerli değildir; diyagram yalnız eğilimi gösterir. F<sub>ön</sub> ya da F<sub>iş</sub>\'i küçültün.'; }
-    else if (seq > Rp){ warn = true; head = 'Sıkmada akma'; nums = 'σ<sub>eş</sub> ≈ 1,3·F<sub>ön</sub>/A<sub>c</sub> = '+fmt(seq,0)+' N/mm² &gt; '+Rs+' = '+Rp+' N/mm² (s. 80)'; }
-    else if (V.sep){ warn = true; head = "Parçalar ayrıldı: F'<sub>ön</sub> = 0"; nums = 'F<sub>iş</sub> = '+kN(V.Fis)+' kN &gt; F<sub>ayr</sub> = '+kN(S.Fsep)+' kN · parçalar arasında basma kalmadı'; }
-    else if (V.Fis >= 1){ head = '4 | İşletme: parçalar temas ediyor'; nums = "F'<sub>ön</sub> = "+kN(S.Fpon)+' kN · F<sub>iş</sub> '+kN(S.Fsep)+' kN\'u aşarsa parçalar ayrılır'; }
+    const dynOn = st.dyn && st.Fis > 0;
+    head = '4 | İşletme';
+    nums = 'F<sub>iş</sub> = '+(dynOn ? '0 … '+kN(st.Fis) : kN(V.Fis))+' kN · F<sub>ön</sub>/F<sub>iş</sub> = '+(st.Fis>0 ? fmt(st.Fon/st.Fis,1) : '∞');
+    if (V.Fis < 1) txt = TX.none(kN(st.Fon));
+    else if (!V.sep) txt = TX.work(kN(V.Fis), kN(S.Fz), kN(S.Fb));
+    else txt = TX.sep(kN(S.Fsep), n);
+    if (dynOn){ const D = CIV.dyn(J, st.Fon, st.Fis); txt = TX.dyn(kN(st.Fis), kN(D.Fmin), kN(D.Fmax), kN(D.Fg), CIV.state(J,st.Fon,st.Fis).sep, kN(CIV.state(J,st.Fon,0).Fsep)); }
+    const seq = 1.3*st.Fon/B.Ac;
+    if (S.yield){ warn = true; head = 'Akma: F<sub>top</sub> &gt; F<sub>0,2</sub>'; nums = 'F<sub>top</sub> = '+kN(S.Ftop)+' kN &gt; F<sub>0,2</sub> = '+kN(J.F02)+' kN'; txt = TX.yld; }
+    else if (seq > J.Rp){ warn = true; head = 'Sıkmada akma'; nums = 'σ<sub>eş</sub> = '+fmt(seq,0)+' N/mm² &gt; '+Rs+' = '+J.Rp+' N/mm² (s. 80)'; txt += TX.seq; }
+    else if (V.sep){ warn = true; head = "Parçalar ayrıldı: F'<sub>ön</sub> = 0"; nums = 'F<sub>iş</sub> = '+kN(V.Fis)+' kN &gt; F<sub>ayr</sub> = '+kN(S.Fsep)+' kN'; }
   }
   s.className = 'status' + (warn ? ' warn' : '');
-  s.innerHTML = '<span class="big">'+head+'</span><span class="nums">'+nums+'</span>';
-  if (V.ph === 3 && V.Fc > SC.YM) txt += ' F<sub>top</sub> diyagramın üst sınırını aştı; çizimde sınırda tutuldu.';
+  s.innerHTML = SB(head, nums);
+  if (V.ph === 3 && V.Fc > SC.YM) txt += TX.clip;
   cap.innerHTML = txt;
+  reserveText();
+  $('given').innerHTML = st.bolt+' cıvata ('+st.grade+'), parçalar '+MATAD[st.mat]+', ℓ<sub>p</sub> = '+st.lp+' mm';
   // adım düğmeleri
   document.querySelectorAll('.steps button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.ph === st.phase)));
   // değerler (sıkılmış durum ve ayardaki F_iş için)
   const S1 = CIV.state(J, st.Fon, st.Fis), D = CIV.dyn(J, st.Fon, st.Fis);
+  const ayr = S1.sep ? '<span class="why">parçalar ayrıldı</span>' : '';
+  const M6 = [
+    ['k<sub>c</sub> = E<sub>c</sub>·A<sub>c</sub>/ℓ<sub>c</sub>', fmt(J.kc/1000,0)+' kN/mm'],
+    ['k<sub>p</sub> = E<sub>p</sub>·A<sub>p</sub>/ℓ<sub>p</sub>', fmt(J.kp/1000,0)+' kN/mm'],
+    [(S1.sep ? 'F<sub>z</sub> = F<sub>iş</sub> − F<sub>ön</sub>' : 'F<sub>z</sub> = F<sub>iş</sub>·k<sub>c</sub>/(k<sub>c</sub> + k<sub>p</sub>)')+ayr, kN(S1.Fz)+' kN'],
+    [(S1.sep ? 'F<sub>b</sub> = F<sub>ön</sub>' : 'F<sub>b</sub> = F<sub>iş</sub>·k<sub>p</sub>/(k<sub>c</sub> + k<sub>p</sub>)')+ayr, kN(S1.Fb)+' kN'],
+    ['F<sub>top</sub> = F<sub>ön</sub> + F<sub>z</sub>', kN(S1.Ftop)+' kN'],
+    ["F'<sub>ön</sub> = F<sub>ön</sub> − F<sub>b</sub>", kN(S1.Fpon)+' kN'],
+  ];
+  $('mini').innerHTML = '<tr><th>F<sub>ön</sub> = '+fmt(st.Fon/1000,0)+' kN, F<sub>iş</sub> = '+fmt(st.Fis/1000,0)+' kN için</th><th>Değer</th></tr>'
+    + M6.map(r => '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>').join('');
   const rows = [
     ['grp','Rijitlikler ('+st.bolt+' '+st.grade+', ℓ<sub>p</sub> = '+st.lp+' mm, '+J.M.ad.toLowerCase()+')'],
     ['A<sub>c</sub> = (π/4)·d<sub>3</sub>²', fmt(B.Ac, B.Ac<100?1:0)+' mm² (d<sub>3</sub> = '+fmt(B.d3,2)+' mm)'],
@@ -778,7 +877,7 @@ function updateText(V){
     ['grp','Sıkma (F<sub>ön</sub> = '+kN(st.Fon)+' kN)'],
     ['δ<sub>c</sub> = F<sub>ön</sub>/k<sub>c</sub>', fmt(S1.dc*1000,1)+' µm'],
     ['δ<sub>p</sub> = F<sub>ön</sub>/k<sub>p</sub>', fmt(S1.dp*1000,1)+' µm'],
-    ['Somunun dönmesi Δθ = 360°·(δ<sub>c</sub> + δ<sub>p</sub>)/P (somunun dönme açısı)', fmt(S1.dth,1)+'° (P = '+fmt(B.P,2).replace(/0$/,'')+' mm)'],
+    ['Somun: Δθ = 360°·(δ<sub>c</sub> + δ<sub>p</sub>)/P', fmt(S1.dth,1)+'° (P = '+fmt(B.P,2).replace(/0$/,'')+' mm)'],
     ['σ<sub>eş</sub> ≈ 1,3·F<sub>ön</sub>/A<sub>c</sub> (s. 80)', fmt(1.3*st.Fon/B.Ac,0)+' N/mm²'],
     ['grp','İşletme (F<sub>iş</sub> = '+kN(st.Fis)+' kN)'],
     ["δ' = F<sub>iş</sub>/(k<sub>c</sub> + k<sub>p</sub>)", S1.sep ? 'geçersiz (ayrılma)' : fmt(S1.dpr*1000,1)+' µm'],
@@ -788,7 +887,7 @@ function updateText(V){
     ["F'<sub>ön</sub> = F<sub>ön</sub> − F<sub>b</sub>", kN(S1.Fpon)+' kN'],
     ['F<sub>ayr</sub> = F<sub>ön</sub>·(k<sub>c</sub> + k<sub>p</sub>)/k<sub>p</sub>', kN(S1.Fsep)+' kN'],
     ['σ = F<sub>top</sub>/A<sub>c</sub>', fmt(S1.sig,0)+' N/mm²'],
-    ['F<sub>0,2</sub> = '+J.sym.replace('_','<sub>')+'</sub>·A<sub>c</sub> ('+st.grade+', '+J.Rp+' N/mm²)', kN(J.F02)+' kN'],
+    ['F<sub>0,2</sub> = '+Rs+'·A<sub>c</sub> ('+st.grade+', '+J.Rp+' N/mm²)', kN(J.F02)+' kN'],
     ['Dinamik: F<sub>g</sub> = (F<sub>max</sub> − F<sub>ön</sub>)/2', kN(D.Fg)+' kN'+(S1.sep ? '' : ' = F<sub>z</sub>/2')],
   ];
   $('vals').innerHTML = rows.map(r => r[0]==='grp' ? '<dt class="grp">'+r[1]+'</dt>' : '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('');
@@ -802,7 +901,8 @@ function updateButtons(){
   $('btnDyn').setAttribute('aria-pressed', String(st.dyn));
 }
 
-function draw(){ const V = view(); drawMain(V); drawF(V); updateText(V); updateButtons(); }
+const more = $('more');
+function draw(){ const V = view(); drawMain(V); if (more.open) drawF(V); updateText(V); updateButtons(); }
 
 function tick(ts){
   if (st.last==null) st.last = ts;
@@ -822,7 +922,7 @@ function tick(ts){
 // ---- kontroller
 const binds = {};
 function setRanges(){
-  const fmax = Math.floor(J.F02ref/1000);               // aralık kaliteden bağımsız: kalite değişince F ayarları kırpılmaz
+  const fmax = Math.floor(J.F02ref/1000);               // üst sınır: 8.8'in akma kuvveti
   const a = $('inFon'), b = $('inFis');
   a.max = fmax; b.max = fmax; a.min = Math.ceil(0.12*J.F02_88/1000);   // çok küçük üçgen okunmaz
   if (st.Fon/1000 < +a.min) st.Fon = +a.min*1000;
@@ -838,12 +938,10 @@ $('inFis').addEventListener('input', e => { st.Fis = +e.target.value*1000; $('oF
 $('inLp').addEventListener('input', e => { st.lp = +e.target.value; $('oLp').textContent = st.lp+' mm'; onConfig(); draw(); });
 $('selBolt').addEventListener('change', e => { st.bolt = e.target.value; onConfig(); draw(); });
 $('selMat').addEventListener('change', e => { st.mat = e.target.value; onConfig(); draw(); });
-$('selGr').addEventListener('change', e => { st.grade = e.target.value; onConfig(); draw(); });
 binds.Fon = v => { $('inFon').value = v; $('inFon').dispatchEvent(new Event('input')); };
 binds.Fis = v => { $('inFis').value = v; $('inFis').dispatchEvent(new Event('input')); };
 binds.lp  = v => { $('inLp').value = v; $('inLp').dispatchEvent(new Event('input')); };
 binds.bolt = v => { $('selBolt').value = v; $('selBolt').dispatchEvent(new Event('change')); };
-binds.grade = v => { $('selGr').value = v; $('selGr').dispatchEvent(new Event('change')); };
 binds.mat = v => { $('selMat').value = v; $('selMat').dispatchEvent(new Event('change')); };
 binds.phase = (ph, p) => { st.phase = ph; st.p = p; st.auto = false; st.playing = false; st.dyn = false; lastSig=''; draw(); };
 binds.dyn = t => { st.phase = 3; st.p = 1; st.dyn = true; st.dynT = t; st.playing = false; lastSig=''; draw(); };
@@ -861,6 +959,9 @@ $('btnDyn').addEventListener('click', () => {
 let lastW = window.innerWidth;
 window.addEventListener('resize', () => { if (window.innerWidth !== lastW){ lastW = window.innerWidth; st.needs = true; } else st.needs = true; });
 
+more.addEventListener('toggle', () => { st.needs = true; });
+// Yan panelin yüksekliği değişirse tuval yeniden çizilir (çizim esnemesin).
+if (window.ResizeObserver) new ResizeObserver(() => { st.needs = true; }).observe(cvM);
 $('oLp').textContent = st.lp+' mm';
 rebuild(); setRanges();
 requestAnimationFrame(tick);
